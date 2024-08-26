@@ -7,6 +7,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 </head>
 <body>
+    <h1>Generador de Etiquetas PDF</h1>
+    <iframe id="pdfFrame" style="width: 100%; height: 100vh; border: none;"></iframe>
+
     <script>
         async function generatePdf() {
             const { PDFDocument, rgb, StandardFonts } = PDFLib;
@@ -26,9 +29,13 @@
             const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
             // Logo en la parte superior izquierda
-            const logoBytes = await fetch('LOGO.jpeg').then(res => res.arrayBuffer());
-            const logoImage = await pdfDoc.embedPng(logoBytes);
-            page.drawImage(logoImage, { x: 2, y: 90, width: 90, height: 35 });
+            try {
+                const logoBytes = await fetch('LOGO.jpeg').then(res => res.arrayBuffer());
+                const logoImage = await pdfDoc.embedPng(logoBytes);
+                page.drawImage(logoImage, { x: 2, y: 90, width: 90, height: 35 });
+            } catch (error) {
+                console.error("Error loading logo:", error);
+            }
 
             // Precio en la parte superior derecha
             page.drawText(`$${parseFloat(precioProducto).toFixed(2)}`, {
@@ -59,17 +66,22 @@
 
             // Obtener la URL del código de barras
             const barcodeUrl = generateBarcodeUrl(codigoProducto);
-            const barcodeBytes = await fetch(barcodeUrl).then(res => res.arrayBuffer());
-            const barcodeImage = await pdfDoc.embedPng(barcodeBytes);
-            page.drawImage(barcodeImage, { x: 72, y: 5, width: 100, height: 20 });
+
+            try {
+                const barcodeBytes = await fetch(barcodeUrl).then(res => res.arrayBuffer());
+                const barcodeImage = await pdfDoc.embedPng(barcodeBytes);
+                page.drawImage(barcodeImage, { x: 72, y: 5, width: 100, height: 20 });
+            } catch (error) {
+                console.error("Error loading barcode:", error);
+            }
 
             // Serializar el PDF a bytes
             const pdfBytes = await pdfDoc.save();
 
-            // Mostrar el PDF en una nueva pestaña
+            // Mostrar el PDF en el iframe
             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
-            window.open(url);
+            document.getElementById('pdfFrame').src = url;
         }
 
         function generateBarcodeUrl(codigo) {
