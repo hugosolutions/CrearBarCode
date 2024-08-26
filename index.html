@@ -11,6 +11,21 @@
     <iframe id="pdfFrame" style="width: 100%; height: 100vh; border: none;"></iframe>
 
     <script>
+
+        function generateBarcodeUrl(codigo) {
+            const baseUrl = "https://barcode.tec-it.com/barcode.ashx?";
+            const params = new URLSearchParams({
+                code: "Code128",
+                data: encodeURIComponent(codigo),
+                dpi: "96",
+                imagetype: "png",
+                rotation: "0",
+                eclevel: "L",
+                dmsize: "Default"
+            });
+            return `${baseUrl}${params.toString()}`;
+        }
+        
         async function generatePdf() {
             const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
@@ -82,21 +97,7 @@
             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
             document.getElementById('pdfFrame').src = url;
-        }
-
-        function generateBarcodeUrl(codigo) {
-            const baseUrl = "https://barcode.tec-it.com/barcode.ashx?";
-            const params = new URLSearchParams({
-                code: "Code128",
-                data: encodeURIComponent(codigo),
-                dpi: "96",
-                imagetype: "png",
-                rotation: "0",
-                eclevel: "L",
-                dmsize: "Default"
-            });
-            return `${baseUrl}${params.toString()}`;
-        }
+        }        
 
         // Ejecutar la función de generación de PDF al cargar la página
         window.onload = generatePdf;
