@@ -26,9 +26,9 @@
             // Cargar una fuente estándar
             const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-            // Logo en la parte superior izquierda (Asegúrate de tener la URL correcta y el formato PNG)
+            // Logo en la parte superior izquierda
             try {
-                const logoUrl = 'LOGO.jpeg';  // Asegúrate de que esta URL apunte a un archivo PNG
+                const logoUrl = 'LOGO.jpeg';  // Actualiza con la URL del archivo PNG
                 const logoBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
                 const logoImage = await pdfDoc.embedPng(logoBytes);
                 page.drawImage(logoImage, { x: 2, y: 90, width: 90, height: 35 });
@@ -63,15 +63,17 @@
                 color: rgb(0, 0, 0),
             });
 
-            // Generar código de barras como imagen base64 usando JsBarcode
-            const barcodeSvg = JsBarcode('#barcode', codigoProducto, { format: 'CODE128', width: 2, height: 50 });
+            // Generar código de barras usando JsBarcode y canvas
             const barcodeCanvas = document.createElement('canvas');
-            barcodeCanvas.width = barcodeSvg.width.baseVal.value;
-            barcodeCanvas.height = barcodeSvg.height.baseVal.value;
-            const barcodeContext = barcodeCanvas.getContext('2d');
-            barcodeContext.drawImage(barcodeSvg, 0, 0);
+            JsBarcode(barcodeCanvas, codigoProducto, {
+                format: 'CODE128',
+                width: 2,
+                height: 50,
+                displayValue: false,
+            });
+
+            // Esperar a que el canvas esté completamente renderizado
             const barcodeDataUrl = barcodeCanvas.toDataURL('image/png');
-            
             const barcodeImage = await pdfDoc.embedPng(await (await fetch(barcodeDataUrl)).arrayBuffer());
             page.drawImage(barcodeImage, { x: 72, y: 10, width: 200, height: 50 });
 
