@@ -28,7 +28,7 @@
 
             // Logo en la parte superior izquierda (Asegúrate de tener la URL correcta y el formato PNG)
             try {
-                const logoUrl = 'URL_DEL_LOGO_EN_TU_SERVIDOR';  // Asegúrate de que esta URL apunte a un archivo PNG
+                const logoUrl = 'LOGO.jpeg';  // Asegúrate de que esta URL apunte a un archivo PNG
                 const logoBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
                 const logoImage = await pdfDoc.embedPng(logoBytes);
                 page.drawImage(logoImage, { x: 2, y: 90, width: 90, height: 35 });
