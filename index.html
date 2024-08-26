@@ -76,7 +76,7 @@
             // Esperar a que el canvas esté completamente renderizado
             const barcodeDataUrl = barcodeCanvas.toDataURL('image/png');
             const barcodeImage = await pdfDoc.embedPng(await (await fetch(barcodeDataUrl)).arrayBuffer());
-            page.drawImage(barcodeImage, { x: 2, y: 12, width: 220, height: 50 });
+            page.drawImage(barcodeImage, { x: 2, y: 18, width: 220, height: 50 });
 
             // Serializar el PDF a bytes
             const pdfBytes = await pdfDoc.save();
