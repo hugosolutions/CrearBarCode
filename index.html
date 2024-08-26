@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -85,4 +85,94 @@
         }
     </script>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Etiquetas PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+<body>
+    <script>
+        async function generatePdf() {
+            const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+            // Parámetros obtenidos de la URL
+            const params = new URLSearchParams(window.location.search);
+            const codigoProducto = params.get('codigo');
+            const precioProducto = params.get('precio');
+            const nombreProducto = params.get('nombre');
+            const descripcionProducto = params.get('descripcion');
+
+            // Crear un nuevo documento PDF
+            const pdfDoc = await PDFDocument.create();
+            const page = pdfDoc.addPage([3.3 * 72, 1.8 * 72]);
+
+            // Cargar una fuente estándar
+            const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+            // Logo en la parte superior izquierda
+            // Aquí se usa una imagen de ejemplo. Asegúrate de que `LOGO.jpeg` esté disponible en tu servidor.
+            const logoBytes = await fetch('LOGO.jpeg').then(res => res.arrayBuffer());
+            const logoImage = await pdfDoc.embedJpg(logoBytes);
+            page.drawImage(logoImage, { x: 2, y: 90, width: 90, height: 35 });
+
+            // Precio en la parte superior derecha
+            page.drawText(`$${parseFloat(precioProducto).toFixed(2)}`, {
+                x: 130,
+                y: 108,
+                size: 16,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
+            // Nombre del producto
+            page.drawText(nombreProducto, {
+                x: 2,
+                y: 74,
+                size: 12,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
+            // Descripción del producto
+            page.drawText(descripcionProducto, {
+                x: 2,
+                y: 60,
+                size: 12,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
+            // Código de barras (ejemplo simple)
+            page.drawText(codigoProducto, {
+                x: 72,
+                y: 5,
+                size: 18,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
+            // Serializar el PDF a bytes
+            const pdfBytes = await pdfDoc.save();
+
+            // Descargar el PDF generado
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${codigoProducto}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        // Llamar a la función para generar el PDF cuando la página se carga
+        window.onload = generatePdf;
+    </script>
+</body>
 </html>
+
