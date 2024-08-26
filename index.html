@@ -5,36 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Etiquetas PDF</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
-    <h1>Generador de Etiquetas PDF</h1>
-    <iframe id="pdfFrame" style="width: 100%; height: 100vh; border: none;"></iframe>
-
     <script>
-
-        function generateBarcodeUrl(codigo) {
-            const baseUrl = "https://barcode.tec-it.com/barcode.ashx?";
-            const params = new URLSearchParams({
-                code: "Code128",
-                data: encodeURIComponent(codigo),
-                dpi: "96",
-                imagetype: "png",
-                rotation: "0",
-                eclevel: "L",
-                dmsize: "Default"
-            });
-            return `${baseUrl}${params.toString()}`;
-        }
-        
         async function generatePdf() {
             const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
             // Parámetros obtenidos de la URL
             const params = new URLSearchParams(window.location.search);
-            const codigoProducto = params.get('codigo');
-            const precioProducto = params.get('precio');
-            const nombreProducto = params.get('nombre');
-            const descripcionProducto = params.get('descripcion');
+            const codigoProducto = params.get('codigo') || '0000000000';
+            const precioProducto = params.get('precio') || '0.00';
+            const nombreProducto = params.get('nombre') || 'Nombre del Producto';
+            const descripcionProducto = params.get('descripcion') || 'Descripción del Producto';
 
             // Crear un nuevo documento PDF
             const pdfDoc = await PDFDocument.create();
@@ -43,13 +26,14 @@
             // Cargar una fuente estándar
             const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-            // Logo en la parte superior izquierda
+            // Logo en la parte superior izquierda (Asegúrate de tener la URL correcta y el formato PNG)
             try {
-                const logoBytes = await fetch('LOGO.jpeg').then(res => res.arrayBuffer());
+                const logoUrl = 'URL_DEL_LOGO_EN_TU_SERVIDOR';  // Asegúrate de que esta URL apunte a un archivo PNG
+                const logoBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
                 const logoImage = await pdfDoc.embedPng(logoBytes);
                 page.drawImage(logoImage, { x: 2, y: 90, width: 90, height: 35 });
             } catch (error) {
-                console.error("Error loading logo:", error);
+                console.log('Error al cargar el logo:', error);
             }
 
             // Precio en la parte superior derecha
@@ -79,28 +63,29 @@
                 color: rgb(0, 0, 0),
             });
 
-            // Obtener la URL del código de barras
-            const barcodeUrl = generateBarcodeUrl(codigoProducto);
-
-            try {
-                const barcodeBytes = await fetch(barcodeUrl).then(res => res.arrayBuffer());
-                const barcodeImage = await pdfDoc.embedPng(barcodeBytes);
-                page.drawImage(barcodeImage, { x: 72, y: 5, width: 100, height: 20 });
-            } catch (error) {
-                console.error("Error loading barcode:", error);
-            }
+            // Generar código de barras como imagen base64 usando JsBarcode
+            const barcodeSvg = JsBarcode('#barcode', codigoProducto, { format: 'CODE128', width: 2, height: 50 });
+            const barcodeCanvas = document.createElement('canvas');
+            barcodeCanvas.width = barcodeSvg.width.baseVal.value;
+            barcodeCanvas.height = barcodeSvg.height.baseVal.value;
+            const barcodeContext = barcodeCanvas.getContext('2d');
+            barcodeContext.drawImage(barcodeSvg, 0, 0);
+            const barcodeDataUrl = barcodeCanvas.toDataURL('image/png');
+            
+            const barcodeImage = await pdfDoc.embedPng(await (await fetch(barcodeDataUrl)).arrayBuffer());
+            page.drawImage(barcodeImage, { x: 72, y: 10, width: 200, height: 50 });
 
             // Serializar el PDF a bytes
             const pdfBytes = await pdfDoc.save();
 
-            // Mostrar el PDF en el iframe
+            // Mostrar el PDF generado en una nueva pestaña
             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
-            document.getElementById('pdfFrame').src = url;
-        }        
+            window.open(url, '_blank');
+        }
 
-        // Ejecutar la función de generación de PDF al cargar la página
-        window.onload = generatePdf;
+        // Llamar a la función para generar el PDF cuando la página se carga
+        generatePdf();
     </script>
 </body>
 </html>
