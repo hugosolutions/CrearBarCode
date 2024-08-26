@@ -69,17 +69,9 @@
                 format: 'CODE128',
                 width: 2,
                 height: 50,
-                displayValue: false,
+                displayValue: true,
             });
 
-            // Descripción del producto
-            page.drawText(codigoProducto, {
-                x: 100,
-                y: 60,
-                size: 12,
-                font,
-                color: rgb(0, 0, 0),
-            });
 
             // Esperar a que el canvas esté completamente renderizado
             const barcodeDataUrl = barcodeCanvas.toDataURL('image/png');
