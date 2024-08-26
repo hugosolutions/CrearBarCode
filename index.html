@@ -72,10 +72,19 @@
                 displayValue: false,
             });
 
+            // Descripción del producto
+            page.drawText(codigoProducto, {
+                x: 100,
+                y: 60,
+                size: 12,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
             // Esperar a que el canvas esté completamente renderizado
             const barcodeDataUrl = barcodeCanvas.toDataURL('image/png');
             const barcodeImage = await pdfDoc.embedPng(await (await fetch(barcodeDataUrl)).arrayBuffer());
-            page.drawImage(barcodeImage, { x: 2, y: 10, width: 100, height: 50 });
+            page.drawImage(barcodeImage, { x: 2, y: 10, width: 220, height: 50 });
 
             // Serializar el PDF a bytes
             const pdfBytes = await pdfDoc.save();
