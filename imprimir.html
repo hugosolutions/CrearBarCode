@@ -1,0 +1,37 @@
+function doGet(e) {
+
+  htmltemplate = HtmlService.createTemplateFromFile('factura');
+
+  var direccion = e.parameter.direccion || '';
+  var ciudad = e.parameter.ciudad || '';
+  var tipoTienda = e.parameter.tipoTienda || '';
+  var telefono = e.parameter.telefono || '';
+  var instagram = e.parameter.instagram || '';
+  var noFactura = e.parameter.noFactura || '';
+  var tipoVenta = e.parameter.tipoVenta || '';
+  var cliente = e.parameter.cliente || '';
+  var caja = e.parameter.caja || '';
+  var fecha = e.parameter.fecha || '';
+  var hora = e.parameter.hora || '';
+  var caja = e.parameter.caja || '';
+
+  
+
+  htmltemplate.direccion = direccion
+  htmltemplate.ciudad = ciudad
+  htmltemplate.tipoTienda = tipoTienda
+  htmltemplate.telefono = telefono
+  htmltemplate.instagram = instagram
+  htmltemplate.noFactura = noFactura
+  htmltemplate.tipoVenta = tipoVenta
+  htmltemplate.cliente = cliente
+  htmltemplate.caja = caja
+  htmltemplate.fecha = fecha
+  htmltemplate.hora = hora
+  htmltemplate.caja = caja
+
+    
+
+ 
+  return htmltemplate.evaluate();
+}
