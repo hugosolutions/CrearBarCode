@@ -1,37 +1,150 @@
-function doGet(e) {
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=60mm, initial-scale=1.0"> <!-- Cambia el ancho de la vista para el papel de 58mm -->
+    <title>Recibo</title>
+    <style>
+        body {
+            font-family: tahoma, Helvetica, sans-serif; /* Ajuste de fuente */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra similar al primer código */
+        }
 
-  htmltemplate = HtmlService.createTemplateFromFile('factura');
+        .recibo {
+            max-width: 60mm; /* Ancho máximo similar al primer código */
+            margin: auto; /* Centrar en la página */
+        }
 
-  var direccion = e.parameter.direccion || '';
-  var ciudad = e.parameter.ciudad || '';
-  var tipoTienda = e.parameter.tipoTienda || '';
-  var telefono = e.parameter.telefono || '';
-  var instagram = e.parameter.instagram || '';
-  var noFactura = e.parameter.noFactura || '';
-  var tipoVenta = e.parameter.tipoVenta || '';
-  var cliente = e.parameter.cliente || '';
-  var caja = e.parameter.caja || '';
-  var fecha = e.parameter.fecha || '';
-  var hora = e.parameter.hora || '';
-  var caja = e.parameter.caja || '';
+        .header, .footer, .details, .items, .totals {
+            text-align: center;
+            font-weight: bold;
+        }
 
-  
+        .header img {
+            max-width: 50mm; /* Ajusta el tamaño de la imagen para que se ajuste al ancho de la impresora térmica */
+        }
 
-  htmltemplate.direccion = direccion
-  htmltemplate.ciudad = ciudad
-  htmltemplate.tipoTienda = tipoTienda
-  htmltemplate.telefono = telefono
-  htmltemplate.instagram = instagram
-  htmltemplate.noFactura = noFactura
-  htmltemplate.tipoVenta = tipoVenta
-  htmltemplate.cliente = cliente
-  htmltemplate.caja = caja
-  htmltemplate.fecha = fecha
-  htmltemplate.hora = hora
-  htmltemplate.caja = caja
+        .header p, .footer p, .details p, .signature p {
+            margin: 0;
+            padding: 1mm 0; /* Margen y padding similar al primer código */
+        }
 
-    
+        .items, .totals {
+            border-top: 1px dashed #000;
+            padding-top: 2mm;
+            margin-top: 2mm;
+        }
 
- 
-  return htmltemplate.evaluate();
-}
+        .items th, .items td {
+            text-align: left;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .items th {
+            font-weight: bold;
+        }
+
+        .totals td {
+            text-align: right;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .totals .label {
+            text-align: left;
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: 5mm;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body onload="window.print()">
+
+    <div class="recibo">
+        <div class="header">
+            <img src="https://via.placeholder.com/150" alt="Logo de la tienda"> <!-- Ajusta la URL de la imagen según sea necesario -->
+            <p>J&E</p>
+            <p>C/ Doroteo Tapia #66</p>
+            <p>Salcedo, Hermanas Mirabal</p>
+            <p>Tienda de repostería</p>
+            <p>829-869-6026</p>
+            <p>@paostlendaderreposteria</p>
+        </div>
+        
+        <div class="details">
+            <p>Bill #0001392</p>
+            <p>Type of payment: <strong>Credit</strong></p>
+            <p>Customer: <strong>Paola Jimenez</strong></p>
+            <p>Hiunday Santa Fe Negro 2014 83326464652</p>
+            <p>Register: test</p>
+            <p>Date: 28/08/2024</p>
+            <p>Time: 09:15:50 PM</p>
+        </div>
+        
+        <div class="items">
+            <table width="100%">
+                <tr>
+                    <th>ITEM</th>
+                    <th>TOTAL PRICE</th>
+                </tr>
+                <tr>
+                    <td>Cambio de aceite</td>
+                </tr>
+                <tr>
+                    <td>1x250</td>
+                    <td>250.00</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="totals">
+            <table width="100%">
+                <tr>
+                    <td class="label">Total Price:</td>
+                    <td>250.00</td>
+                </tr>
+                <tr>
+                    <td class="label">Discount:</td>
+                    <td>-0.00</td>
+                </tr>
+                <tr>
+                    <td class="label">Total:</td>
+                    <td><strong>250.00</strong></td>
+                </tr>
+                <tr>
+                    <td class="label">Paid:</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td class="label">Pending:</td>
+                    <td><strong>250.00</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">Please pay before: 31/08/2024</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="signature">
+            <p>Paola Jimenez</p>
+        </div>
+        
+        <div class="footer">
+            <p>Gracias por su compra</p>
+            <p>Garantía de 60 días en equipos electrónicos</p>
+        </div>
+    </div>
+
+    <script>
+      window.onload = function(){
+        window.print();
+      }
+    </script>
+</body>
+</html>
