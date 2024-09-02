@@ -18,8 +18,13 @@
             margin: auto; /* Centrar en la página */
         }
 
-        .header, .footer, .details, .items, .totals {
+        .header, .footer, .items, .totals {
             text-align: center;
+            font-weight: bold;
+        }
+
+        .details {
+            text-align: left;
             font-weight: bold;
         }
 
@@ -27,28 +32,41 @@
             max-width: 50mm; /* Ajusta el tamaño de la imagen para que se ajuste al ancho de la impresora térmica */
         }
 
-        .header p, .footer p, .details p, .signature p {
+        .header p, .footer p, .signature p {
             margin: 0;
             padding: 1mm 0; /* Margen y padding similar al primer código */
         }
 
-        .items, .totals {
+        .items {
             border-top: 1px dashed #000;
             padding-top: 2mm;
             margin-top: 2mm;
+            border-top: 1px dashed #000;
         }
 
-        .items th, .items td {
-            text-align: left;
-            font-size: 3mm; /* Tamaño de letra ajustado */
+
+
+        .totals {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
         }
 
-        .items th {
+        .lastTotal {
+            font-size: 5mm;
+            text-align: center;
             font-weight: bold;
         }
 
-        .totals td {
+        .totalsizquierdo {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
             text-align: right;
+        }
+
+        .totals td {
+            text-align: center;
             font-size: 3mm; /* Tamaño de letra ajustado */
         }
 
@@ -56,67 +74,144 @@
             text-align: left;
         }
 
+        .totals .labela {
+            text-align: left;
+        }
+
+        .creditos {
+            display: none;
+            padding-top: 2mm;
+            margin-top: 2mm;
+        }
+
+        .items th, .items td {
+            text-align: left;
+            font-size: 2mm; /* Tamaño de letra ajustado */
+        }
+
+        .items .pro{
+            text-align: right;
+            font-size: 2mm; /* Tamaño de letra ajustado */
+        }
+
+
+
+        .items th {
+            font-weight: bold;
+        }
+
+
+
+        
+
         .signature {
+            display: none;
             text-align: center;
             margin-top: 5mm;
             font-weight: bold;
         }
 
+
     </style>
 </head>
-<body onload="window.print()">
+
+<body>
 
     <div class="recibo">
         <div class="header">
             <img src="https://via.placeholder.com/150" alt="Logo de la tienda"> <!-- Ajusta la URL de la imagen según sea necesario -->
-            <p>J&E</p>
-            <p>C/ Doroteo Tapia #66</p>
-            <p>Salcedo, Hermanas Mirabal</p>
-            <p>Tienda de repostería</p>
-            <p>829-869-6026</p>
-            <p>@paostlendaderreposteria</p>
+            <p id="direccion"></p>
+            <p id="ciudad"></p>
+            <p id="tipoTienda"></p>
+            <p id="telefono"></p>
+            <p id="instagram"></p>
         </div>
         
         <div class="details">
-            <p>Bill #0001392</p>
-            <p>Type of payment: <strong>Credit</strong></p>
-            <p>Customer: <strong>Paola Jimenez</strong></p>
-            <p>Hiunday Santa Fe Negro 2014 83326464652</p>
-            <p>Register: test</p>
-            <p>Date: 28/08/2024</p>
-            <p>Time: 09:15:50 PM</p>
+            <p id="noFactura"></p>
+
+            <p id="tipoVenta">Tipo de Venta: </p>
+            <p id="cliente">Cliente: </p>
+            <p id="caja">Caja: </p>
+            <p id="fecha">Fecha: </p>
+            <p id="hora">Hora: </p>
         </div>
-        
+
         <div class="items">
-            <table width="100%">
+            <table width="100%" id="tablaItems">
                 <tr>
                     <th>ITEM</th>
-                    <th>TOTAL PRICE</th>
-                </tr>
-                <tr>
-                    <td>Cambio de aceite</td>
-                </tr>
-                <tr>
-                    <td>1x250</td>
-                    <td>250.00</td>
+                    <th></th>
+                    <th class="pro">TOTAL PRICE</th>
                 </tr>
             </table>
         </div>
         
-        <div class="totals">
+
+        <script>
+
+            var nombreProducto = document.getElementById("nombreProducto")
+            document.getElementById("cantidadProducto").innerHTML="<?= cantidadProducto ?>";
+            document.getElementById("precioUnitProducto").innerHTML="<?= precioUnitProducto ?>";
+            document.getElementById("precioTotalProducto").innerHTML="<?= precioTotalProducto ?>";
+
+            var result = [];
+
+            cantidades = cantidades.split(",");
+            descripciones = descripciones.split(","); 
+            p_units = p_units.split(",");
+
+            cantidades.forEach(function(value, id) {
+                result[id] = {
+                    cantidad: cantidades[id],
+                    descripcion: descripciones[id], // + " " + detalles[id], // Descomenta si deseas concatenar la descripción con el detalle
+                    precio_unit: parseFloat(p_units[id]).toLocaleString('es-ES', { minimumFractionDigits: 0 }),
+                };
+            });
+            // Ejemplo de datos, puedes reemplazarlo con datos dinámicos
+            var result = [
+                { cantidad: 1, descripcion: "Cambio de aceite", precio_unit: 250.00 },
+                { cantidad: 2, descripcion: "Filtro de aire", precio_unit: 150.00 },
+                { cantidad: 1, descripcion: "Revisión general", precio_unit: 300.00 }
+            ];
+
+            var tablaItems = document.getElementById("tablaItems");
+
+            result.forEach(function(row) {
+                var descripcionRow = document.createElement("tr");
+                var cantidadRow = document.createElement("tr");
+
+                descripcionRow.innerHTML = `
+                    <td>${row.descripcion}</td>
+                `;
+
+                cantidadRow.innerHTML = `
+                    <td>${row.cantidad}x ${row.precio_unit.toFixed(2)}</td>
+                    <td></td>
+                    <td class="pro">${row.precio_unit.toFixed(2)}</td>
+                `;
+
+                tablaItems.appendChild(descripcionRow);
+                tablaItems.appendChild(cantidadRow);
+            });
+        </script>
+
+        
+        
+        <div class="totalsizquierdo">
+            <p id="subTotal" ></p>
+            <p id="descuento" ></p>     
+        </div>
+
+        <div class="lastTotal">
+            <p id="total" ></p>        
+        </div>
+        
+
+        </br>
+
+        <div id="creditos" class="creditos">
             <table width="100%">
-                <tr>
-                    <td class="label">Total Price:</td>
-                    <td>250.00</td>
-                </tr>
-                <tr>
-                    <td class="label">Discount:</td>
-                    <td>-0.00</td>
-                </tr>
-                <tr>
-                    <td class="label">Total:</td>
-                    <td><strong>250.00</strong></td>
-                </tr>
                 <tr>
                     <td class="label">Paid:</td>
                     <td>0.00</td>
@@ -127,19 +222,71 @@
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center;">Please pay before: 31/08/2024</td>
-                </tr>
+                </tr>           
+
+                
             </table>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
         </div>
+
         
-        <div class="signature">
+
+
+        
+        <div id="signature" class="signature">
+            <p>_______________________________________</p>
             <p>Paola Jimenez</p>
+            </br>
+            </br>
+            </br>
         </div>
         
         <div class="footer">
-            <p>Gracias por su compra</p>
-            <p>Garantía de 60 días en equipos electrónicos</p>
+            <p id="piePagina"></p>
+            <p id="otroPie"></p>
         </div>
     </div>
+
+    <script>
+      document.getElementById("direccion").innerHTML="<?= direccion ?>";
+      document.getElementById("ciudad").innerHTML="<?= ciudad ?>";
+      document.getElementById("tipoTienda").innerHTML="<?= tipoTienda ?>";
+      document.getElementById("telefono").innerHTML="<?= telefono ?>";
+      document.getElementById("instagram").innerHTML="<?= instagram ?>";
+      document.getElementById("noFactura").innerHTML="<?= noFactura ?>";
+      document.getElementById("tipoVenta").innerHTML="<?= tipoVenta ?>";
+      document.getElementById("caja").innerHTML="<?= caja ?>";
+      document.getElementById("fecha").innerHTML="<?= fecha ?>";
+      document.getElementById("hora").innerHTML="<?= hora ?>";
+      document.getElementById("subTotal").innerHTML="<?= subTotal ?>";
+      document.getElementById("descuento").innerHTML="<?= descuento ?>";
+      document.getElementById("total").innerHTML="<?= total ?>";
+      document.getElementById("piePagina").innerHTML="<?= piePagina ?>";
+      document.getElementById("otroPie").innerHTML="<?= otroPie ?>";     
+      
+    </script>
+
+    <script>
+        var tipoVenta = document.getElementById("tipoVenta").textContent;
+
+        if (tipoVenta.includes("Credito")) {
+            document.getElementById("creditos").style.display = "block";
+            document.getElementById("signature").style.display = "block";
+        }
+    // Condición que quieres evaluar
+        //var condicion = false; // Puedes cambiar esta variable a false para probar
+
+        // Mostrar u ocultar la sección basado en la condición
+        //if (condicion) {
+            //document.getElementById('creditos').style.display = "block";
+            //document.getElementById('signature').style.display = "block";
+        //}
+    </script>
 
     <script>
       window.onload = function(){
