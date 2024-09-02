@@ -208,34 +208,10 @@
                 </tr>
             </table>
         </div>
+
         
 
         <script>
-
-            var nombreProducto = document.getElementById("nombreProducto")
-            document.getElementById("cantidadProducto").innerHTML="<?= cantidadProducto ?>";
-            document.getElementById("precioUnitProducto").innerHTML="<?= precioUnitProducto ?>";
-            document.getElementById("precioTotalProducto").innerHTML="<?= precioTotalProducto ?>";
-
-            var result = [];
-
-            cantidades = cantidades.split(",");
-            descripciones = descripciones.split(","); 
-            p_units = p_units.split(",");
-
-            cantidades.forEach(function(value, id) {
-                result[id] = {
-                    cantidad: cantidades[id],
-                    descripcion: descripciones[id], // + " " + detalles[id], // Descomenta si deseas concatenar la descripción con el detalle
-                    precio_unit: parseFloat(p_units[id]).toLocaleString('es-ES', { minimumFractionDigits: 0 }),
-                };
-            });
-            // Ejemplo de datos, puedes reemplazarlo con datos dinámicos
-            var result = [
-                { cantidad: 1, descripcion: "Cambio de aceite", precio_unit: 250.00 },
-                { cantidad: 2, descripcion: "Filtro de aire", precio_unit: 150.00 },
-                { cantidad: 1, descripcion: "Revisión general", precio_unit: 300.00 }
-            ];
 
             var tablaItems = document.getElementById("tablaItems");
 
@@ -317,17 +293,31 @@
 
     
     <script>
-        var nroBoletaElement = document.getElementById("nro_boleta_id").textContent = nro_boleta;
-        var nroMesaElement = document.getElementById("nro_mesa_id").textContent = nro_mesa;
-        var nroDireccion = document.getElementById("nro_direccion_id").textContent = direc;
+        // Valores encabezado despues del logo
+        document.getElementById("direccion").textContent = direccion
+        document.getElementById("ciudad").textContent = ciudad 
+        document.getElementById("tipoTienda").textContent = tipoTienda
+        document.getElementById("telefono").textContent = telefono 
+        document.getElementById("instagram").textContent = instagram 
+
+        //valores datos de la factura
+        document.getElementById("noFactura").textContent = "Factura #000" + noFactura
+        document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta 
+        document.getElementById("cliente").textContent = "Cliente: " + cliente
+        document.getElementById("caja").textContent = "Caja: " + caja 
+        document.getElementById("fecha").textContent = "Fecha: " + fecha 
+        document.getElementById("hora").textContent = "Hora: " + hora 
 
 
-        var fechaElement = document.getElementById("fechaR").textContent = fecha;
-        var fecha_entregaElement = document.getElementById("hora").textContent = fecha_entrega;
-        var totalElement = document.getElementById("total").textContent = total;
-        var subtotal_descElement = document.getElementById("efectivo").textContent = descuento;
-        var descuentoElement = document.getElementById("devueltas").textContent = subtotal_desc;
-        var estadoElement = document.getElementById("estado").textContent = estado;
+        //valores totales factura
+        document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
+        document.getElementById("descuento").textContent = "Descuento: -" + tipoVenta 
+        document.getElementById("total").textContent = "Total: " + total
+        
+
+        //pies de factura   
+        document.getElementById("piePagina").textContent = piePagina
+        document.getElementById("otroPie").textContent = otroPie
     </script>
 
     <script>
