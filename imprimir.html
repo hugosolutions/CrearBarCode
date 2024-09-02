@@ -312,23 +312,33 @@
             <p id="piePagina"></p>
             <p id="otroPie"></p>
         </div>
-    </div>   
+    </div>  
+
+
+    
+    <script>
+        var nroBoletaElement = document.getElementById("nro_boleta_id").textContent = nro_boleta;
+        var nroMesaElement = document.getElementById("nro_mesa_id").textContent = nro_mesa;
+        var nroDireccion = document.getElementById("nro_direccion_id").textContent = direc;
+
+
+        var fechaElement = document.getElementById("fechaR").textContent = fecha;
+        var fecha_entregaElement = document.getElementById("hora").textContent = fecha_entrega;
+        var totalElement = document.getElementById("total").textContent = total;
+        var subtotal_descElement = document.getElementById("efectivo").textContent = descuento;
+        var descuentoElement = document.getElementById("devueltas").textContent = subtotal_desc;
+        var estadoElement = document.getElementById("estado").textContent = estado;
+    </script>
 
     <script>
-        var tipoVenta = document.getElementById("tipoVenta").textContent;
+        //var tipoVenta = document.getElementById("tipoVenta").textContent;
+        var tipoVentaAux = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
 
-        if (tipoVenta.includes("Credito")) {
+        if (tipoVentaAux.includes("Credito")) {
             document.getElementById("creditos").style.display = "block";
             document.getElementById("signature").style.display = "block";
         }
-    // Condición que quieres evaluar
-        //var condicion = false; // Puedes cambiar esta variable a false para probar
-
-        // Mostrar u ocultar la sección basado en la condición
-        //if (condicion) {
-            //document.getElementById('creditos').style.display = "block";
-            //document.getElementById('signature').style.display = "block";
-        //}
+        
     </script>
 
     <script>
