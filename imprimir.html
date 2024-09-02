@@ -117,6 +117,25 @@
 
 <body>
 
+    <script>
+      document.getElementById("direccion").innerHTML="<?= direccion ?>";
+      document.getElementById("ciudad").innerHTML="<?= ciudad ?>";
+      document.getElementById("tipoTienda").innerHTML="<?= tipoTienda ?>";
+      document.getElementById("telefono").innerHTML="<?= telefono ?>";
+      document.getElementById("instagram").innerHTML="<?= instagram ?>";
+      document.getElementById("noFactura").innerHTML="<?= noFactura ?>";
+      document.getElementById("tipoVenta").innerHTML="<?= tipoVenta ?>";
+      document.getElementById("caja").innerHTML="<?= caja ?>";
+      document.getElementById("fecha").innerHTML="<?= fecha ?>";
+      document.getElementById("hora").innerHTML="<?= hora ?>";
+      document.getElementById("subTotal").innerHTML="<?= subTotal ?>";
+      document.getElementById("descuento").innerHTML="<?= descuento ?>";
+      document.getElementById("total").innerHTML="<?= total ?>";
+      document.getElementById("piePagina").innerHTML="<?= piePagina ?>";
+      document.getElementById("otroPie").innerHTML="<?= otroPie ?>";     
+      
+    </script>
+
 
     <script>
         // Obtener los parámetros de la URL
@@ -300,26 +319,7 @@
             <p id="piePagina"></p>
             <p id="otroPie"></p>
         </div>
-    </div>
-
-    <script>
-      document.getElementById("direccion").innerHTML="<?= direccion ?>";
-      document.getElementById("ciudad").innerHTML="<?= ciudad ?>";
-      document.getElementById("tipoTienda").innerHTML="<?= tipoTienda ?>";
-      document.getElementById("telefono").innerHTML="<?= telefono ?>";
-      document.getElementById("instagram").innerHTML="<?= instagram ?>";
-      document.getElementById("noFactura").innerHTML="<?= noFactura ?>";
-      document.getElementById("tipoVenta").innerHTML="<?= tipoVenta ?>";
-      document.getElementById("caja").innerHTML="<?= caja ?>";
-      document.getElementById("fecha").innerHTML="<?= fecha ?>";
-      document.getElementById("hora").innerHTML="<?= hora ?>";
-      document.getElementById("subTotal").innerHTML="<?= subTotal ?>";
-      document.getElementById("descuento").innerHTML="<?= descuento ?>";
-      document.getElementById("total").innerHTML="<?= total ?>";
-      document.getElementById("piePagina").innerHTML="<?= piePagina ?>";
-      document.getElementById("otroPie").innerHTML="<?= otroPie ?>";     
-      
-    </script>
+    </div>   
 
     <script>
         var tipoVenta = document.getElementById("tipoVenta").textContent;
