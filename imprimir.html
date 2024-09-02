@@ -220,13 +220,13 @@
                 var cantidadRow = document.createElement("tr");
 
                 descripcionRow.innerHTML = `
-                    <td>${row.descripcion}</td>
+                    <td>${row.nombre}</td>
                 `;
 
                 cantidadRow.innerHTML = `
                     <td>${row.cantidad}x ${row.precio_unit.toFixed(2)}</td>
                     <td></td>
-                    <td class="pro">${row.precio_unit.toFixed(2)}</td>
+                    <td class="pro">${row.precio_total.toFixed(2)}</td>
                 `;
 
                 tablaItems.appendChild(descripcionRow);
