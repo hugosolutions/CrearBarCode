@@ -117,71 +117,64 @@
 
 <body>
 
-    <script>
-      document.getElementById("direccion").innerHTML="<?= direccion ?>";
-      document.getElementById("ciudad").innerHTML="<?= ciudad ?>";
-      document.getElementById("tipoTienda").innerHTML="<?= tipoTienda ?>";
-      document.getElementById("telefono").innerHTML="<?= telefono ?>";
-      document.getElementById("instagram").innerHTML="<?= instagram ?>";
-      document.getElementById("noFactura").innerHTML="<?= noFactura ?>";
-      document.getElementById("tipoVenta").innerHTML="<?= tipoVenta ?>";
-      document.getElementById("caja").innerHTML="<?= caja ?>";
-      document.getElementById("fecha").innerHTML="<?= fecha ?>";
-      document.getElementById("hora").innerHTML="<?= hora ?>";
-      document.getElementById("subTotal").innerHTML="<?= subTotal ?>";
-      document.getElementById("descuento").innerHTML="<?= descuento ?>";
-      document.getElementById("total").innerHTML="<?= total ?>";
-      document.getElementById("piePagina").innerHTML="<?= piePagina ?>";
-      document.getElementById("otroPie").innerHTML="<?= otroPie ?>";     
-      
-    </script>
 
 
     <script>
         // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
 
-        // Obtener los valores de los parámetros
-        var nro_boleta = params.has('boleta') ? params.get('boleta') : "---";
-        var nro_mesa = params.has('mesa') ? params.get('mesa') : "---";
-        var direc = params.has('direccion') ? params.get('direccion') : "---";
+        // Valores encabezado despues del logo
+        var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
+        var ciudad = params.has('ciudad') ? params.get('ciudad') : "ciudad";
+        var tipoTienda = params.has('tipoTienda') ? params.get('tipoTienda') : "tipoTienda";
+        var telefono = params.has('telefono') ? params.get('telefono') : "telefono";
+        var instagram = params.has('instagram') ? params.get('instagram') : "instagram";
+
+        //valores datos de la factura
+        var noFactura = params.has('noFactura') ? params.get('noFactura') : "noFactura";
+        var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
+        var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
+        var caja = params.has('caja') ? params.get('caja') : "caja";
+        var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
+        var hora = params.has('hora') ? params.get('hora') : "hora";
+
+
+        //valores totales factura
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
+        var descuento = params.has('descuento') ? params.get('descuento') : "descuento";
+        var total = params.has('total') ? params.get('total') : "total";
+
+        //valores del detalle de la factura
+        var cantidadProducto = params.has('cantidadProducto') ? params.get('cantidadProducto') : "cantidadProducto";
+        var nombreProducto = params.has('nombreProducto') ? params.get('nombreProducto') : "nombreProducto";
+        var precioUnitProducto = params.has('precioUnitProducto') ? params.get('precioUnitProducto') : "precioUnitProducto";
+        var precioTotalProducto = params.has('precioTotalProducto') ? params.get('precioTotalProducto') : "precioTotalProducto";
         
 
-        var fecha = params.has('fecha') ? params.get('fecha') : "dd/mm/aaaa hh:mm:ss";
-        var fecha_entrega = params.has('fecha_entrega') ? params.get('fecha_entrega') : "hh:mm:ss";
-        var domi = params.has('domi') ? params.get('domi') : "N/A";
-        var propina = params.has('propina') ? params.get('propina') : "N/A";
-
-        var total = params.has('total') ? params.get('total') : "";
-        var subtotal_desc = params.has('subtotal_desc') ? params.get('subtotal_desc') : " ";
-        var descuento = params.has('descuento') ? params.get('descuento') : " ";
-        var estado = params.has('estado') ? params.get('estado') : "--";
-
-        //Recibe los datos de los servicios (separados por comas)
-        var cantidades = params.has('cantidades') ? params.get('cantidades') : "0";
-        var descripciones = params.has('servicios') ? params.get('servicios') : "No hay articulos";
-        var p_units = params.has('p_unit') ? params.get('p_unit') : "0.00";
+        //pies de factura
+        var piePagina = params.has('piePagina') ? params.get('piePagina') : "piePagina";
+        var otroPie = params.has('otroPie') ? params.get('otroPie') : "otroPie";
         
         //Formato de 2 decimales
-        propina = parseFloat(propina).toLocaleString('es-ES', { minimumFractionDigits: 0 });
-        domi = parseFloat(domi).toLocaleString('es-ES', { minimumFractionDigits: 0 });
-        total = parseFloat(total).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+        subTotal = parseFloat(subTotal).toLocaleString('es-ES', { minimumFractionDigits: 0 });
         descuento = parseFloat(descuento).toLocaleString('es-ES', { minimumFractionDigits: 0 });
-        subtotal_desc = parseFloat(subtotal_desc).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+        total = parseFloat(total).toLocaleString('es-ES', { minimumFractionDigits: 0 });
         
         //crea una lista de cada columna a partir de las comas.
-        cantidades = cantidades.split(",");
-        descripciones = descripciones.split(","); 
-        p_units = p_units.split(",");
+        cantidadProducto = cantidadProducto.split(",");
+        nombreProducto = nombreProducto.split(",");
+        precioUnitProducto = precioUnitProducto.split(",");
+        precioTotalProducto = precioTotalProducto.split(",");
 
         //Crea una lista para mostrar en cada fila de la tabla
         var result = [];
 
         cantidades.forEach(function(value, id) {
             result[id] = {
-                cantidad: cantidades[id],
-                descripcion: descripciones[id], // + " " + detalles[id], // Descomenta si deseas concatenar la descripción con el detalle
-                precio_unit: parseFloat(p_units[id]).toLocaleString('es-ES', { minimumFractionDigits: 0 }),
+                cantidad: cantidadProducto[id],
+                nombre: nombreProducto[id], // + " " + detalles[id], // Descomenta si deseas concatenar la descripción con el detalle
+                precio_unit: parseFloat(precioUnitProducto[id]).toLocaleString('es-ES', { minimumFractionDigits: 0 }),
+                precio_total: parseFloat(precioTotalProducto[id]).toLocaleString('es-ES', { minimumFractionDigits: 0 }),
             };
         });
     </script>
