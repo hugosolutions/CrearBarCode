@@ -206,33 +206,31 @@
                     <th></th>
                     <th class="pro">TOTAL PRICE</th>
                 </tr>
+                <script>
+                    var tablaItems = document.getElementById("tablaItems");
+        
+                    result.forEach(function(row) {
+                        var descripcionRow = document.createElement("tr");
+                        var cantidadRow = document.createElement("tr");
+        
+                        descripcionRow.innerHTML = `
+                            <td>${row.nombre}</td>
+                        `;
+        
+                        cantidadRow.innerHTML = `
+                            <td>${row.cantidad}x ${row.precio_unit}</td>
+                            <td></td>
+                            <td class="pro">${row.precio_total.toFixed(2)}</td>
+                        `;
+        
+                        tablaItems.appendChild(descripcionRow);
+                        tablaItems.appendChild(cantidadRow);
+                    });
+                </script>
             </table>
-        </div>
+        </div>      
 
         
-
-        <script>
-
-            var tablaItems = document.getElementById("tablaItems");
-
-            result.forEach(function(row) {
-                var descripcionRow = document.createElement("tr");
-                var cantidadRow = document.createElement("tr");
-
-                descripcionRow.innerHTML = `
-                    <td>${row.nombre}</td>
-                `;
-
-                cantidadRow.innerHTML = `
-                    <td>${row.cantidad}x ${row.precio_unit}</td>
-                    <td></td>
-                    <td class="pro">${row.precio_total.toFixed(2)}</td>
-                `;
-
-                tablaItems.appendChild(descripcionRow);
-                tablaItems.appendChild(cantidadRow);
-            });
-        </script>
 
         
         
