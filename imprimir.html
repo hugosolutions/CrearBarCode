@@ -144,6 +144,7 @@
         //valores totales factura
         var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
         var descuento = params.has('descuento') ? params.get('descuento') : "0.00";
+        var itbis = params.has('itbis') ? params.get('itbis') : "0.00";
         var total = params.has('total') ? params.get('total') : "total";
 
         //valores del detalle de la factura
@@ -160,6 +161,7 @@
         //Formato de 2 decimales
         subTotal = parseFloat(subTotal).toLocaleString('es-ES', { minimumFractionDigits: 0 });
         descuento = parseFloat(descuento).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+        itbis = parseFloat(itbis).toLocaleString('es-ES', { minimumFractionDigits: 0 });
         total = parseFloat(total).toLocaleString('es-ES', { minimumFractionDigits: 0 });
         
         //crea una lista de cada columna a partir de las comas.
