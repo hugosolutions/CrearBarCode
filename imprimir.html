@@ -139,6 +139,8 @@
         var caja = params.has('caja') ? params.get('caja') : "caja";
         var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
         var fechaCredito = params.has('fechaCredito') ? params.get('fechaCredito') : "fechaCredito";
+        var pagadoCredito = params.has('pagadoCredito') ? params.get('pagadoCredito') : "pagadoCredito";
+        var pendienteCredito = params.has('pendienteCredito') ? params.get('pendienteCredito') : "pendienteCredito";
         var hora = params.has('hora') ? params.get('hora') : "hora";
 
 
@@ -263,7 +265,7 @@
                     <td id="pendienteCredito"><strong>250.00</strong></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center;">Please pay before: 31/08/2024</td>
+                    <td id="fechaCredito" colspan="2" style="text-align: center;"></td>
                 </tr>           
 
                 
@@ -321,6 +323,11 @@
         //pies de factura   
         var elemento23=document.getElementById("piePagina").textContent = piePagina
         var elemento24=document.getElementById("otroPie").textContent = otroPie
+
+        //creditos
+        var elemento26=document.getElementById("fechaCredito").textContent = "Pagar antes de: " + fechaCredito 
+        var elemento27=document.getElementById("pagadoCredito").textContent = "Pagado: +" + pagadoCredito 
+        var elemento28=document.getElementById("total").textContent = "Pendiente: " + pendienteCredito
 
     </script>
 
