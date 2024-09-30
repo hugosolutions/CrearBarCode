@@ -150,9 +150,6 @@
         montoEfectivo = parseFloat(montoEfectivo).toLocaleString('en-US', { minimumFractionDigits: 2 });
         montoTotal = parseFloat(montoTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
         diferencia = parseFloat(diferencia).toLocaleString('en-US', { minimumFractionDigits: 2 });
-
-        pendienteCredito = parseFloat(pendienteCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
-        pagadoCredito = parseFloat(pagadoCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
         
     </script>
     <div class="recibo">
@@ -205,7 +202,7 @@
     
     <script>
         // Valores encabezado despues del logo
-        var elemento1=document.getElementById("noCuadre").textContent = noCuadre
+        var elemento1=document.getElementById("noCuadre").textContent = "Cuadre No. #" + noCuadre
         var elemento2=document.getElementById("usuarioRecibe").textContent = usuarioRecibe 
         var elemento2=document.getElementById("usuarioEntrega").textContent = usuarioEntrega 
         var elemento3=document.getElementById("tipoTienda").textContent = tipoTienda
@@ -213,8 +210,10 @@
         var elemento5=document.getElementById("hora").textContent = hora 
 
         //valores datos de la factura
-        var elemento8=document.getElementById("noFactura").textContent = "Factura #000" + noFactura
-        var elemento9=document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta 
+        var elemento8=document.getElementById("montoTransferencia").textContent = "Transferencia: " + montoTransferencia
+        var elemento9=document.getElementById("montoEfectivo").textContent = "Efectivo: " + montoEfectivo
+        var elemento10=document.getElementById("montoTotal").textContent = "Monto Total: " + montoTotal
+        var elemento11=document.getElementById("diferencia").textContent = "Diferencia: " + diferencia
 
     </script>
 
