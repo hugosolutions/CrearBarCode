@@ -178,6 +178,9 @@
         descuento = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
         itbis = parseFloat(itbis).toLocaleString('en-US', { minimumFractionDigits: 2 });
         total = parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+        pendienteCredito = parseFloat(pendienteCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        pagadoCredito = parseFloat(pagadoCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
         
         //crea una lista de cada columna a partir de las comas.
         cantidadProducto = cantidadProducto.split(",");
@@ -338,7 +341,7 @@
 
         //creditos
         var elemento26=document.getElementById("fechaCredito").textContent = "Pagar antes de: " + fechaCredito 
-        var elemento27=document.getElementById("pagadoCredito").textContent = "Pagado: +" + pagadoCredito 
+        var elemento27=document.getElementById("pagadoCredito").textContent = "Pagado: " + pagadoCredito 
         var elemento28=document.getElementById("pendienteCredito").textContent = "Pendiente: " + pendienteCredito
 
     </script>
