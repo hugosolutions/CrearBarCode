@@ -130,10 +130,10 @@
         var usuarioEntrega = params.has('usuarioEntrega') ? params.get('usuarioEntrega') : "usuarioEntrega";
 
         
-        var fechaAux = params.has('fecha') ? params.get('fecha') : "fecha";
-        var partesFecha = fechaAux.split('/');        
+        //var fechaAux = params.has('fecha') ? params.get('fecha') : "fecha";
+        //var partesFecha = fechaAux.split('/');        
         // Reorganiza la fecha al formato dd/mm/yyyy
-        var fecha = partesFecha[1] + '/' + partesFecha[0] + '/' + partesFecha[2];
+        var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
         var hora = params.has('hora') ? params.get('hora') : "hora";
 
 
