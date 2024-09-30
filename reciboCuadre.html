@@ -1,1 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=60mm, initial-scale=1.0"> <!-- Cambia el ancho de la vista para el papel de 58mm -->
+    <title>Recibo</title>
+    <style>
+        body {
+            font-family: tahoma, Helvetica, sans-serif; /* Ajuste de fuente */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra similar al primer código */
+        }
 
+        .recibo {
+            max-width: 60mm; /* Ancho máximo similar al primer código */
+            margin: auto; /* Centrar en la página */
+        }
+
+        .header, .footer, .items, .totals {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .details {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .header img {
+            max-width: 50mm; /* Ajusta el tamaño de la imagen para que se ajuste al ancho de la impresora térmica */
+        }
+
+        .header p, .footer p, .signature p {
+            margin: 0;
+            padding: 1mm 0; /* Margen y padding similar al primer código */
+        }
+
+        .items {
+            border-top: 1px dashed #000;
+            padding-top: 2mm;
+            margin-top: 2mm;
+            border-top: 1px dashed #000;
+            
+        }
+
+
+
+        .totals {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
+        }
+
+        .lastTotal {
+            font-size: 5mm;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .totalsizquierdo {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
+            text-align: right;
+            font-size: 3mm;
+        }
+
+        .totals td {
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .totals .label {
+            text-align: left;
+        }
+
+        .totals .labela {
+            text-align: left;
+        }
+
+        .creditos {
+            display: none;
+            padding-top: 2mm;
+            margin-top: 2mm;
+        }
+
+        .items th, .items td {
+            text-align: left;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .items .pro{
+            text-align: right;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+
+
+        .items th {
+            font-weight: bold;
+        }
+
+
+
+        
+
+        .signature {
+            display: none;
+            text-align: center;
+            margin-top: 5mm;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+
+<body onload="window.print()" onfocus="window.close()">
+
+
+
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        //valores datos de la factura
+        var noCuadre = params.has('noCuadre') ? params.get('noCuadre') : "noCuadre";
+        var usuarioRecibe = params.has('usuarioRecibe') ? params.get('usuarioRecibe') : "usuarioRecibe";
+        var usuarioEntrega = params.has('usuarioEntrega') ? params.get('usuarioEntrega') : "usuarioEntrega";
+
+        
+        var fechaAux = params.has('fecha') ? params.get('fecha') : "fecha";
+        var partesFecha = fechaAux.split('/');        
+        // Reorganiza la fecha al formato dd/mm/yyyy
+        var fecha = partesFecha[1] + '/' + partesFecha[0] + '/' + partesFecha[2];
+        var hora = params.has('hora') ? params.get('hora') : "hora";
+
+
+        //valores totales factura
+        var montoTransferencia = params.has('montoTransferencia') ? params.get('montoTransferencia') : "0.00";
+        var montoEfectivo = params.has('montoEfectivo') ? params.get('montoEfectivo') : "0.00";
+        var montoTotal = params.has('montoTotal') ? params.get('montoTotal') : "0.00";
+        var diferencia = params.has('diferencia') ? params.get('diferencia') : "0.00";
+        
+        
+        //Formato de 2 decimales
+        montoTransferencia = parseFloat(montoTransferencia).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        montoEfectivo = parseFloat(montoEfectivo).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        montoTotal = parseFloat(montoTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        diferencia = parseFloat(diferencia).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+        pendienteCredito = parseFloat(pendienteCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        pagadoCredito = parseFloat(pagadoCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        
+    </script>
+    <div class="recibo">
+        <div class="header">
+            <img src="https://drive.google.com/thumbnail?id=1wfVQ7b-EpuaSulykhxJZYQv2itdIQMqS&sz=w1000" alt="Logo">
+            <p>RECIBO DE CUADRE</p>
+        </div>
+        
+        <div class="details">
+            <p id="noCuadre"></p>
+            <p id="fecha">Fecha: </p>
+            <p id="hora">Hora: </p>
+        </div>      
+
+        <div class="lastTotal">
+            <p id="montoTransferencia" ></p>        
+            <p id="montoEfectivo" ></p>        
+            <p id="montoTotal" ></p>        
+            <p id="diferencia" ></p>        
+        </div>
+        
+
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+
+
+        
+
+
+        
+        <div id="signature" class="signature">
+            <p>_______________________________________</p>
+            <p id="usuarioRecibe"></p>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            <p>_______________________________________</p>
+              <p id="usuarioEntrega"></p>
+        </div>
+    </div>  
+
+
+    
+    <script>
+        // Valores encabezado despues del logo
+        var elemento1=document.getElementById("noCuadre").textContent = noCuadre
+        var elemento2=document.getElementById("usuarioRecibe").textContent = usuarioRecibe 
+        var elemento2=document.getElementById("usuarioEntrega").textContent = usuarioEntrega 
+        var elemento3=document.getElementById("tipoTienda").textContent = tipoTienda
+        var elemento4=document.getElementById("fecha").textContent = fecha 
+        var elemento5=document.getElementById("hora").textContent = hora 
+
+        //valores datos de la factura
+        var elemento8=document.getElementById("noFactura").textContent = "Factura #000" + noFactura
+        var elemento9=document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta 
+
+    </script>
+
+    <script>
+        document.getElementById("creditos").style.display = "block";
+        document.getElementById("signature").style.display = "block";        
+        
+    </script>
+
+</body>
+</html>
