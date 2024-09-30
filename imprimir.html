@@ -138,6 +138,7 @@
         var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
         var caja = params.has('caja') ? params.get('caja') : "caja";
         var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
+        var fechaCredito = params.has('fechaCredito') ? params.get('fechaCredito') : "fechaCredito";
         var hora = params.has('hora') ? params.get('hora') : "hora";
 
 
@@ -254,12 +255,12 @@
         <div id="creditos" class="creditos">
             <table width="100%">
                 <tr>
-                    <td class="label">Paid:</td>
-                    <td>0.00</td>
+                    <td class="label">Pagado:</td>
+                    <td id="pagadoCredito">0.00</td>
                 </tr>
                 <tr>
-                    <td class="label">Pending:</td>
-                    <td><strong>250.00</strong></td>
+                    <td class="label">Pendiente:</td>
+                    <td id="pendienteCredito"><strong>250.00</strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center;">Please pay before: 31/08/2024</td>
