@@ -47,27 +47,27 @@
     </style>
 </head>
 <body id="body">
-    <script>        // Obtener los parámetros de la URL
+    <script>
+        // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
 
-        // Valores encabezado despues del logo
+        // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
         var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
         var estado = params.has('estado') ? params.get('estado') : "estado";
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
 
-        //valores del detalle de la factura
+        // Valores del detalle de la factura
         var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
         var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
         var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
         var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
         var tipoVentaDetalle = params.has('tipoVentaDetalle') ? params.get('tipoVentaDetalle') : "tipoVentaDetalle";
         var estadoDetalle = params.has('estadoDetalle') ? params.get('estadoDetalle') : "estadoDetalle";
-        var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";        
+        var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";
 
-        
-        //crea una lista de cada columna a partir de las comas.
+        // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
         idDetalle = idDetalle.split(",");
         clienteDetalle = clienteDetalle.split(",");
@@ -75,15 +75,15 @@
         tipoVentaDetalle = tipoVentaDetalle.split(",");
         estadoDetalle = estadoDetalle.split(",");
         totalDetalle = totalDetalle.split(",");
-        
+
     </script>
     <button id="btn-pdf">Generar PDF</button>
     <h1 id="titulo">Reporte de ventas por fecha</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
     <div id="info" class="info">
-        <p id="vendedores"><strong></p>
-        <p id="estado"><strong></p>
+        <p id="vendedores"><strong></strong></p>
+        <p id="estado"><strong></strong></p>
     </div>
     <table id="tabla-ventas">
         <thead>
@@ -102,14 +102,12 @@
         </tbody>
     </table>
     <div class="total">
-        <p id="total" ></p>
+        <p id="total"></p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
-
-
 
     <script>
         function formatNumber(num) {
@@ -132,14 +130,14 @@
             
             totalGeneral += parseFloat(totalDetalle[i]);
         }
-        // Valores encabezado despues del logo
-        var elemento1=document.getElementById("periodo").textContent = periodo
-        var elemento2=document.getElementById("vendedores").textContent = "Vendedores: " + vendedores 
-        var elemento3=document.getElementById("estado").textContent = "Estados: " + estado  
-        
-        var elemento19=document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral)
 
-          // Función para generar el PDF con contenido completo
+        // Valores encabezado después del logo
+        document.getElementById("periodo").textContent = periodo;
+        document.getElementById("vendedores").textContent = "Vendedores: " + vendedores;
+        document.getElementById("estado").textContent = "Estados: " + estado;
+        document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
+
+        // Función para generar el PDF con contenido completo
         document.getElementById('btn-pdf').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({
@@ -164,11 +162,12 @@
             }
 
             // Agregar encabezado y datos de la tabla
-            doc.text('Reporte de Ventas', 2.25, 1); // Título del reporte
-            doc.text(`Periodo: ${periodo}`, 2.25, 1.5);
-            doc.text(`Vendedores: ${vendedores}`, 0.5, 2);
-            doc.text(`Estado: ${estado}`, 0.5, 2.5);
-            
+            const pageWidth = doc.internal.pageSize.getWidth();
+            doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
+            doc.text(`Periodo: ${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
+            doc.text(`Vendedores: ${vendedores}`, pageWidth / 2, 2, { align: 'center' });
+            doc.text(`Estado: ${estado}`, pageWidth / 2, 2.5, { align: 'center' });
+
             doc.autoTable({
                 head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
                 body: tableData,
@@ -176,16 +175,13 @@
                 margin: { left: 0.5, right: 0.5 }
             });
 
-            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el 
-
-            doc.text(`Total: ${totalGeneral}`, 6.5, filasTablas);
+            // Obtener la posición de la última fila de la tabla
+            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
+            doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 3 + (filasTablas * 0.3), { align: 'center' });
 
             // Guardar PDF
             doc.save('reporte_ventas.pdf');
         });
-        
-        
-
     </script>
 </body>
 </html>
