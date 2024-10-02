@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Ventas por Usuario</title>
+    <title>Reporte de Ventas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,9 +53,10 @@
 
         // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
-        var usuarios = params.has('usuarios') ? params.get('usuarios') : "usuarios";
+        var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
+        var estado = params.has('estado') ? params.get('estado') : "estado";
         var total = params.has('total') ? params.get('total') : "total";
-        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
 
         // Valores del detalle de la factura
         var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
@@ -77,6 +78,9 @@
 
     </script>
     <button id="btn-pdf">Generar PDF</button>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 100%; height: auto;">
+    </div>
     <h1 id="titulo">Reporte de ventas por fecha</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
@@ -126,14 +130,15 @@
             row.insertCell(4).textContent = tipoVentaDetalle[i];
             row.insertCell(5).textContent = estadoDetalle[i];
             row.insertCell(6).textContent = '$' + formatNumber(totalDetalle[i]);
-            
+
             totalGeneral += parseFloat(totalDetalle[i]);
         }
 
-        // Valores encabezado después del logo
-        document.getElementById("periodo").textContent = periodo;
-        document.getElementById("usuarios").textContent = "usuarios: " + usuarios;
-        document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
+        document.getElementById('total').textContent = `Total: $${formatNumber(totalGeneral)}`;
+        document.getElementById('vendedores').querySelector('strong').textContent = `Vendedores: ${vendedores}`;
+        document.getElementById('estado').querySelector('strong').textContent = `Estado: ${estado}`;
+        document.getElementById('periodo').textContent = `Periodo: ${periodo}`;
+        document.getElementById('nombreEmpresa').textContent = `Empresa: ${nombreEmpresa}`;
 
         // Función para generar el PDF con contenido completo
         document.getElementById('btn-pdf').addEventListener('click', () => {
@@ -144,40 +149,51 @@
                 orientation: 'portrait'
             });
 
-            // Usar autoTable para tablas largas
-            const tableData = [];
+            // Agregar la imagen al PDF
+            const logoUrl = "https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+            const img = new Image();
+            img.src = logoUrl;
 
-            for (let i = 0; i < fechaDetalle.length; i++) {
-                tableData.push([
-                    fechaDetalle[i],
-                    idDetalle[i],
-                    clienteDetalle[i],
-                    usuarioDetalle[i],
-                    tipoVentaDetalle[i],
-                    estadoDetalle[i],
-                    '$' + formatNumber(totalDetalle[i])
-                ]);
-            }
+            img.onload = () => {
+                // Insertar la imagen
+                doc.addImage(img, 'JPEG', 15, 0.5, 180, 40); // Ajusta las coordenadas y dimensiones según sea necesario
 
-            // Agregar encabezado y datos de la tabla
-            const pageWidth = doc.internal.pageSize.getWidth();
-            doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
-            doc.text(`Periodo: ${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
-            doc.text(`Usuarios: ${usuarios}`, pageWidth / 2, 2, { align: 'center' });
+                // Usar autoTable para tablas largas
+                const tableData = [];
 
-            doc.autoTable({
-                head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
-                body: tableData,
-                startY: 3,
-                margin: { left: 0.5, right: 0.5 }
-            });
+                for (let i = 0; i < fechaDetalle.length; i++) {
+                    tableData.push([
+                        fechaDetalle[i],
+                        idDetalle[i],
+                        clienteDetalle[i],
+                        usuarioDetalle[i],
+                        tipoVentaDetalle[i],
+                        estadoDetalle[i],
+                        '$' + formatNumber(totalDetalle[i])
+                    ]);
+                }
 
-            // Obtener la posición de la última fila de la tabla
-            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
-            doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 3 + (filasTablas * 0.3), { align: 'center' });
+                // Agregar encabezado y datos de la tabla
+                const pageWidth = doc.internal.pageSize.getWidth();
+                doc.text('Reporte de Ventas', pageWidth / 2, 2, { align: 'center' }); // Título del reporte
+                doc.text(`Periodo: ${periodo}`, pageWidth / 2, 2.5, { align: 'center' });
+                doc.text(`Vendedores: ${vendedores}`, pageWidth / 2, 3, { align: 'center' });
+                doc.text(`Estado: ${estado}`, pageWidth / 2, 3.5, { align: 'center' });
 
-            // Guardar PDF
-            doc.save('reporte_ventas.pdf');
+                doc.autoTable({
+                    head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
+                    body: tableData,
+                    startY: 4, // Ajusta la posición de inicio de la tabla
+                    margin: { left: 0.5, right: 0.5 }
+                });
+
+                // Obtener la posición de la última fila de la tabla
+                const filasTablas = tableData.length + 4; // Sumar las filas de la tabla más el encabezado
+                doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4 + (filasTablas * 0.3), { align: 'center' });
+
+                // Guardar PDF
+                doc.save('reporte_ventas.pdf');
+            };
         });
     </script>
 </body>
