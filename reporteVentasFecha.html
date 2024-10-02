@@ -105,7 +105,9 @@
         <p id="total" ></p>
     </div>
 
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
     <script>
         function formatNumber(num) {
@@ -136,24 +138,24 @@
         var elemento19=document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral)
 
         // Función para generar el PDF
+        // Función para generar el PDF
         document.getElementById('btn-pdf').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({
-                unit: 'in', // Medidas en pulgadas
-                format: 'letter', // Tamaño de hoja Letter
-                orientation: 'portrait'
-            });
-            
 
-            // Convertir el contenido del cuerpo en PDF
-            doc.html(document.getElementById('body'), {
-                callback: function (doc) {
-                    doc.save('reporte_ventas.pdf');
-                },
-                margin: [0.5, 0.5, 0.5, 0.5], // Márgenes de 0.5 pulgadas
-                autoPaging: 'text',
-                width: 8.5, // Ancho de Letter
-                windowWidth: 650
+            html2canvas(document.body).then(canvas => {
+                const doc = new jsPDF({
+                    unit: 'in',
+                    format: 'letter',
+                    orientation: 'portrait'
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 8.5; // Letter width in inches
+                const pageHeight = 11; // Letter height in inches
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+
+                doc.addImage(imgData, 'PNG', 0.5, 0.5, imgWidth - 1, imgHeight - 1); // Margin of 0.5 inches
+                doc.save('reporte_ventas.pdf');
             });
         });
         
