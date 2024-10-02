@@ -164,7 +164,7 @@
             // Agregar encabezado y datos de la tabla
             const pageWidth = doc.internal.pageSize.getWidth();
             doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
-            doc.text(`Periodo: ${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
+            doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
             doc.text(`Vendedores: ${vendedores}`, pageWidth / 2, 2, { align: 'center' });
             doc.text(`Estado: ${estado}`, pageWidth / 2, 2.5, { align: 'center' });
 
