@@ -137,25 +137,24 @@
         
         var elemento19=document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral)
 
-        // Función para generar el PDF
-        // Función para generar el PDF
-        document.getElementById('btn-pdf').addEventListener('click', () => {
+        // Función para generar el PDF con contenido HTML
+        document.getElementById('btn-ppdf').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            });
 
-            html2canvas(document.body).then(canvas => {
-                const doc = new jsPDF({
-                    unit: 'in',
-                    format: 'letter',
-                    orientation: 'portrait'
-                });
-
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 8.5; // Letter width in inches
-                const pageHeight = 11; // Letter height in inches
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-
-                doc.addImage(imgData, 'PNG', 0.5, 0.5, imgWidth - 1, imgHeight - 1); // Margin of 0.5 inches
-                doc.save('reporte_ventas.pdf');
+            // Agregar contenido HTML directamente al PDF
+            doc.html(document.body, {
+                callback: function (pdf) {
+                    pdf.save('reporte_ventas.pdf');
+                },
+                x: 0.5,  // Margen izquierdo de 0.5 pulgadas
+                y: 0.5,  // Margen superior de 0.5 pulgadas
+                width: 7.5,  // Ancho del contenido (Letter width - márgenes)
+                windowWidth: 1024  // Simula el ancho de la ventana del navegador
             });
         });
         
