@@ -107,6 +107,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
 
 
     <script>
@@ -137,8 +139,8 @@
         
         var elemento19=document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral)
 
-        // Función para generar el PDF con contenido HTML
-        document.getElementById('btn-ppdf').addEventListener('click', () => {
+          // Función para generar el PDF con contenido completo
+        document.getElementById('btn-pdf').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({
                 unit: 'in',
@@ -146,16 +148,36 @@
                 orientation: 'portrait'
             });
 
-            // Agregar contenido HTML directamente al PDF
-            doc.html(document.body, {
-                callback: function (pdf) {
-                    pdf.save('reporte_ventas.pdf');
-                },
-                x: 0.5,  // Margen izquierdo de 0.5 pulgadas
-                y: 0.5,  // Margen superior de 0.5 pulgadas
-                width: 7.5,  // Ancho del contenido (Letter width - márgenes)
-                windowWidth: 1024  // Simula el ancho de la ventana del navegador
+            // Usar autoTable para tablas largas
+            const tableData = [];
+
+            for (let i = 0; i < fechaDetalle.length; i++) {
+                tableData.push([
+                    fechaDetalle[i],
+                    idDetalle[i],
+                    clienteDetalle[i],
+                    usuarioDetalle[i],
+                    tipoVentaDetalle[i],
+                    estadoDetalle[i],
+                    '$' + formatNumber(totalDetalle[i])
+                ]);
+            }
+
+            // Agregar encabezado y datos de la tabla
+            doc.text('Reporte de Ventas', 0.5, 1); // Título del reporte
+            doc.text(`Periodo: ${periodo}`, 0.5, 1.5);
+            doc.text(`Vendedores: ${vendedores}`, 0.5, 2);
+            doc.text(`Estado: ${estado}`, 0.5, 2.5);
+            
+            doc.autoTable({
+                head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
+                body: tableData,
+                startY: 3,
+                margin: { left: 0.5, right: 0.5 }
             });
+
+            // Guardar PDF
+            doc.save('reporte_ventas.pdf');
         });
         
         
