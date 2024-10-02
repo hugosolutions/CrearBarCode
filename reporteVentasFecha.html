@@ -119,6 +119,7 @@
         // Llenar la tabla de ventas
         const tablaVentas = document.getElementById('datos-ventas');
         let totalGeneral = 0;
+        let filasTablas = fechaDetalle.length + 2;
 
         for (let i = 0; i < fechaDetalle.length; i++) {
             const row = tablaVentas.insertRow();
@@ -164,8 +165,8 @@
             }
 
             // Agregar encabezado y datos de la tabla
-            doc.text('Reporte de Ventas', 0.5, 1); // Título del reporte
-            doc.text(`Periodo: ${periodo}`, 0.5, 1.5);
+            doc.text('Reporte de Ventas', 4.25, 1); // Título del reporte
+            doc.text(`Periodo: ${periodo}`, 4.25, 1.5);
             doc.text(`Vendedores: ${vendedores}`, 0.5, 2);
             doc.text(`Estado: ${estado}`, 0.5, 2.5);
             
@@ -175,6 +176,8 @@
                 startY: 3,
                 margin: { left: 0.5, right: 0.5 }
             });
+
+            doc.text(`Total: ${totalGeneral}`, 6.5, filasTablas);
 
             // Guardar PDF
             doc.save('reporte_ventas.pdf');
