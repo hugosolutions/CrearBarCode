@@ -47,9 +47,7 @@
     </style>
 </head>
 <body id="body">
-    <script>
-        window.html2canvas = html2canvas;
-        // Obtener los parámetros de la URL
+    <script>        // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
 
         // Valores encabezado despues del logo
@@ -145,6 +143,7 @@
                 format: 'letter', // Tamaño de hoja Letter
                 orientation: 'portrait'
             });
+            
 
             // Convertir el contenido del cuerpo en PDF
             doc.html(document.getElementById('body'), {
