@@ -37,6 +37,13 @@
             text-align: right;
             padding-top: 10px;
         }
+        #btn-pdf {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body id="body">
@@ -71,7 +78,7 @@
         totalDetalle = totalDetalle.split(",");
         
     </script>
-    
+    <button id="btn-pdf">Generar PDF</button>
     <h1 id="titulo">Reporte de ventas por fecha</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
@@ -98,6 +105,8 @@
     <div class="total">
         <p id="total" ></p>
     </div>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         function formatNumber(num) {
