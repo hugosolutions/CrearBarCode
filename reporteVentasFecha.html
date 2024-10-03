@@ -54,7 +54,7 @@
         // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
         var total = params.has('total') ? params.get('total') : "total";
-        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
 
         // Valores del detalle de la factura
         var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
@@ -130,6 +130,7 @@
 
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
         document.getElementById("vendedores").textContent = "Vendedores: " + vendedores;
         document.getElementById("estado").textContent = "Estados: " + estado;
         document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
