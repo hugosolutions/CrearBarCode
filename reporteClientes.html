@@ -53,7 +53,7 @@
 
         // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
-        var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
+        var clientes = params.has('clientes') ? params.get('clientes') : "clientes";
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
 
@@ -82,11 +82,11 @@
     <div style="text-align: center; margin-bottom: 10px;">
         <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 50%; height: auto;">
     </div>
-    <h1 id="titulo">Reporte de Ventas por Clientes</h1>
+    <h1 id="titulo">Reporte de ventas por cliente</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
     <div id="info" class="info">
-        <p id="vendedores"><strong></strong></p>
+        <p id="clientes"><strong></strong></p>
     </div>
     <table id="tabla-ventas">
         <thead>
@@ -138,7 +138,7 @@
 
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
-        document.getElementById("vendedores").textContent = "Usuarios: " + vendedores;
+        document.getElementById("clientes").textContent = "Clientes: " + clientes;
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
 
@@ -172,7 +172,7 @@
             doc.text('Reporte de Ventas por Clientes', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
             doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
             doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
-            doc.text(`Usuarios: ${vendedores}`, 1.5, 2.5);
+            doc.text(`Clientes: ${clientes}`, 1.5, 2.5);
 
             doc.autoTable({
                 head: [['Fecha', 'Hora', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
