@@ -54,12 +54,12 @@
         // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
         var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
-        var estado = params.has('estado') ? params.get('estado') : "estado";
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
 
         // Valores del detalle de la factura
         var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
         var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
         var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
         var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
@@ -69,6 +69,7 @@
 
         // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
+        horaDetalle = horaDetalle.split(",");
         idDetalle = idDetalle.split(",");
         clienteDetalle = clienteDetalle.split(",");
         usuarioDetalle = usuarioDetalle.split(",");
@@ -81,17 +82,17 @@
     <div style="text-align: center; margin-bottom: 10px;">
         <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 50%; height: auto;">
     </div>
-    <h1 id="titulo">Reporte de ventas por fecha</h1>
+    <h1 id="titulo">Reporte de ventas por usuario</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
     <div id="info" class="info">
         <p id="vendedores"><strong></strong></p>
-        <p id="estado"><strong></strong></p>
     </div>
     <table id="tabla-ventas">
         <thead>
             <tr>
                 <th>Fecha</th>
+                <th>Hora</th>
                 <th>ID</th>
                 <th>Cliente</th>
                 <th>Usuario</th>
@@ -124,12 +125,13 @@
         for (let i = 0; i < fechaDetalle.length; i++) {
             const row = tablaVentas.insertRow();
             row.insertCell(0).textContent = fechaDetalle[i];
-            row.insertCell(1).textContent = idDetalle[i];
-            row.insertCell(2).textContent = clienteDetalle[i];
-            row.insertCell(3).textContent = usuarioDetalle[i];
-            row.insertCell(4).textContent = tipoVentaDetalle[i];
-            row.insertCell(5).textContent = estadoDetalle[i];
-            row.insertCell(6).textContent = '$' + formatNumber(totalDetalle[i]);
+            row.insertCell(1).textContent = horaDetalle[i];
+            row.insertCell(2).textContent = idDetalle[i];
+            row.insertCell(3).textContent = clienteDetalle[i];
+            row.insertCell(4).textContent = usuarioDetalle[i];
+            row.insertCell(5).textContent = tipoVentaDetalle[i];
+            row.insertCell(6).textContent = estadoDetalle[i];
+            row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
             
             totalGeneral += parseFloat(totalDetalle[i]);
         }
@@ -137,7 +139,7 @@
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
         document.getElementById("vendedores").textContent = "Vendedores: " + vendedores;
-        document.getElementById("estado").textContent = "Estados: " + estado;
+        document.getElementById("nombreEmpresa").textContent = "nombreEmpresa: " + nombreEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
 
         // Función para generar el PDF con contenido completo
@@ -155,6 +157,7 @@
             for (let i = 0; i < fechaDetalle.length; i++) {
                 tableData.push([
                     fechaDetalle[i],
+                    horaDetalle[i],
                     idDetalle[i],
                     clienteDetalle[i],
                     usuarioDetalle[i],
@@ -168,11 +171,11 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
             doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
-            doc.text(`Periodo: ${periodo}`, 1.5, 2);
+            doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
             doc.text(`Vendedores: ${vendedores}`, 1.5, 2.5);
 
             doc.autoTable({
-                head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
+                head: [['Fecha', 'Hora', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
                 body: tableData,
                 startY: 3,
                 margin: { left: 0.5, right: 0.5 }
