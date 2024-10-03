@@ -53,8 +53,6 @@
 
         // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
-        var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
-        var estado = params.has('estado') ? params.get('estado') : "estado";
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
 
@@ -84,10 +82,6 @@
     <h1 id="titulo">Reporte de ventas por fecha</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
-    <div id="info" class="info">
-        <p id="vendedores"><strong></strong></p>
-        <p id="estado"><strong></strong></p>
-    </div>
     <table id="tabla-ventas">
         <thead>
             <tr>
@@ -168,8 +162,6 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
             doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
-            doc.text(`Periodo: ${periodo}`, 1.5, 2);
-            doc.text(`Vendedores: ${vendedores}`, 1.5, 2.5);
 
             doc.autoTable({
                 head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
