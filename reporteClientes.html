@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ventas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 10px;
+        }
+        #btn-pdf {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body id="body">
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
 
+        // Valores encabezado después del logo
+        var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
+        var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
+        var total = params.has('total') ? params.get('total') : "total";
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "instagram";
+
+        // Valores del detalle de la factura
+        var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
+        var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
+        var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
+        var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
+        var tipoVentaDetalle = params.has('tipoVentaDetalle') ? params.get('tipoVentaDetalle') : "tipoVentaDetalle";
+        var estadoDetalle = params.has('estadoDetalle') ? params.get('estadoDetalle') : "estadoDetalle";
+        var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";
+
+        // Crear una lista de cada columna a partir de las comas.
+        fechaDetalle = fechaDetalle.split(",");
+        horaDetalle = horaDetalle.split(",");
+        idDetalle = idDetalle.split(",");
+        clienteDetalle = clienteDetalle.split(",");
+        usuarioDetalle = usuarioDetalle.split(",");
+        tipoVentaDetalle = tipoVentaDetalle.split(",");
+        estadoDetalle = estadoDetalle.split(",");
+        totalDetalle = totalDetalle.split(",");
+
+    </script>
+    <button id="btn-pdf">Generar PDF</button>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 50%; height: auto;">
+    </div>
+    <h1 id="titulo">Reporte de Ventas por Clientes</h1>
+    <h1 id="periodo"></h1>
+    <h1 id="nombreEmpresa"></h1>
+    <div id="info" class="info">
+        <p id="vendedores"><strong></strong></p>
+    </div>
+    <table id="tabla-ventas">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Usuario</th>
+                <th>Tipo de venta</th>
+                <th>Estado</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="datos-ventas">
+
+        </tbody>
+    </table>
+    <div class="total">
+        <p id="total"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+        let totalGeneral = 0;
+
+        for (let i = 0; i < fechaDetalle.length; i++) {
+            const row = tablaVentas.insertRow();
+            row.insertCell(0).textContent = fechaDetalle[i];
+            row.insertCell(1).textContent = horaDetalle[i];
+            row.insertCell(2).textContent = idDetalle[i];
+            row.insertCell(3).textContent = clienteDetalle[i];
+            row.insertCell(4).textContent = usuarioDetalle[i];
+            row.insertCell(5).textContent = tipoVentaDetalle[i];
+            row.insertCell(6).textContent = estadoDetalle[i];
+            row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
+            
+            totalGeneral += parseFloat(totalDetalle[i]);
+        }
+
+        // Valores encabezado después del logo
+        document.getElementById("periodo").textContent = periodo;
+        document.getElementById("vendedores").textContent = "Usuarios: " + vendedores;
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
+        document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
+
+        // Función para generar el PDF con contenido completo
+        document.getElementById('btn-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            });
+
+            // Usar autoTable para tablas largas
+            const tableData = [];
+
+            for (let i = 0; i < fechaDetalle.length; i++) {
+                tableData.push([
+                    fechaDetalle[i],
+                    horaDetalle[i],
+                    idDetalle[i],
+                    clienteDetalle[i],
+                    usuarioDetalle[i],
+                    tipoVentaDetalle[i],
+                    estadoDetalle[i],
+                    '$' + formatNumber(totalDetalle[i])
+                ]);
+            }
+
+            // Agregar encabezado y datos de la tabla
+            const pageWidth = doc.internal.pageSize.getWidth();
+            doc.text('Reporte de Ventas por Clientes', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
+            doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
+            doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
+            doc.text(`Usuarios: ${vendedores}`, 1.5, 2.5);
+
+            doc.autoTable({
+                head: [['Fecha', 'Hora', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
+                body: tableData,
+                startY: 3,
+                margin: { left: 0.5, right: 0.5 }
+            });
+
+            // Obtener la posición de la última fila de la tabla
+            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
+            doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 3 + (filasTablas * 0.3), { align: 'center' });
+
+            // Guardar PDF
+            doc.save('reporte_ventas.pdf');
+        });
+    </script>
+</body>
+</html>
