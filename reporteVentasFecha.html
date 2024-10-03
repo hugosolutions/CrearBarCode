@@ -58,6 +58,7 @@
 
         // Valores del detalle de la factura
         var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
         var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
         var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
         var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
@@ -67,6 +68,7 @@
 
         // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
+        horaDetalle = fechaDetalle.split(",");
         idDetalle = idDetalle.split(",");
         clienteDetalle = clienteDetalle.split(",");
         usuarioDetalle = usuarioDetalle.split(",");
@@ -86,6 +88,7 @@
         <thead>
             <tr>
                 <th>Fecha</th>
+                <th>Hora</th>
                 <th>ID</th>
                 <th>Cliente</th>
                 <th>Usuario</th>
@@ -118,12 +121,13 @@
         for (let i = 0; i < fechaDetalle.length; i++) {
             const row = tablaVentas.insertRow();
             row.insertCell(0).textContent = fechaDetalle[i];
-            row.insertCell(1).textContent = idDetalle[i];
-            row.insertCell(2).textContent = clienteDetalle[i];
-            row.insertCell(3).textContent = usuarioDetalle[i];
-            row.insertCell(4).textContent = tipoVentaDetalle[i];
-            row.insertCell(5).textContent = estadoDetalle[i];
-            row.insertCell(6).textContent = '$' + formatNumber(totalDetalle[i]);
+            row.insertCell(1).textContent = horaDetalle[i];
+            row.insertCell(2).textContent = idDetalle[i];
+            row.insertCell(3).textContent = clienteDetalle[i];
+            row.insertCell(4).textContent = usuarioDetalle[i];
+            row.insertCell(5).textContent = tipoVentaDetalle[i];
+            row.insertCell(6).textContent = estadoDetalle[i];
+            row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
             
             totalGeneral += parseFloat(totalDetalle[i]);
         }
@@ -131,8 +135,6 @@
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
-        document.getElementById("vendedores").textContent = "Vendedores: " + vendedores;
-        document.getElementById("estado").textContent = "Estados: " + estado;
         document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
 
         // Función para generar el PDF con contenido completo
@@ -150,6 +152,7 @@
             for (let i = 0; i < fechaDetalle.length; i++) {
                 tableData.push([
                     fechaDetalle[i],
+                    horaDetalle[i],
                     idDetalle[i],
                     clienteDetalle[i],
                     usuarioDetalle[i],
@@ -163,9 +166,10 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
             doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
+            doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
 
             doc.autoTable({
-                head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
+                head: [['Fecha','Hora', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
                 body: tableData,
                 startY: 3,
                 margin: { left: 0.5, right: 0.5 }
