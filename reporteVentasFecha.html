@@ -168,8 +168,8 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
             doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
-            doc.text(`Vendedores: ${vendedores}`, pageWidth / 2, 2, { align: 'center' });
-            doc.text(`Estado: ${estado}`, pageWidth / 2, 2.5, { align: 'center' });
+            doc.text(`Periodo: ${periodo}`, 1.5, 2);
+            doc.text(`Vendedores: ${vendedores}`, 1.5, 2.5);
 
             doc.autoTable({
                 head: [['Fecha', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
