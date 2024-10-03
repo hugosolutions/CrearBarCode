@@ -138,8 +138,8 @@
 
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
-        document.getElementById("vendedores").textContent = "Vendedores: " + vendedores;
-        document.getElementById("nombreEmpresa").textContent = "nombreEmpresa: " + nombreEmpresa;
+        document.getElementById("vendedores").textContent = "Usuarios: " + vendedores;
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
 
         // Función para generar el PDF con contenido completo
@@ -172,7 +172,7 @@
             doc.text('Reporte de Ventas', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
             doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
             doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
-            doc.text(`Vendedores: ${vendedores}`, 1.5, 2.5);
+            doc.text(`Usuarios: ${vendedores}`, 1.5, 2.5);
 
             doc.autoTable({
                 head: [['Fecha', 'Hora', 'ID', 'Cliente', 'Usuario', 'Tipo de Venta', 'Estado', 'Total']],
