@@ -125,8 +125,15 @@
             row.insertCell(2).textContent = idDetalle[i];
             row.insertCell(3).textContent = usuarioDetalle[i];
             row.insertCell(4).textContent = descripcionDetalle[i];
-            row.insertCell(5).textContent = entradaDetalle[i] ? '+' + formatNumber(entradaDetalle[i]) : ' ';
-            row.insertCell(6).textContent = salidaDetalle[i] ? '-' + formatNumber(salidaDetalle[i]) : ' ';
+            // Verificar si entradaDetalle es 0.00 o vacío
+            row.insertCell(5).textContent = (entradaDetalle[i] && parseFloat(entradaDetalle[i]) !== 0) 
+                ? '+' + formatNumber(entradaDetalle[i]) 
+                : ' ';
+        
+            // Verificar si salidaDetalle es 0.00 o vacío
+            row.insertCell(6).textContent = (salidaDetalle[i] && parseFloat(salidaDetalle[i]) !== 0) 
+                ? '-' + formatNumber(salidaDetalle[i]) 
+                : ' ';
         }
 
         // Valores encabezado después del logo
