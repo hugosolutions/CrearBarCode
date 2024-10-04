@@ -64,7 +64,7 @@
         var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
         var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
         var entradaDetalle = params.has('entradaDetalle') ? params.get('entradaDetalle') : "entradaDetalle";
-        var salidaDetaslle = params.has('salidaDetaslle') ? params.get('salidaDetaslle') : "salidaDetaslle";
+        var salidaDetalle = params.has('salidaDetalle') ? params.get('salidaDetalle') : "salidaDetalle";
 
         // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
@@ -72,8 +72,8 @@
         idDetalle = idDetalle.split(",");
         usuarioDetalle = usuarioDetalle.split(",");
         descripcionDetalle = descripcionDetalle.split(",");
-        entradaDetalle = estadoDetalle.split(",");
-        salidaDetaslle = totalDetalle.split(",");
+        entradaDetalle = entradaDetalle.split(",");
+        salidaDetalle = salidaDetalle.split(",");
 
     </script>
     <button id="btn-pdf">Generar PDF</button>
