@@ -161,8 +161,15 @@
                     idDetalle[i],
                     usuarioDetalle[i],
                     descripcionDetalle[i],
-                    entradaDetalle[i] ? '+' + formatNumber(entradaDetalle[i]) : ' ',
-                    salidaDetalle[i] ? '-' + formatNumber(salidaDetalle[i]) : ' ',
+                    // Verificar si entradaDetalle es 0.00 o vacío
+                    entradaDetalle[i] && parseFloat(entradaDetalle[i]) !== 0 
+                        ? '+' + formatNumber(entradaDetalle[i]) 
+                        : ' ',
+            
+                    // Verificar si salidaDetalle es 0.00 o vacío
+                    salidaDetalle[i] && parseFloat(salidaDetalle[i]) !== 0 
+                        ? '-' + formatNumber(salidaDetalle[i]) 
+                        : ' ',
                 ]);
             }
 
