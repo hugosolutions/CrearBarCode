@@ -125,8 +125,8 @@
             row.insertCell(2).textContent = idDetalle[i];
             row.insertCell(3).textContent = usuarioDetalle[i];
             row.insertCell(4).textContent = descripcionDetalle[i];
-            row.insertCell(5).textContent = '+' + entradaDetalle[i];
-            row.insertCell(6).textContent = '-' + salidaDetalle[i];
+            row.insertCell(5).textContent = entradaDetalle[i] ? entradaDetalle[i] : ' ';
+            row.insertCell(6).textContent = salidaDetalle[i] ? salidaDetalle[i] : ' ';
         }
 
         // Valores encabezado después del logo
@@ -154,8 +154,8 @@
                     idDetalle[i],
                     usuarioDetalle[i],
                     descripcionDetalle[i],
-                    '+' + entradaDetalle[i],
-                    '-' + salidaDetalle[i],
+                    entradaDetalle[i] ? entradaDetalle[i] : ' ',
+                    salidaDetalle[i] ? salidaDetalle[i] : ' ',
                 ]);
             }
 
