@@ -63,115 +63,17 @@
         var costosDetalle = params.has('costosDetalle') ? params.get('costosDetalle') : "costosDetalle";
         var gastosDetalle = params.has('gastosDetalle') ? params.get('gastosDetalle') : "gastosDetalle";
         var descuentosDetalle = params.has('descuentosDetalle') ? params.get('descuentosDetalle') : "descuentosDetalle";
+        var beneficiosDetalle = params.has('beneficiosDetalle') ? params.get('beneficiosDetalle') : "beneficiosDetalle";
 
-        // Crear una lista de cada columna a partir de las comas
+        // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
-        cantFacturas = cantFacturas.split(",");
-        ventasDetalle = ventasDetalle.split(",");
-        costosDetalle = costosDetalle.split(",");
-        gastosDetalle = gastosDetalle.split(",");
-        descuentosDetalle = descuentosDetalle.split(",");
+        cantFacturas = horaDetalle.split(",");
+        ventasDetalle = idDetalle.split(",");
+        costosDetalle = clienteDetalle.split(",");
+        gastosDetalle = usuarioDetalle.split(",");
+        descuentosDetalle = tipoVentaDetalle.split(",");
+        beneficiosDetalle = estadoDetalle.split(",");
 
-        // Objeto para agrupar los datos por fecha
-        let beneficiosPorDia = {};
-
-        for (let i = 0; i < fechaDetalle.length; i++) {
-            const fecha = fechaDetalle[i];
-
-            if (!beneficiosPorDia[fecha]) {
-                beneficiosPorDia[fecha] = {
-                    cantFacturas: 0,
-                    ventas: 0,
-                    costos: 0,
-                    gastos: 0,
-                    descuentos: 0,
-                    beneficios: 0
-                };
-            }
-
-            // Sumar los valores por día
-            beneficiosPorDia[fecha].cantFacturas += cantFacturas[i] ? parseInt(cantFacturas[i]) : 0;
-            beneficiosPorDia[fecha].ventas += ventasDetalle[i] ? parseFloat(ventasDetalle[i]) : 0;
-            beneficiosPorDia[fecha].costos += costosDetalle[i] ? parseFloat(costosDetalle[i]) : 0;
-            beneficiosPorDia[fecha].gastos += gastosDetalle[i] ? parseFloat(gastosDetalle[i]) : 0;
-            beneficiosPorDia[fecha].descuentos += descuentosDetalle[i] ? parseFloat(descuentosDetalle[i]) : 0;
-
-            // Calcular beneficio: Ventas - (Costos + Gastos + Descuentos)
-            beneficiosPorDia[fecha].beneficios = 
-                beneficiosPorDia[fecha].ventas - 
-                (beneficiosPorDia[fecha].costos + beneficiosPorDia[fecha].gastos + beneficiosPorDia[fecha].descuentos);
-        }
-
-        // Llenar la tabla de ventas
-        const tablaVentas = document.getElementById('datos-ventas');
-        let totalGeneral = 0;
-
-        Object.keys(beneficiosPorDia).forEach(fecha => {
-            const row = tablaVentas.insertRow();
-            const beneficioDia = beneficiosPorDia[fecha];
-
-            row.insertCell(0).textContent = fecha;
-            row.insertCell(1).textContent = beneficioDia.cantFacturas;
-            row.insertCell(2).textContent = formatNumber(beneficioDia.ventas);
-            row.insertCell(3).textContent = formatNumber(beneficioDia.costos);
-            row.insertCell(4).textContent = formatNumber(beneficioDia.gastos);
-            row.insertCell(5).textContent = formatNumber(beneficioDia.descuentos);
-            row.insertCell(6).textContent = formatNumber(beneficioDia.beneficios);
-
-            totalGeneral += beneficioDia.beneficios;
-        });
-
-        // Valores encabezado después del logo
-        document.getElementById("periodo").textContent = periodo;
-        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
-        document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
-
-        // Función para formatear los números
-        function formatNumber(num) {
-            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        // Función para generar el PDF
-        document.getElementById('btn-pdf').addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({
-                unit: 'in',
-                format: 'letter',
-                orientation: 'portrait'
-            });
-
-            // Usar autoTable para tablas largas
-            const tableData = [];
-
-            Object.keys(beneficiosPorDia).forEach(fecha => {
-                const beneficioDia = beneficiosPorDia[fecha];
-                tableData.push([
-                    fecha,
-                    beneficioDia.cantFacturas,
-                    formatNumber(beneficioDia.ventas),
-                    formatNumber(beneficioDia.costos),
-                    formatNumber(beneficioDia.gastos),
-                    formatNumber(beneficioDia.descuentos),
-                    formatNumber(beneficioDia.beneficios)
-                ]);
-            });
-
-            const pageWidth = doc.internal.pageSize.getWidth();
-            doc.text('Reporte de Beneficios', pageWidth / 2, 1, { align: 'center' });
-            doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
-            doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
-
-            doc.autoTable({
-                head: [['Fecha', 'Facturas', 'Ventas', 'Costos', 'Gastos', 'Descuentos', 'Beneficios']],
-                body: tableData,
-                startY: 3,
-                margin: { left: 0.5, right: 0.5 }
-            });
-
-            doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, doc.autoTable.previous.finalY + 0.5, { align: 'center' });
-
-            doc.save('reporte_beneficios.pdf');
-        });
     </script>
     <button id="btn-pdf">Generar PDF</button>
     <div style="text-align: center; margin-bottom: 10px;">
@@ -193,6 +95,7 @@
             </tr>
         </thead>
         <tbody id="datos-ventas">
+
         </tbody>
     </table>
     <div class="total">
@@ -202,5 +105,114 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+        let totalGeneral = 0;
+
+        for (let i = 0; i < fechaDetalle.length; i++) {
+            const row = tablaVentas.insertRow();
+            row.insertCell(0).textContent = fechaDetalle[i];
+            
+            row.insertCell(1).textContent = (cantFacturas[i] && cantFacturas[i] !== 0) 
+                ? cantFacturas[i]
+                : '0';
+            
+            row.insertCell(2).textContent = (ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0) 
+                ? formatNumber(ventasDetalle[i]) 
+                : '0.00';
+            
+            row.insertCell(3).textContent = (costosDetalle[i] && parseFloat(costosDetalle[i]) !== 0) 
+                ? formatNumber(costosDetalle[i]) 
+                : '0.00';
+            
+            row.insertCell(4).textContent = (gastosDetalle[i] && parseFloat(gastosDetalle[i]) !== 0) 
+                ? formatNumber(gastosDetalle[i]) 
+                : '0.00';
+                
+            row.insertCell(5).textContent = (descuentosDetalle[i] && parseFloat(descuentosDetalle[i]) !== 0) 
+                ? formatNumber(descuentosDetalle[i]) 
+                : '0.00';
+
+            row.insertCell(6).textContent = (beneficiosDetalle[i] && parseFloat(beneficiosDetalle[i]) !== 0) 
+                ? formatNumber(beneficiosDetalle[i]) 
+                : '0.00';                
+            
+            totalGeneral += parseFloat(totalDetalle[i]);
+        }
+
+        // Valores encabezado después del logo
+        document.getElementById("periodo").textContent = periodo;
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
+        document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
+
+        // Función para generar el PDF con contenido completo
+        document.getElementById('btn-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            });
+
+            // Usar autoTable para tablas largas
+            const tableData = [];
+
+            for (let i = 0; i < fechaDetalle.length; i++) {
+                tableData.push([
+                    fechaDetalle[i],
+
+                    cantFacturas[i] && cantFacturas[i] !== 0 
+                        ? cantFacturas[i]
+                        : '0',
+
+                    ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0 
+                        ? formatNumber(ventasDetalle[i]) 
+                        : '0.00',
+
+                    costosDetalle[i] && parseFloat(costosDetalle[i]) !== 0 
+                        ? formatNumber(costosDetalle[i]) 
+                        : '0.00',
+
+                    gastosDetalle[i] && parseFloat(gastosDetalle[i]) !== 0 
+                        ? formatNumber(gastosDetalle[i]) 
+                        : '0.00',
+
+                    descuentosDetalle[i] && parseFloat(descuentosDetalle[i]) !== 0 
+                        ? formatNumber(descuentosDetalle[i]) 
+                        : '0.00',
+
+                    beneficiosDetalle[i] && parseFloat(beneficiosDetalle[i]) !== 0 
+                        ? formatNumber(beneficiosDetalle[i]) 
+                        : '0.00'
+                ]);
+            }
+
+            // Agregar encabezado y datos de la tabla
+            const pageWidth = doc.internal.pageSize.getWidth();
+            doc.text('Reporte de Beneficios', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
+            doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
+            doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
+
+            doc.autoTable({
+                head: [['Fecha','Facturas', 'Ventas', 'Costos', 'Gastos', 'Descuentos', 'Beneficios']],
+                body: tableData,
+                startY: 3,
+                margin: { left: 0.5, right: 0.5 }
+            });
+
+            // Obtener la posición de la última fila de la tabla
+            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
+            doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 3 + (filasTablas * 0.3), { align: 'center' });
+
+            // Guardar PDF
+            doc.save('reporte_beneficios.pdf');
+        });
+    </script>
 </body>
 </html>
