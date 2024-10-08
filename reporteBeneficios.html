@@ -56,42 +56,64 @@
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
 
+        // Valores de fecha
+        var fechaInicio = params.has('fechaInicio') ? params.get('fechaInicio') : "2024-10-01";
+        var fechaFin = params.has('fechaFin') ? params.get('fechaFin') : "2024-10-05";
+
         // Valores del detalle de la factura
         var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
-        var cantFacturas = params.has('cantFacturas') ? params.get('cantFacturas') : "cantFacturas";
         var ventasDetalle = params.has('ventasDetalle') ? params.get('ventasDetalle') : "ventasDetalle";
         var costosDetalle = params.has('costosDetalle') ? params.get('costosDetalle') : "costosDetalle";
         var gastosDetalle = params.has('gastosDetalle') ? params.get('gastosDetalle') : "gastosDetalle";
         var descuentosDetalle = params.has('descuentosDetalle') ? params.get('descuentosDetalle') : "descuentosDetalle";
-        var beneficiosDetalle = params.has('beneficiosDetalle') ? params.get('beneficiosDetalle') : "beneficiosDetalle";
 
         // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
-        cantFacturas = cantFacturas.split(",");
         ventasDetalle = ventasDetalle.split(",");
         costosDetalle = costosDetalle.split(",");
         gastosDetalle = gastosDetalle.split(",");
         descuentosDetalle = descuentosDetalle.split(",");
-        beneficiosDetalle = beneficiosDetalle.split(",");
 
         let beneficiosPorDia = {};
+        let facturasPorFecha = {};
 
+        // Crear rango de fechas
+        function obtenerFechasEnRango(fechaInicio, fechaFin) {
+            let inicio = new Date(fechaInicio);
+            let fin = new Date(fechaFin);
+            let rangoFechas = [];
+
+            while (inicio <= fin) {
+                rangoFechas.push(inicio.toISOString().split('T')[0]); // Formato YYYY-MM-DD
+                inicio.setDate(inicio.getDate() + 1);
+            }
+
+            return rangoFechas;
+        }
+
+        // Obtener fechas en el rango
+        const rangoFechas = obtenerFechasEnRango(fechaInicio, fechaFin);
+
+        // Inicializar beneficiosPorDia
+        rangoFechas.forEach(fecha => {
+            beneficiosPorDia[fecha] = {
+                cantFacturas: 0,
+                ventas: 0,
+                costos: 0,
+                gastos: 0,
+                descuentos: 0,
+                beneficios: 0
+            };
+        });
+
+        // Procesar los datos
         for (let i = 0; i < fechaDetalle.length; i++) {
             const fecha = fechaDetalle[i];
 
             if (!beneficiosPorDia[fecha]) {
-                beneficiosPorDia[fecha] = {
-                    cantFacturas: 0,
-                    ventas: 0,
-                    costos: 0,
-                    gastos: 0,
-                    descuentos: 0,
-                    beneficios: 0
-                };
+                continue; // Si la fecha no está en el rango, la ignoramos
             }
 
-            // Sumar los valores por día, asignar 0 si el valor está vacío
-            beneficiosPorDia[fecha].cantFacturas += cantFacturas[i] ? parseInt(cantFacturas[i]) : 0;
             beneficiosPorDia[fecha].ventas += ventasDetalle[i] ? parseFloat(ventasDetalle[i]) : 0;
             beneficiosPorDia[fecha].costos += costosDetalle[i] ? parseFloat(costosDetalle[i]) : 0;
             beneficiosPorDia[fecha].gastos += gastosDetalle[i] ? parseFloat(gastosDetalle[i]) : 0;
@@ -101,15 +123,18 @@
             beneficiosPorDia[fecha].beneficios = 
                 beneficiosPorDia[fecha].ventas - 
                 (beneficiosPorDia[fecha].costos + beneficiosPorDia[fecha].gastos + beneficiosPorDia[fecha].descuentos);
+
+            // Contar facturas por fecha
+            beneficiosPorDia[fecha].cantFacturas++;
         }
 
-        // Ahora contamos cuántas veces cada fecha aparece
-        let facturasPorFecha = {};
-        fechaDetalle.forEach(fecha => {
-            if (!facturasPorFecha[fecha]) {
-                facturasPorFecha[fecha] = 0;
+        // Filtrar solo las fechas relevantes
+        let beneficiosDias = {};
+        Object.keys(beneficiosPorDia).forEach(fecha => {
+            const beneficioDia = beneficiosPorDia[fecha];
+            if (beneficioDia.ventas > 0 || beneficioDia.gastos > 0 || beneficioDia.costos > 0 || beneficioDia.descuentos > 0) {
+                beneficiosDias[fecha] = beneficioDia;
             }
-            facturasPorFecha[fecha]++;
         });
 
     </script>
@@ -153,12 +178,12 @@
         const tablaVentas = document.getElementById('datos-ventas');
         let totalGeneral = 0;
 
-        Object.keys(beneficiosPorDia).forEach(fecha => {
+        Object.keys(beneficiosDias).forEach(fecha => {
             const row = tablaVentas.insertRow();
-            const beneficioDia = beneficiosPorDia[fecha];
+            const beneficioDia = beneficiosDias[fecha];
 
             row.insertCell(0).textContent = fecha;
-            row.insertCell(1).textContent = facturasPorFecha[fecha];
+            row.insertCell(1).textContent = beneficioDia.cantFacturas;
             row.insertCell(2).textContent = formatNumber(beneficioDia.ventas);
             row.insertCell(3).textContent = formatNumber(beneficioDia.costos);
             row.insertCell(4).textContent = formatNumber(beneficioDia.gastos);
@@ -171,53 +196,20 @@
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
-        document.getElementById("total").textContent = "Total: " + formatNumber(totalGeneral);
+        document.getElementById("total").textContent = `Total de Beneficios: ${formatNumber(totalGeneral)}`;
 
-        // Función para generar el PDF con contenido completo
-        document.getElementById('btn-pdf').addEventListener('click', () => {
+        // Función para generar PDF
+        document.getElementById('btn-pdf').onclick = function() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({
-                unit: 'in',
-                format: 'letter',
-                orientation: 'portrait'
-            });
 
-            // Usar autoTable para tablas largas
-            const tableData = [];
-
-            Object.keys(beneficiosPorDia).forEach(fecha => {
-                const beneficioDia = beneficiosPorDia[fecha];
-                tableData.push([
-                    fecha,
-                    facturasPorFecha[fecha],
-                    formatNumber(beneficioDia.ventas),
-                    formatNumber(beneficioDia.costos),
-                    formatNumber(beneficioDia.gastos),
-                    formatNumber(beneficioDia.descuentos),
-                    formatNumber(beneficioDia.beneficios)
-                ]);
-            });
-
-            // Agregar encabezado y datos de la tabla
-            const pageWidth = doc.internal.pageSize.getWidth();
-            doc.text('Reporte de Beneficios', pageWidth / 2, 1, { align: 'center' }); // Título del reporte
-            doc.text(`${periodo}`, pageWidth / 2, 1.5, { align: 'center' });
-            doc.text(`${nombreEmpresa}`, pageWidth / 2, 2, { align: 'center' });
-
-            doc.autoTable({
-                head: [['Fecha','Facturas', 'Ventas', 'Costos', 'Gastos', 'Descuentos', 'Beneficios']],
-                body: tableData,
-                startY: 3,
-                margin: { left: 0.5, right: 0.5 }
-            });
-
-            // Obtener la posición de la última fila de la tabla
-            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
-            doc.text(`Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 3 + (filasTablas * 0.3), { align: 'center' });
-
-            // Guardar PDF
+            const doc = new jsPDF();
+            doc.text(`Reporte de Beneficios`, 14, 10);
+            doc.text(`Periodo: ${periodo}`, 14, 20);
+            doc.text(`Nombre de la Empresa: ${nombreEmpresa}`, 14, 30);
+            doc.autoTable({ html: '#tabla-ventas', startY: 40 });
+            doc.text(`Total de Beneficios: ${formatNumber(totalGeneral)}`, 14, doc.autoTable.previous.finalY + 10);
             doc.save('reporte_beneficios.pdf');
-        });
+        };
     </script>
 </body>
 </html>
