@@ -118,12 +118,30 @@
         for (let i = 0; i < fechaDetalle.length; i++) {
             const row = tablaVentas.insertRow();
             row.insertCell(0).textContent = fechaDetalle[i];
-            row.insertCell(1).textContent = cantFacturas[i];
-            row.insertCell(2).textContent = formatNumber(ventasDetalle[i]);
-            row.insertCell(3).textContent = formatNumber(costosDetalle[i]);
-            row.insertCell(4).textContent = formatNumber(gastosDetalle[i]);
-            row.insertCell(5).textContent = formatNumber(descuentosDetalle[i]);
-            row.insertCell(6).textContent = formatNumber(beneficiosDetalle[i]);
+            
+            row.insertCell(1).textContent = (cantFacturas[i] && cantFacturas[i] !== 0) 
+                ? cantFacturas[i]
+                : '0.00';
+            
+            row.insertCell(2).textContent = (ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0) 
+                ? formatNumber(ventasDetalle[i]) 
+                : '0.00';
+            
+            row.insertCell(3).textContent = (costosDetalle[i] && parseFloat(costosDetalle[i]) !== 0) 
+                ? formatNumber(costosDetalle[i]) 
+                : '0.00';
+            
+            row.insertCell(4).textContent = (gastosDetalle[i] && parseFloat(gastosDetalle[i]) !== 0) 
+                ? formatNumber(gastosDetalle[i]) 
+                : '0.00';
+                
+            row.insertCell(5).textContent = (descuentosDetalle[i] && parseFloat(descuentosDetalle[i]) !== 0) 
+                ? formatNumber(descuentosDetalle[i]) 
+                : '0.00';
+
+            row.insertCell(6).textContent = (beneficiosDetalle[i] && parseFloat(beneficiosDetalle[i]) !== 0) 
+                ? formatNumber(beneficiosDetalle[i]) 
+                : '0.00';                
             
             totalGeneral += parseFloat(totalDetalle[i]);
         }
