@@ -74,6 +74,35 @@
         descuentosDetalle = descuentosDetalle.split(",");
         beneficiosDetalle = beneficiosDetalle.split(",");
 
+        let beneficiosPorDia = {};
+
+        for (let i = 0; i < fechaDetalle.length; i++) {
+            const fecha = fechaDetalle[i];
+
+            if (!beneficiosPorDia[fecha]) {
+                beneficiosPorDia[fecha] = {
+                    cantFacturas: 0,
+                    ventas: 0,
+                    costos: 0,
+                    gastos: 0,
+                    descuentos: 0,
+                    beneficios: 0
+                };
+            }
+
+            // Sumar los valores por día, asignar 0 si el valor está vacío
+            beneficiosPorDia[fecha].cantFacturas += cantFacturas[i] ? parseInt(cantFacturas[i]) : 0;
+            beneficiosPorDia[fecha].ventas += ventasDetalle[i] ? parseFloat(ventasDetalle[i]) : 0;
+            beneficiosPorDia[fecha].costos += costosDetalle[i] ? parseFloat(costosDetalle[i]) : 0;
+            beneficiosPorDia[fecha].gastos += gastosDetalle[i] ? parseFloat(gastosDetalle[i]) : 0;
+            beneficiosPorDia[fecha].descuentos += descuentosDetalle[i] ? parseFloat(descuentosDetalle[i]) : 0;
+
+            // Calcular beneficio: Ventas - (Costos + Gastos + Descuentos)
+            beneficiosPorDia[fecha].beneficios = 
+                beneficiosPorDia[fecha].ventas - 
+                (beneficiosPorDia[fecha].costos + beneficiosPorDia[fecha].gastos + beneficiosPorDia[fecha].descuentos);
+        }
+
     </script>
     <button id="btn-pdf">Generar PDF</button>
     <div style="text-align: center; margin-bottom: 10px;">
@@ -115,36 +144,20 @@
         const tablaVentas = document.getElementById('datos-ventas');
         let totalGeneral = 0;
 
-        for (let i = 0; i < fechaDetalle.length; i++) {
+        Object.keys(beneficiosPorDia).forEach(fecha => {
             const row = tablaVentas.insertRow();
-            row.insertCell(0).textContent = fechaDetalle[i];
-            
-            row.insertCell(1).textContent = (cantFacturas[i] && cantFacturas[i] !== 0) 
-                ? cantFacturas[i]
-                : '0';
-            
-            row.insertCell(2).textContent = (ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0) 
-                ? formatNumber(ventasDetalle[i]) 
-                : '0.00';
-            
-            row.insertCell(3).textContent = (costosDetalle[i] && parseFloat(costosDetalle[i]) !== 0) 
-                ? formatNumber(costosDetalle[i]) 
-                : '0.00';
-            
-            row.insertCell(4).textContent = (gastosDetalle[i] && parseFloat(gastosDetalle[i]) !== 0) 
-                ? formatNumber(gastosDetalle[i]) 
-                : '0.00';
-                
-            row.insertCell(5).textContent = (descuentosDetalle[i] && parseFloat(descuentosDetalle[i]) !== 0) 
-                ? formatNumber(descuentosDetalle[i]) 
-                : '0.00';
+            const beneficioDia = beneficiosPorDia[fecha];
 
-            row.insertCell(6).textContent = (beneficiosDetalle[i] && parseFloat(beneficiosDetalle[i]) !== 0) 
-                ? formatNumber(beneficiosDetalle[i]) 
-                : '0.00';                
-            
-            totalGeneral += parseFloat(totalDetalle[i]);
-        }
+            row.insertCell(0).textContent = fecha;
+            row.insertCell(1).textContent = beneficioDia.cantFacturas;
+            row.insertCell(2).textContent = formatNumber(beneficioDia.ventas);
+            row.insertCell(3).textContent = formatNumber(beneficioDia.costos);
+            row.insertCell(4).textContent = formatNumber(beneficioDia.gastos);
+            row.insertCell(5).textContent = formatNumber(beneficioDia.descuentos);
+            row.insertCell(6).textContent = formatNumber(beneficioDia.beneficios);
+
+            totalGeneral += beneficioDia.beneficios;
+        });
 
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
@@ -163,35 +176,18 @@
             // Usar autoTable para tablas largas
             const tableData = [];
 
-            for (let i = 0; i < fechaDetalle.length; i++) {
+            Object.keys(beneficiosPorDia).forEach(fecha => {
+                const beneficioDia = beneficiosPorDia[fecha];
                 tableData.push([
-                    fechaDetalle[i],
-
-                    cantFacturas[i] && cantFacturas[i] !== 0 
-                        ? cantFacturas[i]
-                        : '0',
-
-                    ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0 
-                        ? formatNumber(ventasDetalle[i]) 
-                        : '0.00',
-
-                    costosDetalle[i] && parseFloat(costosDetalle[i]) !== 0 
-                        ? formatNumber(costosDetalle[i]) 
-                        : '0.00',
-
-                    gastosDetalle[i] && parseFloat(gastosDetalle[i]) !== 0 
-                        ? formatNumber(gastosDetalle[i]) 
-                        : '0.00',
-
-                    descuentosDetalle[i] && parseFloat(descuentosDetalle[i]) !== 0 
-                        ? formatNumber(descuentosDetalle[i]) 
-                        : '0.00',
-
-                    beneficiosDetalle[i] && parseFloat(beneficiosDetalle[i]) !== 0 
-                        ? formatNumber(beneficiosDetalle[i]) 
-                        : '0.00'
+                    fecha,
+                    beneficioDia.cantFacturas,
+                    formatNumber(beneficioDia.ventas),
+                    formatNumber(beneficioDia.costos),
+                    formatNumber(beneficioDia.gastos),
+                    formatNumber(beneficioDia.descuentos),
+                    formatNumber(beneficioDia.beneficios)
                 ]);
-            }
+            });
 
             // Agregar encabezado y datos de la tabla
             const pageWidth = doc.internal.pageSize.getWidth();
