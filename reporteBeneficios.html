@@ -68,8 +68,28 @@
         var descuentosDetalle = params.has('descuentosDetalle') ? params.get('descuentosDetalle') : "descuentosDetalle";
 
         // Crear una lista de cada columna a partir de las comas.
-        fechaDetalle = fechaDetalle.split(",");
-        // fechaDetalle = fechaDetalle.split(",").map(fecha => new Date(fecha.trim()));
+        //fechaDetalle = fechaDetalle.split(",");
+
+        
+        // Convertir fechaDetalle a un array de objetos Date
+        fechaDetalle = fechaDetalle.map(fechaStr => {
+            // Limpiar espacios en blanco y convertir el formato
+            const trimmedFecha = fechaStr.trim(); // Elimina espacios
+            const [day, month, year] = trimmedFecha.split("/").map(Number);
+        
+            // Crear el objeto Date (los meses son 0-indexed en JavaScript)
+            const date = new Date(year, month - 1, day);
+        
+            // Verificar si la fecha es válida
+            if (isNaN(date.getTime())) {
+                console.error(`Fecha inválida: ${trimmedFecha}`);
+                return null; // Retorna null si la fecha no es válida
+            }
+        
+            return date; // Retorna la fecha válida
+        }).filter(fecha => fecha !== null); // Filtrar fechas inválidas
+
+        
         ventasDetalle = ventasDetalle.split(",");
         costosDetalle = costosDetalle.split(",");
         gastosDetalle = gastosDetalle.split(",");
