@@ -121,7 +121,7 @@
             
             row.insertCell(1).textContent = (cantFacturas[i] && cantFacturas[i] !== 0) 
                 ? cantFacturas[i]
-                : '0.00';
+                : '0';
             
             row.insertCell(2).textContent = (ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0) 
                 ? formatNumber(ventasDetalle[i]) 
@@ -166,12 +166,30 @@
             for (let i = 0; i < fechaDetalle.length; i++) {
                 tableData.push([
                     fechaDetalle[i],
-                    cantFacturas[i],
-                    formatNumber(ventasDetalle[i]),
-                    formatNumber(costosDetalle[i]),
-                    formatNumber(gastosDetalle[i]),
-                    formatNumber(descuentosDetalle[i]),
-                    formatNumber(beneficiosDetalle[i])
+
+                    cantFacturas[i] && cantFacturas[i] !== 0 
+                        ? cantFacturas[i]
+                        : '0',
+
+                    ventasDetalle[i] && parseFloat(ventasDetalle[i]) !== 0 
+                        ? formatNumber(ventasDetalle[i]) 
+                        : '0.00',
+
+                    costosDetalle[i] && parseFloat(costosDetalle[i]) !== 0 
+                        ? formatNumber(costosDetalle[i]) 
+                        : '0.00',
+
+                    gastosDetalle[i] && parseFloat(gastosDetalle[i]) !== 0 
+                        ? formatNumber(gastosDetalle[i]) 
+                        : '0.00',
+
+                    descuentosDetalle[i] && parseFloat(descuentosDetalle[i]) !== 0 
+                        ? formatNumber(descuentosDetalle[i]) 
+                        : '0.00',
+
+                    beneficiosDetalle[i] && parseFloat(beneficiosDetalle[i]) !== 0 
+                        ? formatNumber(beneficiosDetalle[i]) 
+                        : '0.00'
                 ]);
             }
 
