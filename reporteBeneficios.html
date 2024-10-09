@@ -226,15 +226,27 @@
 
         // Función para generar PDF
         document.getElementById('btn-pdf').onclick = function() {
-            const { jsPDF } = window.jspdf;
-
             const doc = new jsPDF();
-            doc.text(`Reporte de Beneficios`, 14, 10);
-            doc.text(`Periodo: ${periodo}`, 14, 20);
-            doc.text(`Nombre de la Empresa: ${nombreEmpresa}`, 14, 30);
+
+            // Obtener el ancho de la página
+            const pageWidth = doc.internal.pageSize.getWidth();
+            
+            // Función para centrar texto
+            function centerText(text, y) {
+                const textWidth = doc.getTextWidth(text);
+                const x = (pageWidth - textWidth) / 2;
+                doc.text(text, x, y);
+            }
+            
+            centerText('Reporte de Beneficios', 10);
+            centerText(`Periodo: ${periodo}`, 20);
+            centerText(`Nombre de la Empresa: ${nombreEmpresa}`, 30);
+            
             doc.autoTable({ html: '#tabla-ventas', startY: 40 });
-            doc.text(`Total de Beneficios: ${formatNumber(totalGeneral)}`, 14, doc.autoTable.previous.finalY + 10);
-            doc.save('reporte_beneficios.pdf');
+            
+            centerText(`Total de Beneficios: ${formatNumber(totalGeneral)}`, doc.autoTable.previous.finalY + 10);
+
+            doc.save('reporte_beneficios.pdf'
         };
     </script>
 </body>
