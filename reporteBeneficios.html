@@ -226,7 +226,12 @@
 
          // Función para generar PDF
         document.getElementById('btn-pdf').onclick = function() {
-            const doc = new jsPDF();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            });
 
             // Obtener el ancho de la página
             const pageWidth = doc.internal.pageSize.getWidth();
