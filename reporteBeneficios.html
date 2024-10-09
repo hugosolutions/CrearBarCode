@@ -224,7 +224,7 @@
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
         document.getElementById("total").textContent = `Total de Beneficios: ${formatNumber(totalGeneral)}`;
 
-        // Función para generar PDF
+         // Función para generar PDF
         document.getElementById('btn-pdf').onclick = function() {
             const doc = new jsPDF();
 
@@ -237,17 +237,47 @@
                 const x = (pageWidth - textWidth) / 2;
                 doc.text(text, x, y);
             }
-            
-            centerText('Reporte de Beneficios', 10);
-            centerText(`Periodo: ${periodo}`, 20);
-            centerText(`Nombre de la Empresa: ${nombreEmpresa}`, 30);
-            
-            doc.autoTable({ html: '#tabla-ventas', startY: 40 });
-            
-            centerText(`Total de Beneficios: ${formatNumber(totalGeneral)}`, doc.autoTable.previous.finalY + 10);
 
-            doc.save('reporte_beneficios.pdf');
-        };
+            // Centrar logo
+            const logoUrl = 'https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000';
+            const img = new Image();
+            img.src = logoUrl;
+            img.onload = function() {
+                doc.addImage(img, 'JPEG', (pageWidth - 50) / 2, 10, 50, 30);
+
+                // Título y encabezado centrado
+                centerText('Reporte de Beneficios', 50);
+                centerText(`Periodo: ${periodo}`, 60);
+                centerText(`Empresa: ${nombreEmpresa}`, 70);
+
+                // Agregar tabla con autoTable
+                doc.autoTable({
+                    head: [['Fecha', 'Facturas', 'Ventas', 'Costos', 'Gastos', 'Descuentos', 'Beneficios']],
+                    body: Object.keys(beneficiosDias).map(fecha => {
+                        const beneficioDia = beneficiosDias[fecha];
+                        return [
+                            fecha,
+                            beneficioDia.cantFacturas,
+                            formatNumber(beneficioDia.ventas),
+                            formatNumber(beneficioDia.costos),
+                            formatNumber(beneficioDia.gastos),
+                            formatNumber(beneficioDia.descuentos),
+                            formatNumber(beneficioDia.beneficios)
+                        ];
+                    }),
+                    startY: 80,
+                    styles: { halign: 'right' },
+                    headStyles: { fillColor: [240, 240, 240] }
+                });
+
+                // Agregar total general
+                doc.text(`Total de Beneficios: ${formatNumber(totalGeneral)}`, pageWidth - 60, doc.lastAutoTable.finalY + 10);
+                
+                // Descargar el PDF
+                doc.save('reporte_de_beneficios.pdf');
+            };
+        }       
+        
     </script>
 </body>
 </html>
