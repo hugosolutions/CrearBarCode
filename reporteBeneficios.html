@@ -73,21 +73,17 @@
         
         // Convertir fechaDetalle a un array de objetos Date
         fechaDetalle = fechaDetalle.map(fechaStr => {
-            // Limpiar espacios en blanco y convertir el formato
-            const trimmedFecha = fechaStr.trim(); // Elimina espacios
+            const trimmedFecha = fechaStr.trim();
             const [day, month, year] = trimmedFecha.split("/").map(Number);
-        
-            // Crear el objeto Date (los meses son 0-indexed en JavaScript)
             const date = new Date(year, month - 1, day);
         
-            // Verificar si la fecha es válida
             if (isNaN(date.getTime())) {
                 console.error(`Fecha inválida: ${trimmedFecha}`);
-                return null; // Retorna null si la fecha no es válida
+                return null;
             }
-        
-            return date; // Retorna la fecha válida
-        }).filter(fecha => fecha !== null); // Filtrar fechas inválidas
+            
+            return date.toISOString().split('T')[0]; // Convertir a formato "YYYY-MM-DD"
+        }).filter(fecha => fecha !== null
 
         
         ventasDetalle = ventasDetalle.split(",");
@@ -98,19 +94,20 @@
         let beneficiosPorDia = {};
         let facturasPorFecha = {};
 
-        // Crear rango de fechas
+        // Crear rango de fechas en el formato "YYYY-MM-DD"
         function obtenerFechasEnRango(fechaInicio, fechaFin) {
             let inicio = new Date(fechaInicio);
             let fin = new Date(fechaFin);
             let rangoFechas = [];
-
+        
             while (inicio <= fin) {
-                rangoFechas.push(inicio.toISOString().split('T')[0]); // Formato YYYY-MM-DD
+                rangoFechas.push(inicio.toISOString().split('T')[0]); // Formato "YYYY-MM-DD"
                 inicio.setDate(inicio.getDate() + 1);
             }
-
+        
             return rangoFechas;
         }
+
 
         // Obtener fechas en el rango
         const rangoFechas = obtenerFechasEnRango(fechaInicio, fechaFin);
