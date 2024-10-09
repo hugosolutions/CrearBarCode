@@ -78,7 +78,7 @@
             const date = new Date(year, month - 1, day);
         
             if (isNaN(date.getTime())) {
-                console.error(Fecha inválida: ${trimmedFecha});
+                console.error(`Fecha inválida: ${trimmedFecha}`);
                 return null;
             }
             
@@ -222,7 +222,7 @@
         // Valores encabezado después del logo
         document.getElementById("periodo").textContent = periodo;
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
-        document.getElementById("total").textContent = Total de Beneficios: ${formatNumber(totalGeneral)};
+        document.getElementById("total").textContent = `Total de Beneficios: ${formatNumber(totalGeneral)}`;
 
         // Función para generar PDF
         document.getElementById('btn-pdf').onclick = function() {
@@ -239,21 +239,15 @@
             }
             
             centerText('Reporte de Beneficios', 10);
-            centerText(Periodo: ${periodo}, 20);
-            centerText(Nombre de la Empresa: ${nombreEmpresa}, 30);
+            centerText(`Periodo: ${periodo}`, 20);
+            centerText(`Nombre de la Empresa: ${nombreEmpresa}`, 30);
             
             doc.autoTable({ html: '#tabla-ventas', startY: 40 });
             
-            centerText(Total de Beneficios: ${formatNumber(totalGeneral)}, doc.autoTable.previous.finalY + 10);
+            centerText(`Total de Beneficios: ${formatNumber(totalGeneral)}`, doc.autoTable.previous.finalY + 10);
 
             doc.save('reporte_beneficios.pdf');
         };
-
-
-
-
-        
-        
     </script>
 </body>
 </html>
