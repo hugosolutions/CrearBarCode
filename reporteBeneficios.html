@@ -226,8 +226,9 @@
 
         // Función para generar PDF
         document.getElementById('btn-pdf').onclick = function() {
+            const { jsPDF } = window.jspdf;  // Asegúrate de acceder correctamente a jsPDF
             const doc = new jsPDF();
-
+        
             // Obtener el ancho de la página
             const pageWidth = doc.internal.pageSize.getWidth();
             
@@ -245,9 +246,10 @@
             doc.autoTable({ html: '#tabla-ventas', startY: 40 });
             
             centerText(`Total de Beneficios: ${formatNumber(totalGeneral)}`, doc.autoTable.previous.finalY + 10);
-
+        
             doc.save('reporte_beneficios.pdf');
         };
+
     </script>
 </body>
 </html>
