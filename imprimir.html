@@ -125,6 +125,9 @@
         // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
 
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+        
+
         // Valores encabezado despues del logo
         var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
         var ciudad = params.has('ciudad') ? params.get('ciudad') : "ciudad";
@@ -203,7 +206,7 @@
     </script>
     <div class="recibo">
         <div class="header">
-            <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo">
+            <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo">
             <p id="direccion"></p>
             <p id="ciudad"></p>
             <p id="tipoTienda"></p>
@@ -314,6 +317,9 @@
 
     
     <script>
+        //Logo
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+        
         // Valores encabezado despues del logo
         var elemento1=document.getElementById("direccion").textContent = direccion
         var elemento2=document.getElementById("ciudad").textContent = ciudad 
