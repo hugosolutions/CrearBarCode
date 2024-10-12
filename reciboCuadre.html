@@ -124,6 +124,8 @@
         // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
 
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+
         //valores datos de la factura
         var noCuadre = params.has('noCuadre') ? params.get('noCuadre') : "noCuadre";
         var usuarioRecibe = params.has('usuarioRecibe') ? params.get('usuarioRecibe') : "usuarioRecibe";
@@ -153,7 +155,7 @@
     </script>
     <div class="recibo">
         <div class="header">
-            <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" width="1000" height="100" alt="Logo">
+            <img id="idLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" width="1000" height="100" alt="Logo">
             </br>
             </br>
             <p>RECIBO DE CUADRE</p>
@@ -202,6 +204,10 @@
 
     
     <script>
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        
         // Valores encabezado despues del logo
         var elemento1=document.getElementById("noCuadre").textContent = "Cuadre No. #" + noCuadre
         var elemento2=document.getElementById("usuarioRecibe").textContent = usuarioRecibe 
