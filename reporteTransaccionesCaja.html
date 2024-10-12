@@ -51,6 +51,8 @@
         // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
 
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+
         // Valores encabezado después del logo
         var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
         var vendedores = params.has('vendedores') ? params.get('vendedores') : "vendedores";
@@ -78,7 +80,7 @@
     </script>
     <button id="btn-pdf">Generar PDF</button>
     <div style="text-align: center; margin-bottom: 10px;">
-        <img src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
+        <img id="idLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
     </div>
     <h1 id="titulo">Reporte de Transacciones</h1>
     <h1 id="periodo"></h1>
@@ -111,6 +113,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
 
     <script>
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        
         function formatNumber(num) {
             return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
