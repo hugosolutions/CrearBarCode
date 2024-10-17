@@ -59,21 +59,15 @@
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
 
         // Valores del detalle de la factura
-        var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
-        var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
-        var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
-        var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
-        var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
+        var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
+        var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
         var tipoVentaDetalle = params.has('tipoVentaDetalle') ? params.get('tipoVentaDetalle') : "tipoVentaDetalle";
         var estadoDetalle = params.has('estadoDetalle') ? params.get('estadoDetalle') : "estadoDetalle";
         var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";
 
         // Crear una lista de cada columna a partir de las comas.
-        fechaDetalle = fechaDetalle.split(",");
-        horaDetalle = horaDetalle.split(",");
-        idDetalle = idDetalle.split(",");
-        clienteDetalle = clienteDetalle.split(",");
-        usuarioDetalle = usuarioDetalle.split(",");
+        descripcionDetalle = descripcionDetalle.split(",");
+        cantidadDetalle = cantidadDetalle.split(",");
         tipoVentaDetalle = tipoVentaDetalle.split(",");
         estadoDetalle = estadoDetalle.split(",");
         totalDetalle = totalDetalle.split(",");
@@ -130,7 +124,7 @@
             row.insertCell(1).textContent = horaDetalle[i];
             row.insertCell(2).textContent = idDetalle[i];
             row.insertCell(3).textContent = clienteDetalle[i];
-            row.insertCell(4).textContent = usuarioDetalle[i];
+            row.insertCell(4).textContent = cantidadDetalle[i];
             row.insertCell(5).textContent = tipoVentaDetalle[i];
             row.insertCell(6).textContent = estadoDetalle[i];
             row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
@@ -209,7 +203,7 @@
         var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
         var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
         var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
-        var usuarioDetalle = params.has('usuarioDetalle') ? params.get('usuarioDetalle') : "usuarioDetalle";
+        var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
         var tipoVentaDetalle = params.has('tipoVentaDetalle') ? params.get('tipoVentaDetalle') : "tipoVentaDetalle";
         var estadoDetalle = params.has('estadoDetalle') ? params.get('estadoDetalle') : "estadoDetalle";
         var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";
@@ -219,7 +213,7 @@
         horaDetalle = horaDetalle.split(",");
         idDetalle = idDetalle.split(",");
         clienteDetalle = clienteDetalle.split(",");
-        usuarioDetalle = usuarioDetalle.split(",");
+        cantidadDetalle = cantidadDetalle.split(",");
         tipoVentaDetalle = tipoVentaDetalle.split(",");
         estadoDetalle = estadoDetalle.split(",");
         totalDetalle = totalDetalle.split(",");
@@ -276,7 +270,7 @@
             row.insertCell(1).textContent = horaDetalle[i];
             row.insertCell(2).textContent = idDetalle[i];
             row.insertCell(3).textContent = clienteDetalle[i];
-            row.insertCell(4).textContent = usuarioDetalle[i];
+            row.insertCell(4).textContent = cantidadDetalle[i];
             row.insertCell(5).textContent = tipoVentaDetalle[i];
             row.insertCell(6).textContent = estadoDetalle[i];
             row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
@@ -307,7 +301,7 @@
                     horaDetalle[i],
                     idDetalle[i],
                     clienteDetalle[i],
-                    usuarioDetalle[i],
+                    cantidadDetalle[i],
                     tipoVentaDetalle[i],
                     estadoDetalle[i],
                     '$' + formatNumber(totalDetalle[i])
