@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Ventas</title>
+    <title>Cotización</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,22 +54,33 @@
         var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
 
         // Valores encabezado después del logo
-        var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
-        var total = params.has('total') ? params.get('total') : "total";
+        var fechaCotizacion = params.has('fechaCotizacion') ? params.get('fechaCotizacion') : "fechaCotizacion";
+        var noCotizacion = params.has('noCotizacion') ? params.get('noCotizacion') : "noCotizacion";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+        var nombreCliente = params.has('nombreCliente') ? params.get('nombreCliente') : "nombreCliente";
+        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "telefonoCliente";
+        var vehiculoCliente = params.has('vehiculoCliente') ? params.get('vehiculoCliente') : "vehiculoCliente";
+        var colorCliente = params.has('colorCliente') ? params.get('colorCliente') : "colorCliente";
+
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
+        var descuento = params.has('descuento') ? params.get('descuento') : "descuento";
+        var subtotalMenosDesucento = params.has('subtotalMenosDesucento') ? params.get('subtotalMenosDesucento') : "subtotalMenosDesucento";
+        var iva = params.has('iva') ? params.get('iva') : "iva";
+        var totalIva = params.has('totalIva') ? params.get('totalIva') : "totalIva";
+        var envio = params.has('envio') ? params.get('envio') : "envio";
+        var total = params.has('total') ? params.get('total') : "total";
+        
 
         // Valores del detalle de la factura
         var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
         var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
-        var tipoVentaDetalle = params.has('tipoVentaDetalle') ? params.get('tipoVentaDetalle') : "tipoVentaDetalle";
-        var estadoDetalle = params.has('estadoDetalle') ? params.get('estadoDetalle') : "estadoDetalle";
+        var precioUnitarioDetalle = params.has('precioUnitarioDetalle') ? params.get('precioUnitarioDetalle') : "precioUnitarioDetalle";
         var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";
 
         // Crear una lista de cada columna a partir de las comas.
         descripcionDetalle = descripcionDetalle.split(",");
         cantidadDetalle = cantidadDetalle.split(",");
-        tipoVentaDetalle = tipoVentaDetalle.split(",");
-        estadoDetalle = estadoDetalle.split(",");
+        precioUnitarioDetalle = precioUnitarioDetalle.split(",");
         totalDetalle = totalDetalle.split(",");
 
     </script>
@@ -77,7 +88,7 @@
     <div style="text-align: center; margin-bottom: 10px;">
         <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
     </div>
-    <h1 id="titulo">Reporte de ventas por fecha</h1>
+    <h1 id="titulo">Cotizacion</h1>
     <h1 id="periodo"></h1>
     <h1 id="nombreEmpresa"></h1>
     <table id="tabla-ventas">
@@ -125,7 +136,7 @@
             row.insertCell(2).textContent = idDetalle[i];
             row.insertCell(3).textContent = clienteDetalle[i];
             row.insertCell(4).textContent = cantidadDetalle[i];
-            row.insertCell(5).textContent = tipoVentaDetalle[i];
+            row.insertCell(5).textContent = precioUnitarioDetalle[i];
             row.insertCell(6).textContent = estadoDetalle[i];
             row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
             
@@ -204,7 +215,7 @@
         var idDetalle = params.has('idDetalle') ? params.get('idDetalle') : "idDetalle";
         var clienteDetalle = params.has('clienteDetalle') ? params.get('clienteDetalle') : "clienteDetalle";
         var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
-        var tipoVentaDetalle = params.has('tipoVentaDetalle') ? params.get('tipoVentaDetalle') : "tipoVentaDetalle";
+        var precioUnitarioDetalle = params.has('precioUnitarioDetalle') ? params.get('precioUnitarioDetalle') : "precioUnitarioDetalle";
         var estadoDetalle = params.has('estadoDetalle') ? params.get('estadoDetalle') : "estadoDetalle";
         var totalDetalle = params.has('totalDetalle') ? params.get('totalDetalle') : "totalDetalle";
 
@@ -214,7 +225,7 @@
         idDetalle = idDetalle.split(",");
         clienteDetalle = clienteDetalle.split(",");
         cantidadDetalle = cantidadDetalle.split(",");
-        tipoVentaDetalle = tipoVentaDetalle.split(",");
+        precioUnitarioDetalle = precioUnitarioDetalle.split(",");
         estadoDetalle = estadoDetalle.split(",");
         totalDetalle = totalDetalle.split(",");
 
@@ -271,7 +282,7 @@
             row.insertCell(2).textContent = idDetalle[i];
             row.insertCell(3).textContent = clienteDetalle[i];
             row.insertCell(4).textContent = cantidadDetalle[i];
-            row.insertCell(5).textContent = tipoVentaDetalle[i];
+            row.insertCell(5).textContent = precioUnitarioDetalle[i];
             row.insertCell(6).textContent = estadoDetalle[i];
             row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
             
@@ -302,7 +313,7 @@
                     idDetalle[i],
                     clienteDetalle[i],
                     cantidadDetalle[i],
-                    tipoVentaDetalle[i],
+                    precioUnitarioDetalle[i],
                     estadoDetalle[i],
                     '$' + formatNumber(totalDetalle[i])
                 ]);
