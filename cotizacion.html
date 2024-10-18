@@ -37,6 +37,10 @@
             background-color: #f2f2f2;
             font-weight: bold;
         }
+        .totales {
+            text-align: right;
+            padding-top: 8px;
+        }
         .total {
             font-weight: bold;
             text-align: right;
@@ -83,6 +87,16 @@
         precioUnitarioDetalle = precioUnitarioDetalle.split(",");
         precioTotalDetalle = precioTotalDetalle.split(",");
 
+        // Valores del final de la factura
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
+        var descuento = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
+        var iva = params.has('iva') ? params.get('iva') : "iva";
+        var totalIva = params.has('totalIva') ? params.get('totalIva') : "totalIva";
+        var envio = params.has('envio') ? params.get('envio') : "envio";
+
+
+        
+
 
     </script>
     <button id="btn-pdf">Generar PDF</button>
@@ -106,6 +120,13 @@
 
         </tbody>
     </table>
+    <div class="totales">
+        <p id="subTotal"></p>
+        <p id="descuento"></p>
+        <p id="iva"></p>
+        <p id="totalIva"></p>
+        <p id="envio"></p>
+    </div>
     <div class="total">
         <p id="total"></p>
     </div>
@@ -194,13 +215,13 @@
     
             // Obtener la posición de la última fila de la tabla
             const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
-            doc.text(`Sub-Total: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Descuento: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Sub-Total - Descuento: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`IVA: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Total Impuestos: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Envio: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(totalGeneral)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Descuento: ${formatNumber(descuento)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal) - formatNumber(descuento)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`IVA: ${iva}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Envio: ${formatNumber(envio)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
     
             // Guardar PDF
             doc.save('cotizacion.pdf');
