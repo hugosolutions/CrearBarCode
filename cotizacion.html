@@ -12,7 +12,11 @@
             padding: 20px;
         }
         h1 {
-            text-align: center;
+            text-align: left;
+            color: #333;
+        }
+        h2 {
+            text-align: right;
             color: #333;
         }
         .info {
@@ -89,19 +93,15 @@
         <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
     </div>
     <h1 id="titulo">Cotizacion</h1>
-    <h1 id="periodo"></h1>
+    <h2 id="fechaCotizacion"></h2>
     <h1 id="nombreEmpresa"></h1>
     <table id="tabla-ventas">
         <thead>
             <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Usuario</th>
-                <th>Tipo de venta</th>
-                <th>Estado</th>
-                <th>Total</th>
+                <th>Descripcion</th>
+                <th>Unidades</th>
+                <th>Precio Unitario</th>
+                <th>Precio Total</th>
             </tr>
         </thead>
         <tbody id="datos-ventas">
@@ -127,20 +127,13 @@
 
         // Llenar la tabla de ventas
         const tablaVentas = document.getElementById('datos-ventas');
-        let totalGeneral = 0;
 
         for (let i = 0; i < fechaDetalle.length; i++) {
             const row = tablaVentas.insertRow();
-            row.insertCell(0).textContent = fechaDetalle[i];
-            row.insertCell(1).textContent = horaDetalle[i];
-            row.insertCell(2).textContent = idDetalle[i];
-            row.insertCell(3).textContent = clienteDetalle[i];
-            row.insertCell(4).textContent = cantidadDetalle[i];
-            row.insertCell(5).textContent = precioUnitarioDetalle[i];
-            row.insertCell(6).textContent = estadoDetalle[i];
-            row.insertCell(7).textContent = '$' + formatNumber(totalDetalle[i]);
-            
-            totalGeneral += parseFloat(totalDetalle[i]);
+            row.insertCell(0).textContent = descripcionDetalle[i];
+            row.insertCell(1).textContent = cantidadDetalle[i];
+            row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
+            row.insertCell(3).textContent = formatNumber(totalDetalle[i]);            
         }
 
         // Valores encabezado después del logo
@@ -240,14 +233,10 @@
     <table id="tabla-ventas">
         <thead>
             <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Usuario</th>
-                <th>Tipo de venta</th>
-                <th>Estado</th>
-                <th>Total</th>
+                <th>Descripcion</th>
+                <th>Unidades</th>
+                <th>Precio Unitario</th>
+                <th>Precio Total</th>
             </tr>
         </thead>
         <tbody id="datos-ventas">
