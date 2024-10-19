@@ -252,44 +252,54 @@
                 doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, 2.5);
                 doc.text(`COLOR: ${colorVehiculo}`, 0.5, 2.7);
         
+                // Generar la tabla y capturar la posición de la última fila
                 doc.autoTable({
                     head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
                     body: tableData,
                     startY: 3,
                     margin: { left: 0.5, right: 0.5 },
                     didDrawPage: function (data) {
-                        // Verificar si es la última página
-                        if (doc.internal.getNumberOfPages() === doc.internal.pages.length - 1) {
-                            let finalY = data.cursor.y; // Última posición Y de la tabla
-                            const pageHeight = doc.internal.pageSize.getHeight();
-                            const espacioDisponible = pageHeight - finalY;
-        
-                            // Si no hay suficiente espacio para los totales, crear una nueva página
-                            if (espacioDisponible < 1.5) { // Ajusta este valor según el tamaño que ocupan tus totales
-                                doc.addPage();
-                                finalY = 0.5; // Reiniciar posición Y en la nueva página
-                            }
-        
-                            // Dibujar los totales después de la tabla o en la nueva página
-                            doc.setFontSize(10);
-                            doc.setFont("helvetica", "bold");
-                            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
-                            doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
-                            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
-                            doc.text(`IVA: ${iva}`, 7.9, finalY + 1.25, { align: 'right' });
-                            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
-                            doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
-        
-                            doc.setFontSize(14);
-                            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
-                        }
+                        // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
+                    },
+                    didDrawCell: function (data) {
+                        // Este callback se ejecuta en cada celda
+                    },
+                    willDrawCell: function (data) {
+                        // Este callback permite personalizar el comportamiento antes de dibujar cada celda
                     }
                 });
         
+                // Después de que la tabla haya terminado
+                let finalY = doc.lastAutoTable.finalY; // Obtiene la posición Y después de la tabla
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const espacioDisponible = pageHeight - finalY;
+        
+                // Verificar si hay espacio suficiente para los totales en la misma página
+                if (espacioDisponible < 1.5) { // Ajustar este valor según lo que ocupen tus totales
+                    // No hay suficiente espacio, agregar una nueva página
+                    doc.addPage();
+                    finalY = 0.5; // Reiniciar la posición en la nueva página
+                }
+        
+                // Dibujar los totales al final de la última página o en una nueva página
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
+                doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
+                doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
+                doc.text(`IVA: ${iva}`, 7.9, finalY + 1.25, { align: 'right' });
+                doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
+        
+                doc.setFontSize(14);
+                doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
+        
+                // Guardar el PDF
                 const nombreArchivo = `Cotizacion ${noCotizacion}.pdf`;
                 doc.save(nombreArchivo);
             });
         }
+
 
 
 
