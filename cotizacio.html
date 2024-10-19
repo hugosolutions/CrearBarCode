@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h1 {
+            font-size: 14px;
+        }
+        h2 {
+            font-size: 14px;
+            text-align: right;
+        }
+        h3 {
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body onload="generatePDF()">
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
+    </div>
+    <h1 id="titulo"></h1>
+    <h1 id="nombreEmpresa"></h1>
+    <h2 id="fechaCotizacion"></h2>
+    <h2 id="noCotizacion"></h2>
+    <h3 id="cliente"></h3>
+    <h3 id="telefonoCliente"></h3>
+    <h3 id="vehiculo"></h3>
+    <h3 id="colorVehiculo"></h3>
+    <table id="tabla-ventas">
+        <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th>Unidades</th>
+                <th>Precio Unidad</th>
+                <th>Precio Total</th>
+            </tr>
+        </thead>
+        <tbody id="datos-ventas"></tbody>
+    </table>
+    <div class="total">
+        <p id="total"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.get('idLogo') || "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+        var fechaCotizacion = params.get('fechaCotizacion') || "fechaCotizacion";
+        var noCotizacion = params.get('noCotizacion') || "noCotizacion";
+        var total = params.get('total') || "total";
+        var nombreEmpresa = params.get('nombreEmpresa') || "nombreEmpresa";
+        var cliente = params.get('cliente') || "cliente";
+        var vehiculo = params.get('vehiculo') || "vehiculo";
+        var colorVehiculo = params.get('colorVehiculo') || "colorVehiculo";
+        var telefonoCliente = params.get('telefonoCliente') || "telefonoCliente";
+        var descripcionDetalle = (params.get('descripcionDetalle') || "").split(",");
+        var cantidadDetalle = (params.get('cantidadDetalle') || "").split(",");
+        var precioUnitarioDetalle = (params.get('precioUnitarioDetalle') || "").split(",");
+        var precioTotalDetalle = (params.get('precioTotalDetalle') || "").split(",");
+        var subTotal = params.get('subTotal') || "subTotal";
+        var descuento = params.get('descuento') || "descuento";
+        var iva = params.get('iva') || "iva";
+        var totalIva = params.get('totalIva') || "totalIva";
+        var envio = params.get('envio') || "envio";
+
+        const formatNumber = num => parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        const tablaVentas = document.getElementById('datos-ventas');
+
+        for (let i = 0; i < descripcionDetalle.length; i++) {
+            const row = tablaVentas.insertRow();
+            row.insertCell(0).textContent = descripcionDetalle[i];
+            row.insertCell(1).textContent = cantidadDetalle[i];
+            row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
+            row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
+        }
+
+        document.getElementById("titulo").textContent = "Cotización";
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
+        document.getElementById("fechaCotizacion").textContent = fechaCotizacion + " - No. Cotización: " + noCotizacion;
+        document.getElementById("cliente").textContent = "CLIENTE: " + cliente;
+        document.getElementById("vehiculo").textContent = "VEHÍCULO: " + vehiculo;
+        document.getElementById("colorVehiculo").textContent = "COLOR: " + colorVehiculo;
+        document.getElementById("telefonoCliente").textContent = "TELÉFONO: " + telefonoCliente;
+        document.getElementById("total").textContent = "Total: " + formatNumber(total);
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("Cotización", 20, 20);
+            doc.text(`Empresa: ${nombreEmpresa}`, 20, 30);
+            doc.text(`Fecha: ${fechaCotizacion}`, 20, 40);
+            doc.text(`No. Cotización: ${noCotizacion}`, 20, 50);
+            doc.text(`CLIENTE: ${cliente}`, 20, 60);
+            doc.text(`TELÉFONO: ${telefonoCliente}`, 20, 70);
+            doc.text(`VEHÍCULO: ${vehiculo}`, 20, 80);
+            doc.text(`COLOR: ${colorVehiculo}`, 20, 90);
+
+            let y = 100;
+            doc.autoTable({
+                head: [['Descripción', 'Unidades', 'Precio Unidad', 'Precio Total']],
+                body: descripcionDetalle.map((desc, i) => [
+                    desc,
+                    cantidadDetalle[i],
+                    formatNumber(precioUnitarioDetalle[i]),
+                    formatNumber(precioTotalDetalle[i])
+                ]),
+                startY: y,
+                theme: 'grid'
+            });
+
+            y += (descripcionDetalle.length + 1) * 10;
+            doc.text(`Total: ${formatNumber(total)}`, 20, y);
+
+            doc.save('cotizacion.pdf');
+        }
+    </script>
+</body>
+</html>
