@@ -24,14 +24,14 @@
             color: #333;
         }
         h1, h2 {
-            margin: 0;
+            margin: 0; /* Elimina márgenes predeterminados */
             padding: 0;
             display: inline-block;
-            vertical-align: middle;
+            vertical-align: middle; /* Alinea verticalmente los elementos */
         }
         
         h2 {
-            float: right;
+            float: right; /* Hace que flote a la derecha */
         }
 
         h3 {
@@ -50,27 +50,21 @@
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 5px; /* Reducir el padding */
+            padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #007bff; /* Cambiar color de fondo del encabezado a azul */
-            color: #fff; /* Color de texto blanco */
+            background-color: #f2f2f2;
             font-weight: bold;
         }
-        td {
-            line-height: 1.2; /* Reducir la altura de línea */
-        }
-        .totales p {
+        .totales {
             text-align: right;
-            padding: 2px 0; /* Reducir el espacio vertical */
-            margin: 0;
+            padding-top: 2px;
         }
-        .total p {
+        .total {
             font-weight: bold;
             text-align: right;
-            padding: 2px 0;
-            margin: 0;
+            padding-top: 1px;
         }
         #btn-pdf {
             background-color: #f2f2f2;
@@ -82,6 +76,49 @@
     </style>
 </head>
 <body onload="window.print()" onfocus="window.close()" id="body">
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+
+        // Valores encabezado después del logo
+        var fechaCotizacion = params.has('fechaCotizacion') ? params.get('fechaCotizacion') : "fechaCotizacion";
+        var noCotizacion = params.has('noCotizacion') ? params.get('noCotizacion') : "noCotizacion";
+        var total = params.has('total') ? params.get('total') : "total";
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+
+      // Valores encabezado después del logo Cliente Datos
+        var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
+        var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "vehiculo";
+        var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "colorVehiculo";
+        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "telefonoCliente";
+
+        // Valores del detalle de la factura
+        var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
+        var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
+        var precioUnitarioDetalle = params.has('precioUnitarioDetalle') ? params.get('precioUnitarioDetalle') : "precioUnitarioDetalle";
+        var precioTotalDetalle = params.has('precioTotalDetalle') ? params.get('precioTotalDetalle') : "precioTotalDetalle";
+
+
+        // Crear una lista de cada columna a partir de las comas.
+        descripcionDetalle = descripcionDetalle.split(",");
+        cantidadDetalle = cantidadDetalle.split(",");
+        precioUnitarioDetalle = precioUnitarioDetalle.split(",");
+        precioTotalDetalle = precioTotalDetalle.split(",");
+
+        // Valores del final de la factura
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
+        var descuento = params.has('descuento') ? params.get('descuento') : "descuento";
+        var iva = params.has('iva') ? params.get('iva') : "iva";
+        var totalIva = params.has('totalIva') ? params.get('totalIva') : "totalIva";
+        var envio = params.has('envio') ? params.get('envio') : "envio";
+
+
+        
+
+
+    </script>
     <div style="text-align: center; margin-bottom: 10px;">
         <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
     </div>
@@ -123,7 +160,141 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
 
     <script>
-        // ... Tu script existente ...
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+
+        for (let i = 0; i < descripcionDetalle.length; i++) {
+            const row = tablaVentas.insertRow();
+            row.insertCell(0).textContent = descripcionDetalle[i];
+            row.insertCell(1).textContent = cantidadDetalle[i];
+            row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
+            row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
+        }
+
+        // Valores encabezado después del logo
+        // document.getElementById("fechaCotizacion").textContent = fechaCotizacion;
+        // document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
+        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa;
+        document.getElementById("total").textContent = "Total: " + formatNumber(total);
+
+        document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
+
+
+        document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
+        document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
+        document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
+        document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
+
+
+        
+
+
+
+        
+        document.getElementById("subTotal").textContent = "Sub-Total: " + formatNumber(subTotal);
+        document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
+        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva);
+        document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
+        document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + formatNumber(subTotal-descuento);
+        document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
+
+        // Función para generar el PDF con contenido completo
+        document.getElementById('btn-pdf').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            unit: 'in',
+            format: 'letter',
+            orientation: 'portrait'
+        });
+    
+        // Cargar la imagen desde la URL y convertirla a base64
+        const imgUrl = document.getElementById('imagenLogo').src;
+    
+        convertImageToBase64(imgUrl, function(base64Img) {
+            // Agregar la imagen (logo) al PDF
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const imgWidth = 2;  // Ancho de la imagen en pulgadas
+            const imgHeight = 2;  // Alto de la imagen en pulgadas
+    
+            // Incrustar el logo en la parte superior centrado
+            doc.addImage(base64Img, 'JPEG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
+    
+            // Usar autoTable para tablas largas
+            const tableData = [];
+    
+            for (let i = 0; i < descripcionDetalle.length; i++) {
+                tableData.push([
+                    descripcionDetalle[i],
+                    cantidadDetalle[i],
+                    formatNumber(precioUnitarioDetalle[i]),
+                    formatNumber(precioTotalDetalle[i])
+                ]);
+            }
+    
+            // Agregar encabezado y datos de la tabla
+            doc.text('Cotización', pageWidth / 2, 3, { align: 'left' }); // Título del reporte
+            doc.text(`${fechaCotizacion}`, pageWidth / 2, 4, { align: 'right' });
+            doc.text(`${noCotizacion}`, pageWidth / 2, 4.5, { align: 'right' });
+            doc.text(`${nombreEmpresa}`, pageWidth / 2, 4, { align: 'left' });
+
+            //datos Cliente
+            doc.text(`CLIENTE: ${cliente}`, pageWidth / 2, 5.5, { align: 'left' });
+            doc.text(`TELÉFONO: ${telefonoCliente}`, pageWidth / 2, 6, { align: 'left' });
+            doc.text(`VEHÍCULO: ${vehiculo}`, pageWidth / 2, 6.5, { align: 'left' });
+            doc.text(`COLOR: ${coloVehiculo}`, pageWidth / 2, 7, { align: 'left' });
+    
+            doc.autoTable({
+                head: [['Descripción','Unidades', 'Precio Unitario', 'Precio Total']],
+                body: tableData,
+                startY: 8,
+                margin: { left: 0.5, right: 0.5 }
+            });
+    
+            // Obtener la posición de la última fila de la tabla
+            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
+            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Descuento: ${formatNumber(descuento)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal) - formatNumber(descuento)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`IVA: ${iva}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`Envio: ${formatNumber(envio)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
+    
+            // Guardar PDF
+            doc.save('cotizacion.pdf');
+        });
+    });
+    
+    // Función para convertir una imagen a base64
+    function convertImageToBase64(url, callback) {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous'; // Necesario para cargar imágenes externas
+        img.src = url;
+    
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL('image/jpeg');
+            callback(dataURL);
+        };
+    
+        img.onerror = function() {
+            console.error("No se pudo cargar la imagen.");
+            callback(null);
+        };
+    }
+
     </script>
 </body>
 </html>
