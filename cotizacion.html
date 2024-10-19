@@ -122,6 +122,7 @@
     <div class="totales">
         <p id="subTotal"></p>
         <p id="descuento"></p>
+        <p id="subTotalMenosDescuento"></p>
         <p id="iva"></p>
         <p id="totalIva"></p>
         <p id="envio"></p>
@@ -159,6 +160,29 @@
         document.getElementById("noCotizacion").textContent = noCotizacion;
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
+
+        document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
+        document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
+        document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
+        document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
+
+
+        
+
+
+        // Valores encabezado después del logo Cliente Datos
+        var  = params.has('cliente') ? params.get('cliente') : "cliente";
+        var  = params.has('vehiculo') ? params.get('vehiculo') : "vehiculo";
+        var  = params.has('colorVehiculo') ? params.get('colorVehiculo') : "colorVehiculo";
+        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "telefonoCliente";
+
+        
+        document.getElementById("subTotal").textContent = "Sub-Total: " + formatNumber(subTotal);
+        document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
+        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva);
+        document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
+        document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + (formatNumber(subTotal)-formatNumber(descuento));
+        document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
 
         // Función para generar el PDF con contenido completo
         document.getElementById('btn-pdf').addEventListener('click', () => {
