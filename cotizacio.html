@@ -258,23 +258,30 @@
                     startY: 3,
                     margin: { left: 0.5, right: 0.5 },
                     didDrawPage: function (data) {
-                        // Este código se ejecutará en cada página generada
-                        let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
-                        let yPosition = pageHeight - 1; // Ajusta la posición en la parte inferior de la página
-        
+                        // Verificar si es la última página
                         if (doc.internal.getNumberOfPages() === doc.internal.pages.length - 1) {
-                            // Solo se ejecuta en la última página
+                            let finalY = data.cursor.y; // Última posición Y de la tabla
+                            const pageHeight = doc.internal.pageSize.getHeight();
+                            const espacioDisponible = pageHeight - finalY;
+        
+                            // Si no hay suficiente espacio para los totales, crear una nueva página
+                            if (espacioDisponible < 1.5) { // Ajusta este valor según el tamaño que ocupan tus totales
+                                doc.addPage();
+                                finalY = 0.5; // Reiniciar posición Y en la nueva página
+                            }
+        
+                            // Dibujar los totales después de la tabla o en la nueva página
                             doc.setFontSize(10);
                             doc.setFont("helvetica", "bold");
-                            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, yPosition - 1, { align: 'right' });
-                            doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, yPosition - 0.75, { align: 'right' });
-                            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, yPosition - 0.5, { align: 'right' });
-                            doc.text(`IVA: ${iva}`, 7.9, yPosition - 0.25, { align: 'right' });
-                            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, yPosition, { align: 'right' });
-                            doc.text(`Envio: ${formatNumber(envio)}`, 7.9, yPosition + 0.25, { align: 'right' });
+                            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
+                            doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
+                            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
+                            doc.text(`IVA: ${iva}`, 7.9, finalY + 1.25, { align: 'right' });
+                            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                            doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
         
                             doc.setFontSize(14);
-                            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, yPosition + 0.60, { align: 'right' });
+                            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
                         }
                     }
                 });
@@ -283,6 +290,7 @@
                 doc.save(nombreArchivo);
             });
         }
+
 
 
     
