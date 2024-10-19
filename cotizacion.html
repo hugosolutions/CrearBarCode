@@ -182,7 +182,7 @@
         // Valores encabezado después del logo
         // document.getElementById("fechaCotizacion").textContent = fechaCotizacion;
         // document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
-        document.getElementById("nombreEmpresa").textContent = "<br>" + nombreEmpresa;
+        document.getElementById("nombreEmpresa").innerHTML = "<br>" + nombreEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
 
         document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
@@ -203,7 +203,7 @@
         document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
         document.getElementById("iva").textContent = "IVA: " + formatNumber(iva);
         document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
-        document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + (formatNumber(subTotal)-formatNumber(descuento));
+        document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + formatNumber(subTotal-descuento);
         document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
 
         // Función para generar el PDF con contenido completo
