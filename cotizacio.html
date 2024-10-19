@@ -87,6 +87,9 @@
         var noCotizacion = params.has('noCotizacion') ? params.get('noCotizacion') : "noCotizacion";
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+        var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
+        var telefonoEmpresa = params.has('telefonoEmpresa') ? params.get('telefonoEmpresa') : "telefonoEmpresa";
+        var rncEmpresa = params.has('rncEmpresa') ? params.get('rncEmpresa') : "rncEmpresa";
 
       // Valores encabezado después del logo Cliente Datos
         var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
@@ -182,7 +185,7 @@
         // Valores encabezado después del logo
         // document.getElementById("fechaCotizacion").textContent = fechaCotizacion;
         // document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
-        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa;
+        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
 
         document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
@@ -242,21 +245,24 @@
         
                 doc.setFontSize(12);
                 doc.text(`${nombreEmpresa}`, 0.5, 1.48);
+                doc.text(`${direccion}`, 0.5, 1.70);
+                doc.text(`${telefonoEmpresa}`, 0.5, 1.92);
+                doc.text(`RNC: ${rncEmpresa}`, 0.5, 2.14);
                 doc.text(`${fechaCotizacion}`, 8.1, 1.48, { align: 'right' });
                 doc.text(`No. Cotización: ${noCotizacion}`, 8.1, 1.70, { align: 'right' });
         
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(10);
-                doc.text(`CLIENTE: ${cliente}`, 0.5, 2.1);
-                doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, 2.3);
-                doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, 2.5);
-                doc.text(`COLOR: ${colorVehiculo}`, 0.5, 2.7);
+                doc.text(`CLIENTE: ${cliente}`, 0.5, 2.76);
+                doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, 2.96);
+                doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, 3.16);
+                doc.text(`COLOR: ${colorVehiculo}`, 0.5, 3.36);
         
                 // Generar la tabla y capturar la posición de la última fila
                 doc.autoTable({
                     head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
                     body: tableData,
-                    startY: 3,
+                    startY: 4,
                     margin: { left: 0.5, right: 0.5 },
                     didDrawPage: function (data) {
                         // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
