@@ -124,7 +124,6 @@
     </div>
     <h1 id="titulo">Cotización</h1>
     <h1 id="nombreEmpresa"></h1>
-    <h2 id="fechaAquella">Fecha</h2>
     <h2 id="fechaCotizacion"></h2>
     <h2 id="noCotizacion"></h2>
     <h3 id="cliente"></h3>
@@ -185,6 +184,9 @@
         document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
         document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
+
+        document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
+
 
         document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
         document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
