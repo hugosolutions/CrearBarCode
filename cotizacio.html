@@ -215,22 +215,18 @@
                 orientation: 'portrait'
             });
         
-            // Cargar la imagen desde la URL y convertirla a base64
-            //const imgUrl = document.getElementById('imagenLogo').src;
             const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/appLogo.png";
         
             convertImageToBase64(imgUrl, function(base64Img) {
                 // Agregar la imagen (logo) al PDF
                 const pageWidth = doc.internal.pageSize.getWidth();
-                const imgWidth = 2;  // Ancho de la imagen en pulgadas
-                const imgHeight = 1;  // Alto de la imagen en pulgadas
+                const imgWidth = 2;
+                const imgHeight = 1;
         
-                // Incrustar el logo en la parte superior centrado
                 doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
         
-                // Usar autoTable para tablas largas
+                // Preparar datos de la tabla
                 const tableData = [];
-        
                 for (let i = 0; i < descripcionDetalle.length; i++) {
                     tableData.push([
                         descripcionDetalle[i],
@@ -239,25 +235,18 @@
                         formatNumber(precioTotalDetalle[i])
                     ]);
                 }
-
-                doc.setFontSize(18); // Cambiar tamaño de fuente
-                doc.setFont("helvetica", "bold"); // Negrita para títulos
         
-                // Agregar encabezado y datos de la tabla
-                doc.text('Cotización', 0.5, 1); // Título del reporte    
-
-                doc.setFontSize(12); // Cambiar tamaño de fuente
-                doc.setFont("helvetica", "bold"); // Negrita para títulos            
-                doc.text(`${nombreEmpresa}`, 0.5, 1.48);              
-
-
+                doc.setFontSize(18);
+                doc.setFont("helvetica", "bold");
+                doc.text('Cotización', 0.5, 1);
+        
+                doc.setFontSize(12);
+                doc.text(`${nombreEmpresa}`, 0.5, 1.48);
                 doc.text(`${fechaCotizacion}`, 8.1, 1.48, { align: 'right' });
                 doc.text(`No. Cotización: ${noCotizacion}`, 8.1, 1.70, { align: 'right' });
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(10); // Tamaño más pequeño para detalles
         
-                // Datos Cliente
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
                 doc.text(`CLIENTE: ${cliente}`, 0.5, 2.1);
                 doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, 2.3);
                 doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, 2.5);
@@ -267,32 +256,34 @@
                     head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
                     body: tableData,
                     startY: 3,
-                    margin: { left: 0.5, right: 0.5 }
+                    margin: { left: 0.5, right: 0.5 },
+                    didDrawPage: function (data) {
+                        // Este código se ejecutará en cada página generada
+                        let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+                        let yPosition = pageHeight - 1; // Ajusta la posición en la parte inferior de la página
+        
+                        if (doc.internal.getNumberOfPages() === doc.internal.pages.length - 1) {
+                            // Solo se ejecuta en la última página
+                            doc.setFontSize(10);
+                            doc.setFont("helvetica", "bold");
+                            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, yPosition - 1, { align: 'right' });
+                            doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, yPosition - 0.75, { align: 'right' });
+                            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, yPosition - 0.5, { align: 'right' });
+                            doc.text(`IVA: ${iva}`, 7.9, yPosition - 0.25, { align: 'right' });
+                            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, yPosition, { align: 'right' });
+                            doc.text(`Envio: ${formatNumber(envio)}`, 7.9, yPosition + 0.25, { align: 'right' });
+        
+                            doc.setFontSize(14);
+                            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, yPosition + 0.60, { align: 'right' });
+                        }
+                    }
                 });
         
-                // Obtener la posición de la última fila de la tabla
-                const filasTablas = tableData.length + 0.02; // Sumar las filas de la tabla más el encabezado
-                const yPosition = 3.7 + (filasTablas * 0.3); // Posición Y basada en la longitud de la tabla
-
-                doc.setFontSize(10); // Cambiar tamaño de fuente
-                doc.setFont("helvetica", "bold"); // Negrita para títulos  
-        
-                doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, yPosition, { align: 'right' });
-                doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, yPosition + 0.25, { align: 'right' });
-                doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal) - formatNumber(descuento)}`, 7.9, yPosition + 0.5, { align: 'right' });
-                doc.text(`IVA: ${iva}`, 7.9, yPosition + 0.75, { align: 'right' });
-                doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, yPosition + 1, { align: 'right' });
-                doc.text(`Envio: ${formatNumber(envio)}`, 7.9, yPosition + 1.25, { align: 'right' });
-
-                doc.setFontSize(14); // Cambiar tamaño de fuente
-                doc.setFont("helvetica", "bold"); // Negrita para títulos  
-                doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, yPosition + 1.60, { align: 'right' });
-        
-                // Guardar PDF
                 const nombreArchivo = `Cotizacion ${noCotizacion}.pdf`;
                 doc.save(nombreArchivo);
             });
         }
+
 
     
     // Función para convertir una imagen a base64
