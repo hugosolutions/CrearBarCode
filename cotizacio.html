@@ -92,10 +92,10 @@
         var rncEmpresa = params.has('rncEmpresa') ? params.get('rncEmpresa') : "rncEmpresa";
 
       // Valores encabezado después del logo Cliente Datos
-        var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
-        var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "vehiculo";
-        var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "colorVehiculo";
-        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "telefonoCliente";
+        var cliente = params.has('cliente') ? params.get('cliente') : "";
+        var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
+        var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "";
+        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "";
 
         // Valores del detalle de la factura
         var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
@@ -191,10 +191,23 @@
         document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
 
 
-        document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
-        document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
-        document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
-        document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
+        //document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
+        //document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
+        //document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
+        //document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
+
+        if (cliente) {
+            document.getElementById("cliente").textContent = "CLIENTE: " + cliente;
+        }
+        if (vehiculo) {
+            document.getElementById("vehiculo").textContent = "VEHÍCULO: " + vehiculo;
+        }
+        if (colorVehiculo) {
+            document.getElementById("colorVehiculo").textContent = "COLOR: " + colorVehiculo;
+        }
+        if (telefonoCliente) {
+            document.getElementById("telefonoCliente").textContent = "TELÉFONO: " + telefonoCliente;
+        }  
 
 
         
@@ -225,6 +238,7 @@
                 const pageWidth = doc.internal.pageSize.getWidth();
                 const imgWidth = 2;
                 const imgHeight = 1;
+                var saltoLinea = 2.76;
         
                 doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
         
@@ -253,16 +267,34 @@
         
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(10);
-                doc.text(`CLIENTE: ${cliente}`, 0.5, 2.76);
-                doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, 2.96);
-                doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, 3.16);
-                doc.text(`COLOR: ${colorVehiculo}`, 0.5, 3.36);
+                //doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                //doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea + 0.2);
+                //doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea + 0.2);
+                //doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea + 0.2);
+
+                if (cliente) {
+                    doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+                if (telefonoCliente) {
+                    doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+                if (vehiculo) {
+                    doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+                if (colorVehiculo) {
+                    doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+
         
                 // Generar la tabla y capturar la posición de la última fila
                 doc.autoTable({
                     head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
                     body: tableData,
-                    startY: 3.60,
+                    startY: saltoLinea + 0.04,
                     margin: { left: 0.5, right: 0.5 },
                     didDrawPage: function (data) {
                         // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
