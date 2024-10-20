@@ -184,11 +184,11 @@
 
         // Valores encabezado después del logo
         // document.getElementById("fechaFactura").textContent = fechaFactura;
-        // document.getElementById("noFactura").innerHTML = "<br>No. Cotización: " + noFactura;
-        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
+        // document.getElementById("noFactura").innerHTML = "<br>No. Factura: " + noFactura;
+        document.getElementById("titulo").innerHTML = "Factura<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
 
-        document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Cotización: " + noFactura;
+        document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura;
 
 
         document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
@@ -241,7 +241,7 @@
         
                 doc.setFontSize(18);
                 doc.setFont("helvetica", "bold");
-                doc.text('Cotización', 0.5, 1);
+                doc.text('Factura', 0.5, 1);
         
                 doc.setFontSize(12);
                 doc.text(`${nombreEmpresa}`, 0.5, 1.48);
@@ -249,7 +249,7 @@
                 doc.text(`${telefonoEmpresa}`, 0.5, 1.92);
                 doc.text(`RNC: ${rncEmpresa}`, 0.5, 2.14);
                 doc.text(`${fechaFactura}`, 8.1, 1.48, { align: 'right' });
-                doc.text(`No. Cotización: ${noFactura}`, 8.1, 1.70, { align: 'right' });
+                doc.text(`No. Factura: ${noFactura}`, 8.1, 1.70, { align: 'right' });
         
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(10);
@@ -298,7 +298,7 @@
                 doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
         
                 doc.setFontSize(14);
-                doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
+                doc.text(`TOTAL Factura: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
         
                 // Guardar el PDF
                 const nombreArchivo = `Factura ${noFactura}.pdf`;
