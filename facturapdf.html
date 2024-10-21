@@ -91,6 +91,10 @@
         var telefonoEmpresa = params.has('telefonoEmpresa') ? params.get('telefonoEmpresa') : "telefonoEmpresa";
         var rncEmpresa = params.has('rncEmpresa') ? params.get('rncEmpresa') : "rncEmpresa";
 
+        var numTipoVenta = params.has('numTipoVenta') ? params.get('numTipoVenta') : "numTipoVenta";
+        var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
+        var ncf = params.has('ncf') ? params.get('ncf') : "ncf";
+
       // Valores encabezado después del logo Cliente Datos
         var cliente = params.has('cliente') ? params.get('cliente') : "";
         var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
@@ -185,11 +189,18 @@
         // Valores encabezado después del logo
         // document.getElementById("fechaFactura").textContent = fechaFactura;
         // document.getElementById("noFactura").innerHTML = "<br>No. Factura: " + noFactura;
+        if (formatNumber(numTipoVenta)>0) {
+            document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura + "<br>" + tipoVenta+ "<br>NCF: " + ncf;
+        }
+
+        if (formatNumber(numTipoVenta)>0) {
+            document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura;
+        }
+
+
+        
         document.getElementById("titulo").innerHTML = "Factura<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
-
-        document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura;
-
 
         //document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
         //document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
