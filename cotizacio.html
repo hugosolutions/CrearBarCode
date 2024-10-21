@@ -296,6 +296,11 @@
                     body: tableData,
                     startY: saltoLinea + 0.04,
                     margin: { left: 0.5, right: 0.5 },
+                    headStyles: {
+                        fillColor: [0, 0, 64], // Color de fondo del encabezado (en formato RGB)
+                        textColor: [255, 255, 255], // Color del texto del encabezado (blanco)
+                        fontStyle: 'bold', // Negrita para el texto del encabezado
+                    },
                     didDrawPage: function (data) {
                         // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
                     },
