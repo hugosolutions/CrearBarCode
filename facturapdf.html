@@ -193,7 +193,7 @@
             document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura + "<br>" + tipoVenta+ "<br>NCF: " + ncf;
         }
 
-        if (formatNumber(numTipoVenta)>0) {
+        if (formatNumber(numTipoVenta)==0) {
             document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura;
         }
 
@@ -246,7 +246,7 @@
                 const pageWidth = doc.internal.pageSize.getWidth();
                 const imgWidth = 2;
                 const imgHeight = 1;
-                var saltoLinea = 2.76;
+                var saltoLinea = 1.48;
         
                 doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
         
@@ -267,12 +267,27 @@
                 doc.text('Factura', 0.5, 1);
         
                 doc.setFontSize(12);
-                doc.text(`${nombreEmpresa}`, 0.5, 1.48);
-                doc.text(`${direccion}`, 0.5, 1.70);
-                doc.text(`${telefonoEmpresa}`, 0.5, 1.92);
-                doc.text(`RNC: ${rncEmpresa}`, 0.5, 2.14);
-                doc.text(`${fechaFactura}`, 8.1, 1.48, { align: 'right' });
-                doc.text(`No. Factura: ${noFactura}`, 8.1, 1.70, { align: 'right' });
+                doc.text(`${nombreEmpresa}`, 0.5, saltoLinea);
+                doc.text(`${fechaFactura}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${direccion}`, 0.5, saltoLinea);
+                doc.text(`No. Factura: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${telefonoEmpresa}`, 0.5, saltoLinea);
+
+                if (formatNumber(numTipoVenta)>0) {
+                    doc.text(`${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
+                }
+
+                saltoLinea+=0.22
+                doc.text(`RNC: ${rncEmpresa}`, 0.5, saltoLinea);
+
+                if (formatNumber(numTipoVenta)>0) {
+                    doc.text(`NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
+                }
+
+                saltoLinea= 2.76
+                
         
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(10);
