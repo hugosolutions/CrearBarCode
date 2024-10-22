@@ -338,7 +338,7 @@
                 doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
         
                 // Guardar el PDF
-                const nombreArchivo = `Cotizacion ${noCotizacion}.pdf`;
+                const nombreArchivo = `${cliente} ${vehiculo} Cotizacion ${noCotizacion}.pdf`;
                 doc.save(nombreArchivo);
             });
         }
