@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura</title>
+    <title>Servicios</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,46 +83,29 @@
         var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
 
         // Valores encabezado después del logo
-        var fechaFactura = params.has('fechaFactura') ? params.get('fechaFactura') : "fechaFactura";
-        var noFactura = params.has('noFactura') ? params.get('noFactura') : "noFactura";
-        var total = params.has('total') ? params.get('total') : "total";
+        var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
+
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
         var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
         var telefonoEmpresa = params.has('telefonoEmpresa') ? params.get('telefonoEmpresa') : "telefonoEmpresa";
         var rncEmpresa = params.has('rncEmpresa') ? params.get('rncEmpresa') : "rncEmpresa";
 
-        var numTipoVenta = params.has('numTipoVenta') ? params.get('numTipoVenta') : "numTipoVenta";
-        var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
-        var ncf = params.has('ncf') ? params.get('ncf') : "ncf";
 
       // Valores encabezado después del logo Cliente Datos
-        var cliente = params.has('cliente') ? params.get('cliente') : "";
         var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
-        var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "";
-        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "";
 
         // Valores del detalle de la factura
         var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
-        var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
-        var precioUnitarioDetalle = params.has('precioUnitarioDetalle') ? params.get('precioUnitarioDetalle') : "precioUnitarioDetalle";
-        var precioTotalDetalle = params.has('precioTotalDetalle') ? params.get('precioTotalDetalle') : "precioTotalDetalle";
+        var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
+        var mecanicoDetalle = params.has('mecanicoDetalle') ? params.get('mecanicoDetalle') : "mecanicoDetalle";
 
 
         // Crear una lista de cada columna a partir de las comas.
         descripcionDetalle = descripcionDetalle.split(",");
-        cantidadDetalle = cantidadDetalle.split(",");
-        precioUnitarioDetalle = precioUnitarioDetalle.split(",");
-        precioTotalDetalle = precioTotalDetalle.split(",");
-
-        // Valores del final de la factura
-        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
-        var descuento = params.has('descuento') ? params.get('descuento') : "descuento";
-        var iva = params.has('iva') ? params.get('iva') : "iva";
-        var totalIva = params.has('totalIva') ? params.get('totalIva') : "totalIva";
-        var envio = params.has('envio') ? params.get('envio') : "envio";
-
-
-        
+        fechaDetalle = fechaDetalle.split(",");
+        horaDetalle = horaDetalle.split(",");
+        mecanicoDetalle = mecanicoDetalle.split(",");        
 
 
     </script>
@@ -131,36 +114,21 @@
     </div>
     <h1 id="titulo"></h1>
     <h1 id="nombreEmpresa"></h1>
-    <h2 id="fechaFactura"></h2>
-    <h2 id="noFactura"></h2>
-    <h3 id="cliente"></h3>
-    <h3 id="telefonoCliente"></h3>
+    <h2 id="fecha"></h2>
     <h3 id="vehiculo"></h3>
-    <h3 id="colorVehiculo"></h3>
     <table id="tabla-ventas">
         <thead>
             <tr>
-                <th>Descripcion</th>
-                <th>Unidades</th>
-                <th>Precio Unidad</th>
-                <th>Precio Total</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Servicio</th>
+                <th>Mecanico</th>
             </tr>
         </thead>
         <tbody id="datos-ventas">
 
         </tbody>
     </table>
-    <div class="totales">
-        <p id="subTotal"></p>
-        <p id="descuento"></p>
-        <p id="subTotalMenosDescuento"></p>
-        <p id="iva"></p>
-        <p id="totalIva"></p>
-        <p id="envio"></p>
-    </div>
-    <div class="total">
-        <p id="total"></p>
-    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -180,55 +148,19 @@
 
         for (let i = 0; i < descripcionDetalle.length; i++) {
             const row = tablaVentas.insertRow();
-            row.insertCell(0).textContent = descripcionDetalle[i];
-            row.insertCell(1).textContent = cantidadDetalle[i];
-            row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
-            row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
+            row.insertCell(0).textContent = fechaDetalle[i];
+            row.insertCell(1).textContent = horaDetalle[i];
+            row.insertCell(2).textContent = descripcionDetalle[i];
+            row.insertCell(3).textContent = mecanicoDetalle[i];
         }
 
         // Valores encabezado después del logo
-        // document.getElementById("fechaFactura").textContent = fechaFactura;
-        // document.getElementById("noFactura").innerHTML = "<br>No. Factura: " + noFactura;
-        if (formatNumber(numTipoVenta)<3) {
-            document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura + "<br>" + tipoVenta+ "<br>NCF: " + ncf;
-        }
+        document.getElementById("fecha").innerHTML = fecha;
+        document.getElementById("titulo").innerHTML = "Reporte de Servicios<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
 
-        if (formatNumber(numTipoVenta)==3) {
-            document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura;
-        }
-
-
-        
-        document.getElementById("titulo").innerHTML = "Factura<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
-        document.getElementById("total").textContent = "Total: " + formatNumber(total);
-
-        //document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
-        //document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
-        //document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
-        //document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
-
-        if (cliente) {
-            document.getElementById("cliente").textContent = "CLIENTE: " + cliente;
-        }
         if (vehiculo) {
-            document.getElementById("vehiculo").textContent = "VEHÍCULO: " + vehiculo;
+            document.getElementById("vehiculo").textContent = "Cliente: " + vehiculo;
         }
-        if (colorVehiculo) {
-            document.getElementById("colorVehiculo").textContent = "COLOR: " + colorVehiculo;
-        }
-        if (telefonoCliente) {
-            document.getElementById("telefonoCliente").textContent = "TELÉFONO: " + telefonoCliente;
-        }      
-
-
-
-        
-        document.getElementById("subTotal").textContent = "Sub-Total: " + formatNumber(subTotal);
-        document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
-        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva*100) + "%";
-        document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
-        document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + formatNumber(subTotal-descuento);
-        document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
 
         // Función para generar el PDF con contenido completo
         function generarPDF() {
@@ -254,37 +186,37 @@
                 const tableData = [];
                 for (let i = 0; i < descripcionDetalle.length; i++) {
                     tableData.push([
+                        fechaDetalle[i],
+                        horaDetalle[i],
                         descripcionDetalle[i],
-                        cantidadDetalle[i],
-                        formatNumber(precioUnitarioDetalle[i]),
-                        formatNumber(precioTotalDetalle[i])
+                        mecanicoDetalle[i]
                     ]);
                 }
                 
         
                 doc.setFontSize(18);
                 doc.setFont("helvetica", "bold");
-                doc.text('Factura', 0.5, 1);
+                doc.text('Reporte de Servicios', 0.5, 1);
         
                 doc.setFontSize(12);
                 doc.text(`${nombreEmpresa}`, 0.5, saltoLinea);
-                doc.text(`${fechaFactura}`, 8.1, saltoLinea, { align: 'right' });
+                doc.text(`${fecha}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
                 doc.text(`${direccion}`, 0.5, saltoLinea);
-                doc.text(`No. Factura: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
+                //doc.text(`No. Factura: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
                 doc.text(`${telefonoEmpresa}`, 0.5, saltoLinea);
 
-                if (formatNumber(numTipoVenta)<3) {
-                    doc.text(`${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
-                }
+                // if (formatNumber(numTipoVenta)<3) {
+                //     doc.text(`${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
+                // }
 
                 saltoLinea+=0.22
                 doc.text(`RNC: ${rncEmpresa}`, 0.5, saltoLinea);
 
-                if (formatNumber(numTipoVenta)<3) {
-                    doc.text(`NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
-                }
+                // if (formatNumber(numTipoVenta)<3) {
+                //     doc.text(`NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
+                // }
 
                 saltoLinea= 2.76
                 
@@ -296,32 +228,32 @@
                 //doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea + 0.2);
                 //doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea + 0.2);
 
-                if (cliente) {
-                    doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
-                    saltoLinea+= 0.2;
-                }
-                if (telefonoCliente) {
-                    doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea);
-                    saltoLinea+= 0.2;
-                }
+                // if (cliente) {
+                //     doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
+                // if (telefonoCliente) {
+                //     doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
                 if (vehiculo) {
-                    doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea);
+                    doc.text(`CLIENTE: ${vehiculo}`, 0.5, saltoLinea);
                     saltoLinea+= 0.2;
                 }
-                if (colorVehiculo) {
-                    doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea);
-                    saltoLinea+= 0.2;
-                }
+                // if (colorVehiculo) {
+                //     doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
 
         
                 // Generar la tabla y capturar la posición de la última fila
                 doc.autoTable({
-                    head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
+                    head: [['Fecha', 'Hora', 'Servicio', 'Mecanico']],
                     body: tableData,
                     startY: saltoLinea + 0.04,
                     margin: { left: 0.5, right: 0.5 },
                     headStyles: {
-                        fillColor: [0, 0, 64], // Color de fondo del encabezado (en formato RGB)
+                        fillColor: [166, 7, 7], // Color de fondo del encabezado (en formato RGB)
                         textColor: [255, 255, 255], // Color del texto del encabezado (blanco)
                         fontStyle: 'bold', // Negrita para el texto del encabezado
                     },
@@ -349,20 +281,20 @@
                 }
         
                 // Dibujar los totales al final de la última página o en una nueva página
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "bold");
-                doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
-                doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
-                doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
-                doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
-                doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
-                doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
+                // doc.setFontSize(10);
+                // doc.setFont("helvetica", "bold");
+                // doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
+                // doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
+                // doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
+                // doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
+                // doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                // doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
         
-                doc.setFontSize(14);
-                doc.text(`TOTAL FACTURA: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
+                // doc.setFontSize(14);
+                // doc.text(`TOTAL FACTURA: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
         
                 // Guardar el PDF
-                const nombreArchivo = `${cliente} ${vehiculo} Factura ${noFactura}.pdf`;
+                const nombreArchivo = `Reporte ${vehiculo}.pdf`;
                 doc.save(nombreArchivo);
             });
         }
