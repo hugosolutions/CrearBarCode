@@ -75,7 +75,7 @@
         }
     </style>
 </head>
-<body onload="window.print()" onfocus="window.close()" id="body">
+<body onload="generarPDF()" onfocus="window.close()" id="body">
     <script>
         // Obtener los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
@@ -87,12 +87,15 @@
         var noCotizacion = params.has('noCotizacion') ? params.get('noCotizacion') : "noCotizacion";
         var total = params.has('total') ? params.get('total') : "total";
         var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+        var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
+        var telefonoEmpresa = params.has('telefonoEmpresa') ? params.get('telefonoEmpresa') : "telefonoEmpresa";
+        var rncEmpresa = params.has('rncEmpresa') ? params.get('rncEmpresa') : "rncEmpresa";
 
       // Valores encabezado después del logo Cliente Datos
-        var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
-        var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "vehiculo";
-        var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "colorVehiculo";
-        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "telefonoCliente";
+        var cliente = params.has('cliente') ? params.get('cliente') : "";
+        var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
+        var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "";
+        var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "";
 
         // Valores del detalle de la factura
         var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
@@ -182,16 +185,29 @@
         // Valores encabezado después del logo
         // document.getElementById("fechaCotizacion").textContent = fechaCotizacion;
         // document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
-        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa;
+        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
 
         document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
 
 
-        document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
-        document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
-        document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
-        document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
+        //document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
+        //document.getElementById("vehiculo").textContent ="VEHÍCULO: " + vehiculo;
+        //document.getElementById("colorVehiculo").textContent ="COLOR: " + colorVehiculo;
+        //document.getElementById("telefonoCliente").textContent ="TELÉFONO: " + telefonoCliente;
+
+        if (cliente) {
+            document.getElementById("cliente").textContent = "CLIENTE: " + cliente;
+        }
+        if (vehiculo) {
+            document.getElementById("vehiculo").textContent = "VEHÍCULO: " + vehiculo;
+        }
+        if (colorVehiculo) {
+            document.getElementById("colorVehiculo").textContent = "COLOR: " + colorVehiculo;
+        }
+        if (telefonoCliente) {
+            document.getElementById("telefonoCliente").textContent = "TELÉFONO: " + telefonoCliente;
+        }  
 
 
         
@@ -201,77 +217,135 @@
         
         document.getElementById("subTotal").textContent = "Sub-Total: " + formatNumber(subTotal);
         document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
-        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva);
+        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva*100) + "%";
         document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
         document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + formatNumber(subTotal-descuento);
         document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
 
         // Función para generar el PDF con contenido completo
-        document.getElementById('btn-pdf').addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            unit: 'in',
-            format: 'letter',
-            orientation: 'portrait'
-        });
-    
-        // Cargar la imagen desde la URL y convertirla a base64
-        const imgUrl = document.getElementById('imagenLogo').src;
-    
-        convertImageToBase64(imgUrl, function(base64Img) {
-            // Agregar la imagen (logo) al PDF
-            const pageWidth = doc.internal.pageSize.getWidth();
-            const imgWidth = 2;  // Ancho de la imagen en pulgadas
-            const imgHeight = 2;  // Alto de la imagen en pulgadas
-    
-            // Incrustar el logo en la parte superior centrado
-            doc.addImage(base64Img, 'JPEG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
-    
-            // Usar autoTable para tablas largas
-            const tableData = [];
-    
-            for (let i = 0; i < descripcionDetalle.length; i++) {
-                tableData.push([
-                    descripcionDetalle[i],
-                    cantidadDetalle[i],
-                    formatNumber(precioUnitarioDetalle[i]),
-                    formatNumber(precioTotalDetalle[i])
-                ]);
-            }
-    
-            // Agregar encabezado y datos de la tabla
-            doc.text('Cotización', pageWidth / 2, 3, { align: 'left' }); // Título del reporte
-            doc.text(`${fechaCotizacion}`, pageWidth / 2, 4, { align: 'right' });
-            doc.text(`${noCotizacion}`, pageWidth / 2, 4.5, { align: 'right' });
-            doc.text(`${nombreEmpresa}`, pageWidth / 2, 4, { align: 'left' });
-
-            //datos Cliente
-            doc.text(`CLIENTE: ${cliente}`, pageWidth / 2, 5.5, { align: 'left' });
-            doc.text(`TELÉFONO: ${telefonoCliente}`, pageWidth / 2, 6, { align: 'left' });
-            doc.text(`VEHÍCULO: ${vehiculo}`, pageWidth / 2, 6.5, { align: 'left' });
-            doc.text(`COLOR: ${coloVehiculo}`, pageWidth / 2, 7, { align: 'left' });
-    
-            doc.autoTable({
-                head: [['Descripción','Unidades', 'Precio Unitario', 'Precio Total']],
-                body: tableData,
-                startY: 8,
-                margin: { left: 0.5, right: 0.5 }
+        function generarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
             });
-    
-            // Obtener la posición de la última fila de la tabla
-            const filasTablas = tableData.length + 3; // Sumar las filas de la tabla más el encabezado
-            doc.text(`Sub-Total: ${formatNumber(subTotal)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Descuento: ${formatNumber(descuento)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal) - formatNumber(descuento)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`IVA: ${iva}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`Envio: ${formatNumber(envio)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-            doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, pageWidth / 2, 4.5 + (filasTablas * 0.3), { align: 'right' });
-    
-            // Guardar PDF
-            doc.save('cotizacion.pdf');
-        });
-    });
+        
+            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/appLogo.png";
+        
+            convertImageToBase64(imgUrl, function(base64Img) {
+                // Agregar la imagen (logo) al PDF
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const imgWidth = 2;
+                const imgHeight = 1;
+                var saltoLinea = 2.76;
+        
+                doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
+        
+                // Preparar datos de la tabla
+                const tableData = [];
+                for (let i = 0; i < descripcionDetalle.length; i++) {
+                    tableData.push([
+                        descripcionDetalle[i],
+                        cantidadDetalle[i],
+                        formatNumber(precioUnitarioDetalle[i]),
+                        formatNumber(precioTotalDetalle[i])
+                    ]);
+                }
+        
+                doc.setFontSize(18);
+                doc.setFont("helvetica", "bold");
+                doc.text('Cotización', 0.5, 1);
+        
+                doc.setFontSize(12);
+                doc.text(`${nombreEmpresa}`, 0.5, 1.48);
+                doc.text(`${direccion}`, 0.5, 1.70);
+                doc.text(`${telefonoEmpresa}`, 0.5, 1.92);
+                doc.text(`RNC: ${rncEmpresa}`, 0.5, 2.14);
+                doc.text(`${fechaCotizacion}`, 8.1, 1.48, { align: 'right' });
+                doc.text(`No. Cotización: ${noCotizacion}`, 8.1, 1.70, { align: 'right' });
+        
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                //doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                //doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea + 0.2);
+                //doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea + 0.2);
+                //doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea + 0.2);
+
+                if (cliente) {
+                    doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+                if (telefonoCliente) {
+                    doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+                if (vehiculo) {
+                    doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+                if (colorVehiculo) {
+                    doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea);
+                    saltoLinea+= 0.2;
+                }
+
+        
+                // Generar la tabla y capturar la posición de la última fila
+                doc.autoTable({
+                    head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
+                    body: tableData,
+                    startY: saltoLinea + 0.04,
+                    margin: { left: 0.5, right: 0.5 },
+                    headStyles: {
+                        fillColor: [0, 0, 64], // Color de fondo del encabezado (en formato RGB)
+                        textColor: [255, 255, 255], // Color del texto del encabezado (blanco)
+                        fontStyle: 'bold', // Negrita para el texto del encabezado
+                    },
+                    didDrawPage: function (data) {
+                        // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
+                    },
+                    didDrawCell: function (data) {
+                        // Este callback se ejecuta en cada celda
+                    },
+                    willDrawCell: function (data) {
+                        // Este callback permite personalizar el comportamiento antes de dibujar cada celda
+                    }
+                });
+        
+                // Después de que la tabla haya terminado
+                let finalY = doc.lastAutoTable.finalY; // Obtiene la posición Y después de la tabla
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const espacioDisponible = pageHeight - finalY;
+        
+                // Verificar si hay espacio suficiente para los totales en la misma página
+                if (espacioDisponible < 1.5) { // Ajustar este valor según lo que ocupen tus totales
+                    // No hay suficiente espacio, agregar una nueva página
+                    doc.addPage();
+                    finalY = 0.5; // Reiniciar la posición en la nueva página
+                }
+        
+                // Dibujar los totales al final de la última página o en una nueva página
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
+                doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
+                doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
+                doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
+                doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
+        
+                doc.setFontSize(14);
+                doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
+        
+                // Guardar el PDF
+                const nombreArchivo = `${cliente} ${vehiculo} Cotizacion ${noCotizacion}.pdf`;
+                doc.save(nombreArchivo);
+            });
+        }
+
+
+
+
     
     // Función para convertir una imagen a base64
     function convertImageToBase64(url, callback) {
@@ -285,7 +359,7 @@
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-            const dataURL = canvas.toDataURL('image/jpeg');
+            const dataURL = canvas.toDataURL('image/png');
             callback(dataURL);
         };
     
