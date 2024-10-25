@@ -144,6 +144,10 @@
         var montoEfectivo = params.has('montoEfectivo') ? params.get('montoEfectivo') : "0.00";
         var montoTotal = params.has('montoTotal') ? params.get('montoTotal') : "0.00";
         var diferencia = params.has('diferencia') ? params.get('diferencia') : "0.00";
+
+        var efectivoCaja = params.has('efectivoCaja') ? params.get('efectivoCaja') : "0.00";
+        var transferenciaCaja = params.has('transferenciaCaja') ? params.get('transferenciaCaja') : "0.00";
+        var totalCaja = params.has('totalCaja') ? params.get('totalCaja') : "0.00";
         
         
         //Formato de 2 decimales
@@ -151,6 +155,11 @@
         montoEfectivo = parseFloat(montoEfectivo).toLocaleString('en-US', { minimumFractionDigits: 2 });
         montoTotal = parseFloat(montoTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
         diferencia = parseFloat(diferencia).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        
+        efectivoCaja = parseFloat(efectivoCaja).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        transferenciaCaja = parseFloat(transferenciaCaja).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        totalCaja = parseFloat(totalCaja).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
         
     </script>
     <div class="recibo">
@@ -168,9 +177,17 @@
         </div>      
 
         <div class="lastTotal">
+            <p id="tituloCaja" >CAJA</p>        
+            <p id="transferenciaCaja" ></p>        
+            <p id="efectivoCaja" ></p>        
+            <p id="totalCaja" ></p>  
+
+            <p id="tituloRecibido" >RECIBIDO</p>       
             <p id="montoTransferencia" ></p>        
             <p id="montoEfectivo" ></p>        
-            <p id="montoTotal" ></p>        
+            <p id="montoTotal" ></p>     
+
+            <p id="tituloDiferencia" >DIFERENCIA</p>     
             <p id="diferencia" ></p>        
         </div>
         
@@ -216,8 +233,13 @@
         var elemento5=document.getElementById("hora").textContent = "Hora: " + hora
 
         //valores datos de la factura
-        var elemento8=document.getElementById("montoTransferencia").textContent = "Transferencia Recibida: " + montoTransferencia
-        var elemento9=document.getElementById("montoEfectivo").textContent = "Efectivo Recibido: " + montoEfectivo
+        var elemento12=document.getElementById("transferenciaCaja").textContent = "Transferencias: " + montoTransferencia
+        var elemento13=document.getElementById("efectivoCaja").textContent = "Efectivo: " + montoEfectivo
+        var elemento14=document.getElementById("totalCaja").textContent = "Total Caja: " + montoTotal
+
+        //valores datos de la factura
+        var elemento8=document.getElementById("montoTransferencia").textContent = "Transferencias: " + montoTransferencia
+        var elemento9=document.getElementById("montoEfectivo").textContent = "Efectivo: " + montoEfectivo
         var elemento10=document.getElementById("montoTotal").textContent = "Total Recibido: " + montoTotal
         var elemento11=document.getElementById("diferencia").textContent = "Diferencia: " + diferencia
 
