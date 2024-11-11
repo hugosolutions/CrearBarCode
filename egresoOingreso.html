@@ -128,8 +128,7 @@
 
         //valores datos de la factura
         //var noCuadre = params.has('noCuadre') ? params.get('noCuadre') : "noCuadre";
-        var usuarioRecibe = params.has('usuarioRecibe') ? params.get('usuarioRecibe') : "usuarioRecibe";
-        var usuarioEntrega = params.has('usuarioEntrega') ? params.get('usuarioEntrega') : "usuarioEntrega";
+        var usuario = params.has('usuario') ? params.get('usuario') : "usuario";
         var ingresoOegreso = params.has('ingresoOegreso') ? params.get('ingresoOegreso') : "ingresoOegreso";
 
         
@@ -180,16 +179,10 @@
         
         <div id="signature" class="signature">
             <p>_______________________________________</p>
-            <p id="usuarioRecibe"></p>
+            <p id="usuario"></p>
             </br>
             </br>
             </br>
-            </br>
-            </br>
-            </br>
-            </br>
-            <p>_______________________________________</p>
-              <p id="usuarioEntrega"></p>
         </div>
     </div>  
 
@@ -201,8 +194,7 @@
 
         
         // Valores encabezado despues del logo
-        var elemento2=document.getElementById("usuarioRecibe").textContent ="Recibe: " + usuarioRecibe 
-        var elemento2=document.getElementById("usuarioEntrega").textContent ="Entrega: " + usuarioEntrega 
+        var elemento2=document.getElementById("usuario").textContent =usuario 
         var elemento4=document.getElementById("fecha").textContent = "Fecha: " + fecha 
         var elemento5=document.getElementById("hora").textContent = "Hora: " + hora
 
