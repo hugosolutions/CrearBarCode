@@ -68,6 +68,9 @@
         var costosDetalle = params.has('costosDetalle') ? params.get('costosDetalle') : "costosDetalle";
         var gastosDetalle = params.has('gastosDetalle') ? params.get('gastosDetalle') : "gastosDetalle";
         var descuentosDetalle = params.has('descuentosDetalle') ? params.get('descuentosDetalle') : "descuentosDetalle";
+        var costosIndividual = params.has('costosIndividual') ? params.get('costosIndividual') : "costosIndividual";
+
+        
 
         // Crear una lista de cada columna a partir de las comas.
         fechaDetalle = fechaDetalle.split(",");
@@ -92,6 +95,7 @@
         costosDetalle = costosDetalle.split(",");
         gastosDetalle = gastosDetalle.split(",");
         descuentosDetalle = descuentosDetalle.split(",");
+        costosIndividual = costosIndividual.split(",");
 
         let beneficiosPorDia = {};
         let facturasPorFecha = {};
@@ -138,6 +142,7 @@
 
             beneficiosPorDia[fecha].ventas += ventasDetalle[i] ? parseFloat(ventasDetalle[i]) : 0;
             beneficiosPorDia[fecha].costos += costosDetalle[i] ? parseFloat(costosDetalle[i]) : 0;
+            beneficiosPorDia[fecha].costos += costosIndividual[i] ? parseFloat(costosIndividual[i]) : 0;
             beneficiosPorDia[fecha].gastos += gastosDetalle[i] ? parseFloat(gastosDetalle[i]) : 0;
             beneficiosPorDia[fecha].descuentos += descuentosDetalle[i] ? parseFloat(descuentosDetalle[i]) : 0;
 
