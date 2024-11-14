@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=60mm, initial-scale=1.0"> <!-- Cambia el ancho de la vista para el papel de 58mm -->
+    <title>Recibo</title>
+    <style>
+        body {
+            font-family: tahoma, Helvetica, sans-serif; /* Ajuste de fuente */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra similar al primer código */
+        }
+
+        .recibo {
+            max-width: 60mm; /* Ancho máximo similar al primer código */
+            margin: auto; /* Centrar en la página */
+        }
+
+        .header, .footer, .items, .totals {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .details {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .header img {
+            max-width: 50mm; /* Ajusta el tamaño de la imagen para que se ajuste al ancho de la impresora térmica */
+        }
+
+        .header p, .footer p, .signature p {
+            margin: 0;
+            padding: 1mm 0; /* Margen y padding similar al primer código */
+        }
+
+        .items {
+            border-top: 1px dashed #000;
+            padding-top: 2mm;
+            margin-top: 2mm;
+            border-top: 1px dashed #000;
+            
+        }
+
+
+
+        .totals {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
+        }
+
+        .lastTotal {
+            font-size: 5mm;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .totalsizquierdo {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
+            text-align: right;
+            font-size: 3mm;
+        }
+
+        .totals td {
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .totals .label {
+            text-align: left;
+        }
+
+        .totals .labela {
+            text-align: left;
+        }
+
+        .creditos {
+            display: none;
+            padding-top: 2mm;
+            margin-top: 2mm;
+        }
+
+        .items th, .items td {
+            text-align: left;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .items .pro{
+            text-align: right;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+
+
+        .items th {
+            font-weight: bold;
+        }
+
+
+
+        
+
+        .signature {
+            display: none;
+            text-align: center;
+            margin-top: 5mm;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+
+<body onload="window.print()" onfocus="window.close()">
+
+
+
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+        
+
+        // Valores encabezado despues del logo
+        var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
+        var ciudad = params.has('ciudad') ? params.get('ciudad') : "ciudad";
+        var tipoTienda = params.has('tipoTienda') ? params.get('tipoTienda') : "tipoTienda";
+        var telefono = params.has('telefono') ? params.get('telefono') : "telefono";
+        var instagram = params.has('instagram') ? params.get('instagram') : "instagram";
+
+        //valores datos de la factura
+        var noFactura = params.has('noFactura') ? params.get('noFactura') : "noFactura";
+        var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
+        var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
+        var caja = params.has('caja') ? params.get('caja') : "caja";
+        var ncf = params.has('ncf') ? params.get('ncf') : "ncf";
+        var tipoFactura = params.has('tipoFactura') ? params.get('tipoFactura') : "tipoFactura";
+
+        
+        var fechaAux = params.has('fecha') ? params.get('fecha') : "fecha";
+        var partesFecha = fechaAux.split('/');        
+        // Reorganiza la fecha al formato dd/mm/yyyy
+        var fecha = partesFecha[1] + '/' + partesFecha[0] + '/' + partesFecha[2];
+        
+        var fechaCreditoAux = params.has('fechaCredito') ? params.get('fechaCredito') : "fechaCredito";
+        var partesFechaCredito = fechaCreditoAux.split('/');        
+        // Reorganiza la fecha al formato dd/mm/yyyy
+        var fechaCredito = partesFechaCredito[1] + '/' + partesFechaCredito[0] + '/' + partesFechaCredito[2];
+
+
+        
+        var pagadoCredito = params.has('pagadoCredito') ? params.get('pagadoCredito') : "pagadoCredito";
+        var pendienteCredito = params.has('pendienteCredito') ? params.get('pendienteCredito') : "pendienteCredito";
+        var hora = params.has('hora') ? params.get('hora') : "hora";
+
+
+        //valores totales factura
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
+        var descuento = params.has('descuento') ? params.get('descuento') : "0.00";
+        var itbis = params.has('itbis') ? params.get('itbis') : "0.00";
+        var total = params.has('total') ? params.get('total') : "total";
+
+        //valores del detalle de la factura
+        var cantidadProducto = params.has('cantidadProducto') ? params.get('cantidadProducto') : "cantidadProducto";
+        var nombreProducto = params.has('nombreProducto') ? params.get('nombreProducto') : "nombreProducto";
+        var precioUnitProducto = params.has('precioUnitProducto') ? params.get('precioUnitProducto') : "precioUnitProducto";
+        var precioTotalProducto = params.has('precioTotalProducto') ? params.get('precioTotalProducto') : "precioTotalProducto";
+        
+
+        //pies de factura
+        var piePagina = params.has('piePagina') ? params.get('piePagina') : "piePagina";
+        var otroPie = params.has('otroPie') ? params.get('otroPie') : "otroPie";
+        
+        //Formato de 2 decimales
+        subTotal = parseFloat(subTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        descuento = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        itbis = parseFloat(itbis).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        total = parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+        pendienteCredito = parseFloat(pendienteCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        pagadoCredito = parseFloat(pagadoCredito).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        
+        //crea una lista de cada columna a partir de las comas.
+        cantidadProducto = cantidadProducto.split(",");
+        nombreProducto = nombreProducto.split(",");
+        precioUnitProducto = precioUnitProducto.split(",");
+        precioTotalProducto = precioTotalProducto.split(",");
+
+        //Crea una lista para mostrar en cada fila de la tabla
+        var result = [];
+
+        cantidadProducto.forEach(function(value, id) {
+            result[id] = {
+                cantidad: cantidadProducto[id],
+                nombre: nombreProducto[id], // + " " + detalles[id], // Descomenta si deseas concatenar la descripción con el detalle
+                precio_unit: parseFloat(precioUnitProducto[id]).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+                precio_total: parseFloat(precioTotalProducto[id]).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+            };
+        });
+        console.log(result);
+    </script>
+    <div class="recibo">
+        <div class="header">
+            <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo">
+            <p id="direccion"></p>
+            <p id="ciudad"></p>
+            <p id="tipoTienda"></p>
+            <p id="telefono"></p>
+            <p id="instagram"></p>
+        </div>
+        
+        <div class="details">
+            <p id="noFactura"></p>
+            <p id="tipoFactura">Tipo de Factura: </p>
+            <p id="ncf">NCF: </p>
+            <p id="cliente">Cliente: </p>
+            <p id="caja">Caja: </p>
+            <p id="fecha">Fecha: </p>
+            <p id="hora">Hora: </p>
+        </div>
+
+        <div class="items">
+            <table width="100%" id="tablaItems">
+                <tr>
+                    <th>ARTÍCULO</th>
+                    <th></th>
+                    <th class="pro">PRECIO TOTAL</th>
+                </tr>
+                <script>
+                    var tablaItems = document.getElementById("tablaItems");
+        
+                    result.forEach(function(row) {
+                        var descripcionRow = document.createElement("tr");
+                        var cantidadRow = document.createElement("tr");
+        
+                        descripcionRow.innerHTML = `
+                            <td>${row.nombre}</td>
+                        `;
+        
+                        cantidadRow.innerHTML = `
+                            <td>${row.cantidad}x ${row.precio_unit}</td>
+                            <td></td>
+                            <td class="pro">${row.precio_total}</td>
+                        `;
+        
+                        tablaItems.appendChild(descripcionRow);
+                        tablaItems.appendChild(cantidadRow);
+                    });
+                </script>
+            </table>
+        </div>      
+
+        
+
+        
+        
+        <div class="totalsizquierdo">
+            <p id="subTotal" ></p>
+            <p id="itbis" ></p>
+            <p id="descuento" ></p>     
+        </div>
+
+        <div class="lastTotal">
+            <p id="total" ></p>        
+        </div>
+        
+
+        </br>
+
+        <div id="creditos" class="creditos">
+            <table width="100%">
+                <tr>
+                    <td class="label">Pagado:</td>
+                    <td id="pagadoCredito"></td>
+                </tr>
+                <tr>
+                    <td class="label">Pendiente:</td>
+                    <td id="pendienteCredito"><strong></strong></td>
+                </tr>
+                <tr>
+                    <td id="fechaCredito" colspan="2" style="text-align: center;"></td>
+                </tr>           
+
+                
+            </table>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+        </div>
+
+        
+
+
+        
+        <div id="signature" class="signature">
+            <p>_______________________________________</p>
+            <p id="clienteCredito"></p>
+            </br>
+            </br>
+            </br>
+        </div>
+        
+        <div class="footer">
+            <p id="piePagina"></p>
+            <p id="otroPie"></p>
+        </div>
+    </div>  
+
+
+    
+    <script>
+        //Logo
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+        
+        // Valores encabezado despues del logo
+        var elemento1=document.getElementById("direccion").textContent = direccion
+        var elemento2=document.getElementById("ciudad").textContent = ciudad 
+        var elemento3=document.getElementById("tipoTienda").textContent = tipoTienda
+        var elemento4=document.getElementById("telefono").textContent = telefono 
+        var elemento5=document.getElementById("instagram").textContent = instagram 
+
+        //valores datos de la factura
+        var elemento8=document.getElementById("noFactura").textContent = "Factura #000" + noFactura
+        // var elemento9=document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta 
+        var elemento9=document.getElementById("ncf").textContent = "NCF: " + ncf 
+        var elemento9=document.getElementById("tipoFactura").textContent = "Tipo de factura: " + tipoFactura 
+        var elemento10=document.getElementById("cliente").textContent = "Cliente: " + cliente
+        var elemento11=document.getElementById("caja").textContent = "Caja: " + caja 
+        var elemento12=document.getElementById("fecha").textContent = "Fecha: " + fecha 
+        var elemento13=document.getElementById("hora").textContent = "Hora: " + hora 
+        
+        //valores totales factura
+        var elemento17=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
+        var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
+        var elemento25=document.getElementById("itbis").textContent = "ITBIS: +" + itbis 
+        var elemento19=document.getElementById("total").textContent = "Total: " + total
+        
+        //pies de factura   
+        var elemento23=document.getElementById("piePagina").textContent = piePagina
+        var elemento24=document.getElementById("otroPie").textContent = otroPie
+
+        //creditos
+        var elemento26=document.getElementById("fechaCredito").textContent = "Pagar antes de: " + fechaCredito 
+        var elemento27=document.getElementById("pagadoCredito").textContent = pagadoCredito 
+        var elemento28=document.getElementById("pendienteCredito").textContent = pendienteCredito
+        var elemento29=document.getElementById("clienteCredito").textContent = cliente
+        
+
+    </script>
+
+    <script>
+        //var tipoVenta = document.getElementById("tipoVenta").textContent;
+        var tipoVentaAux = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
+
+        if (tipoVentaAux.includes("Credito")) {
+            document.getElementById("creditos").style.display = "block";
+            document.getElementById("signature").style.display = "block";
+        }
+        
+    </script>
+
+</body>
+</html>
