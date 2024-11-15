@@ -152,7 +152,7 @@
                 (beneficiosPorDia[fecha].costos + beneficiosPorDia[fecha].gastos + beneficiosPorDia[fecha].descuentos);
 
             // Contar facturas por fecha
-            beneficiosPorDia[fecha].cantFacturas++;
+            beneficiosPorDia[fecha].cantFacturas+= ventasDetalle[i] ? 1 : 0;
         }
 
         // Filtrar solo las fechas relevantes
