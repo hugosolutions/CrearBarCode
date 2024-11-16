@@ -164,6 +164,7 @@
         //valores totales factura
         var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
         var descuento = params.has('descuento') ? params.get('descuento') : "0.00";
+        var envio = params.has('envio') ? params.get('envio') : "0.00";
         var itbis = params.has('itbis') ? params.get('itbis') : "0.00";
         var total = params.has('total') ? params.get('total') : "total";
 
@@ -181,6 +182,7 @@
         //Formato de 2 decimales
         subTotal = parseFloat(subTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
         descuento = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        envio = parseFloat(envio).toLocaleString('en-US', { minimumFractionDigits: 2 });
         itbis = parseFloat(itbis).toLocaleString('en-US', { minimumFractionDigits: 2 });
         total = parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2 });
 
@@ -338,10 +340,20 @@
         var elemento11=document.getElementById("caja").textContent = "Caja: " + caja 
         var elemento12=document.getElementById("fecha").textContent = "Fecha: " + fecha 
         var elemento13=document.getElementById("hora").textContent = "Hora: " + hora 
+
+        //valores totales factura
+        var elemento17=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
+        if (parseFloat(descuento) > 0) {
+            var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
+        } 
+
+        if (parseFloat(envio) > 0) {
+            var elemento30=document.getElementById("envio").textContent = "Envío: +" + envio 
+        } 
         
         //valores totales factura
         var elemento17=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
-        var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
+        // var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
         var elemento25=document.getElementById("itbis").textContent = "ITBIS: +" + itbis 
         var elemento19=document.getElementById("total").textContent = "Total: " + total
         
