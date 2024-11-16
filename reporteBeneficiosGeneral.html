@@ -214,7 +214,9 @@
         const tablaVentas = document.getElementById('datos-ventas');
         let totalGeneral = 0;
 
-        var beneficioDetalle = formatNumber(ventasDetalle) - (formatNumber(costosDetalle) + formatNumber(gastosDetalle) + formatNumber(descuentosDetalle))
+        let beneficioDetalle = 0; 
+
+        beneficioDetalle = parseFloat(ventasDetalle) - (parseFloat(costosDetalle) + parseFloat(gastosDetalle) + parseFloat(descuentosDetalle))
 
         const row = tablaVentas.insertRow();
 
