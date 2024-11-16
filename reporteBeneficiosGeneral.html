@@ -68,7 +68,6 @@
         var costosDetalle = params.has('costosDetalle') ? params.get('costosDetalle') : "costosDetalle";
         var gastosDetalle = params.has('gastosDetalle') ? params.get('gastosDetalle') : "gastosDetalle";
         var descuentosDetalle = params.has('descuentosDetalle') ? params.get('descuentosDetalle') : "descuentosDetalle";
-        var beneficioDetalle = params.has('beneficioDetalle') ? params.get('beneficioDetalle') : "beneficioDetalle";
         var costosIndividual = params.has('costosIndividual') ? params.get('costosIndividual') : "costosIndividual";
         var cantFacturas = params.has('cantFacturas') ? params.get('cantFacturas') : "cantFacturas";
 
@@ -214,6 +213,8 @@
         // Llenar la tabla de ventas
         const tablaVentas = document.getElementById('datos-ventas');
         let totalGeneral = 0;
+
+        var beneficioDetalle = formatNumber(ventasDetalle) - (formatNumber(costosDetalle) + formatNumber(gastosDetalle) + formatNumber(descuentosDetalle))
 
         const row = tablaVentas.insertRow();
 
