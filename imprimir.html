@@ -163,6 +163,7 @@
         var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
         var descuento = params.has('descuento') ? params.get('descuento') : "0.00";
         var itbis = params.has('itbis') ? params.get('itbis') : "0.00";
+        var envio = params.has('envio') ? params.get('envio') : "0.00";
         var total = params.has('total') ? params.get('total') : "total";
 
         //valores del detalle de la factura
@@ -263,6 +264,7 @@
             <p id="subTotal" ></p>
             <p id="itbis" ></p>
             <p id="descuento" ></p>     
+            <p id="envio" ></p>     
         </div>
 
         <div class="lastTotal">
@@ -337,7 +339,17 @@
         
         //valores totales factura
         var elemento17=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
-        var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
+        if (parseFloat(descuento) > 0) {
+            var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
+        } 
+
+        if (parseFloat(envio) > 0) {
+            var elemento30=document.getElementById("envio").textContent = "Envío: +" + envio 
+        } 
+
+
+        // var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
+        // var elemento30=document.getElementById("envio").textContent = "Envío: +" + envio 
         var elemento25=document.getElementById("itbis").textContent = "ITBIS: +" + itbis 
         var elemento19=document.getElementById("total").textContent = "Total: " + total
         
