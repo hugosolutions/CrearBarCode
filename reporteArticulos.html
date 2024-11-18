@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articulos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-weight: bold;            
+            font-size: 14px;
+            text-align: left;
+            color: #333;
+        }
+        h2 {
+            font-weight: bold;
+            font-size: 14px;            
+            text-align: right;
+            color: #333;
+        }
+        h1, h2 {
+            margin: 0; /* Elimina márgenes predeterminados */
+            padding: 0;
+            display: inline-block;
+            vertical-align: middle; /* Alinea verticalmente los elementos */
+        }
+        
+        h2 {
+            float: right; /* Hace que flote a la derecha */
+        }
+
+        h3 {
+            text-align: left;
+            color: #333;
+            font-size: 12px;
+        }
+      
+        .info {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .totales {
+            text-align: right;
+            padding-top: 2px;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 1px;
+        }
+        #btn-pdf {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body onload="generarPDF()" onfocus="window.close()" id="body">
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+
+        // Valores encabezado después del logo
+        var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
+
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+    //     var direccion = params.has('direccion') ? params.get('direccion') : "direccion";
+    //     var telefonoEmpresa = params.has('telefonoEmpresa') ? params.get('telefonoEmpresa') : "telefonoEmpresa";
+    //     var rncEmpresa = params.has('rncEmpresa') ? params.get('rncEmpresa') : "rncEmpresa";
+
+
+    //   // Valores encabezado después del logo Cliente Datos
+    //     var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
+
+        // Valores del detalle de la factura
+        var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
+        var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        // var horaDetalle = params.has('horaDetalle') ? params.get('horaDetalle') : "horaDetalle";
+        var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
+
+
+        // Crear una lista de cada columna a partir de las comas.
+        descripcionDetalle = descripcionDetalle.split(",");
+        fechaDetalle = fechaDetalle.split(",");
+        // horaDetalle = horaDetalle.split(",");
+        cantidadDetalle = cantidadDetalle.split(",");        
+
+
+    </script>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
+    </div>
+    <h1 id="titulo"></h1>
+    <h1 id="nombreEmpresa"></h1>
+    <h2 id="fecha"></h2>
+    <h3 id="vehiculo"></h3>
+    <table id="tabla-ventas">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Cantidad</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody id="datos-ventas">
+
+        </tbody>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+
+        for (let i = 0; i < descripcionDetalle.length; i++) {
+            const row = tablaVentas.insertRow();
+            row.insertCell(0).textContent = fechaDetalle[i];
+            row.insertCell(1).textContent = cantidadDetalle[i];
+            row.insertCell(2).textContent = descripcionDetalle[i];
+        }
+
+        // Valores encabezado después del logo
+        document.getElementById("fecha").innerHTML = fecha;
+        document.getElementById("titulo").innerHTML = "Reporte de Articulos Vendidos<br>" + nombreEmpresa
+
+        // if (vehiculo) {
+        //     document.getElementById("vehiculo").textContent = "Cliente: " + vehiculo;
+        // }
+
+        // Función para generar el PDF con contenido completo
+        function generarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            });
+        
+            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/appLogo.png";
+        
+            convertImageToBase64(imgUrl, function(base64Img) {
+                // Agregar la imagen (logo) al PDF
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const imgWidth = 2;
+                const imgHeight = 1;
+                var saltoLinea = 1.48;
+        
+                doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
+        
+                // Preparar datos de la tabla
+                const tableData = [];
+                for (let i = 0; i < descripcionDetalle.length; i++) {
+                    tableData.push([
+                        fechaDetalle[i],
+                        cantidadDetalle[i],
+                        descripcionDetalle[i]
+                    ]);
+                }
+                
+        
+                doc.setFontSize(18);
+                doc.setFont("helvetica", "bold");
+                doc.text('Reporte de Articulos Vendidos', 0.5, 1.90);
+        
+                doc.setFontSize(12);
+                doc.text(`${nombreEmpresa}`, 0.5, saltoLinea);
+                doc.text(`${fecha}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                // doc.text(`${direccion}`, 0.5, saltoLinea);
+                // //doc.text(`No. Factura: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
+                // saltoLinea+=0.22
+                // doc.text(`${telefonoEmpresa}`, 0.5, saltoLinea);
+
+                // if (formatNumber(numTipoVenta)<3) {
+                //     doc.text(`${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
+                // }
+
+                saltoLinea+=0.22
+                // doc.text(`RNC: ${rncEmpresa}`, 0.5, saltoLinea);
+
+                // if (formatNumber(numTipoVenta)<3) {
+                //     doc.text(`NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
+                // }
+
+                saltoLinea= 2.76
+                
+        
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                //doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                //doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea + 0.2);
+                //doc.text(`VEHÍCULO: ${vehiculo}`, 0.5, saltoLinea + 0.2);
+                //doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea + 0.2);
+
+                // if (cliente) {
+                //     doc.text(`CLIENTE: ${cliente}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
+                // if (telefonoCliente) {
+                //     doc.text(`TELÉFONO: ${telefonoCliente}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
+                // if (vehiculo) {
+                //     doc.text(`CLIENTE: ${vehiculo}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
+                // if (colorVehiculo) {
+                //     doc.text(`COLOR: ${colorVehiculo}`, 0.5, saltoLinea);
+                //     saltoLinea+= 0.2;
+                // }
+
+        
+                // Generar la tabla y capturar la posición de la última fila
+                doc.autoTable({
+                    head: [['Fecha','Cantidad', 'Descripción']],
+                    body: tableData,
+                    startY: saltoLinea + 0.04,
+                    margin: { left: 0.5, right: 0.5 },
+                    headStyles: {
+                        fillColor: [60, 110, 145], // Color de fondo del encabezado (en formato RGB)
+                        textColor: [255, 255, 255], // Color del texto del encabezado (blanco)
+                        fontStyle: 'bold', // Negrita para el texto del encabezado
+                    },
+                    didDrawPage: function (data) {
+                        // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
+                    },
+                    didDrawCell: function (data) {
+                        // Este callback se ejecuta en cada celda
+                    },
+                    willDrawCell: function (data) {
+                        // Este callback permite personalizar el comportamiento antes de dibujar cada celda
+                    }
+                });
+        
+                // Después de que la tabla haya terminado
+                let finalY = doc.lastAutoTable.finalY; // Obtiene la posición Y después de la tabla
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const espacioDisponible = pageHeight - finalY;
+        
+                // Verificar si hay espacio suficiente para los totales en la misma página
+                if (espacioDisponible < 1.5) { // Ajustar este valor según lo que ocupen tus totales
+                    // No hay suficiente espacio, agregar una nueva página
+                    doc.addPage();
+                    finalY = 0.5; // Reiniciar la posición en la nueva página
+                }
+        
+                // Dibujar los totales al final de la última página o en una nueva página
+                // doc.setFontSize(10);
+                // doc.setFont("helvetica", "bold");
+                // doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
+                // doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
+                // doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
+                // doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
+                // doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                // doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
+        
+                // doc.setFontSize(14);
+                // doc.text(`TOTAL FACTURA: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
+        
+                // Guardar el PDF
+                const nombreArchivo = `Reporte Articulos.pdf`;
+                doc.save(nombreArchivo);
+            });
+        }
+
+
+
+
+    
+    // Función para convertir una imagen a base64
+    function convertImageToBase64(url, callback) {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous'; // Necesario para cargar imágenes externas
+        img.src = url;
+    
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL('image/png');
+            callback(dataURL);
+        };
+    
+        img.onerror = function() {
+            console.error("No se pudo cargar la imagen.");
+            callback(null);
+        };
+    }
+
+    </script>
+</body>
+</html>
