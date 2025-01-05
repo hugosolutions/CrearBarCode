@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=60mm, initial-scale=1.0"> <!-- Cambia el ancho de la vista para el papel de 58mm -->
+    <title>Comanda</title>
+    <style>
+        body {
+            font-family: tahoma, Helvetica, sans-serif; /* Ajuste de fuente */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra similar al primer código */
+        }
+
+        .recibo {
+            max-width: 60mm; /* Ancho máximo similar al primer código */
+            margin: auto; /* Centrar en la página */
+        }
+
+        .header, .footer, .items, .totals {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .details {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .header img {
+            max-width: 50mm; /* Ajusta el tamaño de la imagen para que se ajuste al ancho de la impresora térmica */
+        }
+
+        .header p, .footer p, .signature p {
+            margin: 0;
+            padding: 1mm 0; /* Margen y padding similar al primer código */
+        }
+
+        .items {
+            border-top: 1px dashed #000;
+            padding-top: 2mm;
+            margin-top: 2mm;
+            border-top: 1px dashed #000;
+            
+        }
+
+
+
+        .totals {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
+        }
+
+        .lastTotal {
+            font-size: 5mm;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .totalsizquierdo {
+            border-top: 1px dashed #000;
+            padding-top: 1mm;
+            margin-top: 2mm;
+            text-align: right;
+            font-size: 3mm;
+        }
+
+        .totals td {
+            text-align: center;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .totals .label {
+            text-align: left;
+        }
+
+        .totals .labela {
+            text-align: left;
+        }
+
+        .creditos {
+            display: none;
+            padding-top: 2mm;
+            margin-top: 2mm;
+        }
+
+        .items th, .items td {
+            text-align: left;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+        .items .pro{
+            text-align: right;
+            font-size: 3mm; /* Tamaño de letra ajustado */
+        }
+
+
+
+        .items th {
+            font-weight: bold;
+        }
+
+
+
+        
+
+        .signature {
+            display: none;
+            text-align: center;
+            margin-top: 5mm;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+
+<body onload="window.print()" onfocus="window.close()">
+
+
+
+    <script>
+        
+
+        // Valores encabezado despues del logo
+        var noPedido = params.has('noPedido') ? params.get('noPedido') : "noPedido";
+
+
+        //valores del detalle de la factura
+        var cantidadProducto = params.has('cantidadProducto') ? params.get('cantidadProducto') : "cantidadProducto";
+        var nombreProducto = params.has('nombreProducto') ? params.get('nombreProducto') : "nombreProducto";
+        var notaProducto = params.has('notaProducto') ? params.get('notaProducto') : "notaProducto";
+        
+        //crea una lista de cada columna a partir de las comas.
+        cantidadProducto = cantidadProducto.split(",");
+        nombreProducto = nombreProducto.split(",");
+        notaProducto = notaProducto.split(",");
+
+        //Crea una lista para mostrar en cada fila de la tabla
+        var result = [];
+
+        cantidadProducto.forEach(function(value, id) {
+            result[id] = {
+                cantidad: cantidadProducto[id],
+                nombre: nombreProducto[id], // + " " + detalles[id], // Descomenta si deseas concatenar la descripción con el detalle
+                notaProducto: parseFloat(notaProducto[id]).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+            };
+        });
+        console.log(result);
+    </script>
+    <div class="recibo">
+        <div class="header">
+            <p id="noPedido"></p>
+        </div>
+
+        <div class="items">
+            <table width="100%" id="tablaItems">
+                <tr>
+                    <th>ARTÍCULO</th>
+                    <th></th>
+                </tr>
+                <script>
+
+                    var tablaItems = document.getElementById("tablaItems");
+        
+                    result.forEach(function(row) {
+                        var descripcionRow = document.createElement("tr");
+                        var cantidadRow = document.createElement("tr");
+        
+                        descripcionRow.innerHTML = `
+                            <td>${row.cantidad} x ${row.nombre}</td>
+                        `;
+        
+                        cantidadRow.innerHTML = `
+                            <td> ${row.notaProducto}</td>
+                        `;
+        
+                        tablaItems.appendChild(descripcionRow);
+                        tablaItems.appendChild(cantidadRow);
+                    });
+                </script>
+            </table>
+        </div>      
+
+        
+
+        
+        
+       
+    </div>  
+
+
+    
+    <script>
+        //Logo
+        
+        // Valores encabezado despues del logo
+        var elemento1=document.getElementById("noPedido").textContent = noPedido
+
+        
+
+    </script>
+
+</body>
+</html>
