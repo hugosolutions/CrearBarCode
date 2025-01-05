@@ -130,6 +130,9 @@
 
         // Valores encabezado despues del logo
         var noPedido = params.has('noPedido') ? params.get('noPedido') : "noPedido";
+        var tipoOrden = params.has('tipoOrden') ? params.get('tipoOrden') : "tipoOrden";
+        var idOrden = params.has('idOrden') ? params.get('idOrden') : "idOrden";
+        var mesa = params.has('mesa') ? params.get('mesa') : "mesa";
 
 
         //valores del detalle de la factura
@@ -159,6 +162,9 @@
             <p style="font-size: 8mm;">NO. ORDEN</p>
 
             <p style="font-size: 8mm;" id="noPedido"></p>
+
+            <p style="font-size: 8mm;" id="tipoOrden"></p>
+            <p style="font-size: 8mm;" id="mesa"></p>
         </div>
 
         <div class="items">
@@ -218,6 +224,16 @@
         
         // Valores encabezado despues del logo
         var elemento1=document.getElementById("noPedido").textContent = noPedido
+    
+        var elemento2=document.getElementById("tipoOrden").textContent = tipoOrden
+        
+
+        if (idOrden === "1") {
+            var elemento3=document.getElementById("mesa").textContent = mesa
+        } else {
+            // Dejar el elemento vacío si no es "Consumo Local"
+            var elemento3=document.getElementById("mesa").textContent = " "
+        }
 
         
 
