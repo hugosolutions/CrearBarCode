@@ -112,6 +112,12 @@
             font-weight: bold;
         }
 
+        .descripcionMovimiento {
+            text-align: center;
+            margin-top: 5mm;
+            font-weight: bold;
+        }
+
 
     </style>
 </head>
@@ -137,6 +143,7 @@
         // Reorganiza la fecha al formato dd/mm/yyyy
         var fecha = params.has('fecha') ? params.get('fecha') : "fecha";
         var hora = params.has('hora') ? params.get('hora') : "hora";
+        var descripcion = params.has('descripcion') ? params.get('descripcion') : "descripcion";
 
 
         //valores totales factura
@@ -160,9 +167,13 @@
             <p id="hora">Hora: </p>
         </div>      
 
-        <div class="lastTotal">
+        <div class="lastTotal">         
             <p id="tituloRecibido" ></p>             
             <p id="montoEfectivo" ></p>             
+        </div>
+
+        <div class="descripcionMovimiento">
+            <p id="descripcion" ></p>                         
         </div>
         
 
@@ -201,6 +212,7 @@
         //valores datos de la factura
         var elemento9=document.getElementById("montoEfectivo").textContent = "Efectivo: " + montoEfectivo
         var elemento10=document.getElementById("tituloRecibido").textContent = ingresoOegreso
+        var elemento11=document.getElementById("descripcion").textContent = descripcion
 
 
     </script>
