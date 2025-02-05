@@ -185,7 +185,7 @@
         // Valores encabezado después del logo
         // document.getElementById("fechaCotizacion").textContent = fechaCotizacion;
         // document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
-        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
+        document.getElementById("titulo").innerHTML = "Cotización<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
 
         document.getElementById("fechaCotizacion").innerHTML = fechaCotizacion + "<br>No. Cotización: " + noCotizacion;
@@ -217,10 +217,10 @@
         
         document.getElementById("subTotal").textContent = "Sub-Total: " + formatNumber(subTotal);
         document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
-        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva*100) + "%";
-        document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
+        //document.getElementById("iva").textContent = "IVA: " + formatNumber(iva*100) + "%";
+        //document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
         document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + formatNumber(subTotal-descuento);
-        document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
+        //document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
 
         // Función para generar el PDF con contenido completo
         function generarPDF() {
@@ -261,7 +261,7 @@
                 doc.text(`${nombreEmpresa}`, 0.5, 1.48);
                 doc.text(`${direccion}`, 0.5, 1.70);
                 doc.text(`${telefonoEmpresa}`, 0.5, 1.92);
-                doc.text(`RNC: ${rncEmpresa}`, 0.5, 2.14);
+                // doc.text(`RNC: ${rncEmpresa}`, 0.5, 2.14);
                 doc.text(`${fechaCotizacion}`, 8.1, 1.48, { align: 'right' });
                 doc.text(`No. Cotización: ${noCotizacion}`, 8.1, 1.70, { align: 'right' });
         
@@ -330,9 +330,9 @@
                 doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
                 doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
                 doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
-                doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
-                doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
-                doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
+                // doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
+                // doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                // doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
         
                 doc.setFontSize(14);
                 doc.text(`TOTAL COTIZACIÓN: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
