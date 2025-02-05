@@ -190,7 +190,7 @@
         // document.getElementById("fechaFactura").textContent = fechaFactura;
         // document.getElementById("noFactura").innerHTML = "<br>No. Factura: " + noFactura;
         if (formatNumber(numTipoVenta)<3) {
-            document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura + "<br>" + tipoVenta+ "<br>NCF: " + ncf;
+            document.getElementById("fechaFactura").innerHTML = fechaFactura + "<br>No. Factura: " + noFactura + "<br>" + tipoVenta;
         }
 
         if (formatNumber(numTipoVenta)==3) {
@@ -199,7 +199,7 @@
 
 
         
-        document.getElementById("titulo").innerHTML = "Factura<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa + "<br>RNC: " + rncEmpresa;
+        document.getElementById("titulo").innerHTML = "Factura<br>" + nombreEmpresa + "<br>" + direccion + "<br>" + telefonoEmpresa;
         document.getElementById("total").textContent = "Total: " + formatNumber(total);
 
         //document.getElementById("cliente").textContent ="CLIENTE: " + cliente;
@@ -225,10 +225,10 @@
         
         document.getElementById("subTotal").textContent = "Sub-Total: " + formatNumber(subTotal);
         document.getElementById("descuento").textContent = "Descuento: " + formatNumber(descuento);
-        document.getElementById("iva").textContent = "IVA: " + formatNumber(iva*100) + "%";
-        document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
+        // document.getElementById("iva").textContent = "IVA: " + formatNumber(iva*100) + "%";
+        // document.getElementById("totalIva").textContent = "Total impuestos: " + formatNumber(totalIva);
         document.getElementById("subTotalMenosDescuento").textContent = "Sub-Total - Descuento: " + formatNumber(subTotal-descuento);
-        document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
+        // document.getElementById("envio").textContent = "Envío: " + formatNumber(envio);
 
         // Función para generar el PDF con contenido completo
         function generarPDF() {
@@ -280,10 +280,10 @@
                 }
 
                 saltoLinea+=0.22
-                doc.text(`RNC: ${rncEmpresa}`, 0.5, saltoLinea);
+                // doc.text(`RNC: ${rncEmpresa}`, 0.5, saltoLinea);
 
                 if (formatNumber(numTipoVenta)<3) {
-                    doc.text(`NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
+                    // doc.text(`NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
                 }
 
                 saltoLinea= 2.76
@@ -354,9 +354,9 @@
                 doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
                 doc.text(`Descuento: ${formatNumber(descuento)}`, 7.9, finalY + 0.75, { align: 'right' });
                 doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
-                doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
-                doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
-                doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
+                // doc.text(`IVA: ${formatNumber(iva)*100}%`, 7.9, finalY + 1.25, { align: 'right' });
+                // doc.text(`Total Impuestos: ${formatNumber(totalIva)}`, 7.9, finalY + 1.5, { align: 'right' });
+                // doc.text(`Envio: ${formatNumber(envio)}`, 7.9, finalY + 1.75, { align: 'right' });
         
                 doc.setFontSize(14);
                 doc.text(`TOTAL FACTURA: ${formatNumber(total)}`, 7.9, finalY + 2, { align: 'right' });
