@@ -219,9 +219,9 @@
         if (noFactura!="sinDato") {
 
             if(formatNumber(numTipoFactura)<3){
-                document.getElementById("noFactura").innerHTML = noFactura + "<br>Tipo de Factura: " + tipoFactura + "<br>" + ncf;
+                document.getElementById("noFactura").innerHTML ="Factura No. " + noFactura + "<br>Tipo de Factura: " + tipoFactura + "<br>" + ncf;
             }else{
-                var elemento64 = document.getElementById("noFactura").textContent = noFactura;
+                var elemento64 = document.getElementById("noFactura").textContent ="Factura No. " + noFactura;
             }
         }
 
@@ -398,7 +398,7 @@
 
 
                 doc.setFontSize(10);
-                if(formatNumber(numTipoVenta)=2){
+                if(formatNumber(numTipoVenta)==2){
                     
 
                     // Obtener el ancho del texto
