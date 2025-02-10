@@ -388,12 +388,12 @@
                     
 
                     // Obtener el ancho del texto
-                    const textWidth1aux = doc.getTextWidth(`Pagar Antes de: ${fechaCredito}`);
+                    const textWidth1aux = doc.getTextWidth(`Pagar Antes de: ${fechaCreditoAux}`);
                     const textWidth2aux = doc.getTextWidth("______________________________________________________________");
                     const textWidth3aux = doc.getTextWidth(cliente);
 
 
-                    doc.text(`Pagar Antes de: ${fechaCredito}`, centerXaux - textWidth1aux / 2, finalY + 3);
+                    doc.text(`Pagar Antes de: ${fechaCreditoAux}`, centerXaux - textWidth1aux / 2, finalY + 3);
                     doc.text("______________________________________________________________", centerXaux - textWidth2aux / 2, finalY + 3.8);
                     doc.text(cliente, centerXaux - textWidth3aux / 2, finalY + 4);
 
