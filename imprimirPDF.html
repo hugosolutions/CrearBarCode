@@ -238,7 +238,7 @@
         }
 
         if (fechaFactura!="sinDato") {
-            var elemento68 = document.getElementById("fechaFactura").textContent = fechaFactura;
+            var elemento68 = document.getElementById("fechaFactura").textContent = fecha;
         }
 
         if (hora!="sinDato") {
@@ -248,20 +248,6 @@
         var elemento70=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
         var elemento71=document.getElementById("totalIva").textContent = "ITBIS: +" + itbis 
         var elemento72=document.getElementById("total").textContent = "Total: " + total
-
-        // var elemento60 = document.getElementById("direccion").textContent = "direccion" + direccion;
-        // var elemento61 = document.getElementById("telefono").textContent = "telefono" + telefono;
-        // var elemento62 = document.getElementById("tipoTienda").textContent = "tipoTienda" + tipoTienda;
-        // var elemento63 = document.getElementById("instagram").textContent = "instagram" + instagram;
-        // var elemento64 = document.getElementById("noFactura").innerHTML = noFactura + "<br>Tipo de Factura: " + tipoFactura + "<br>" + ncf;
-        // var elemento65 = document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta;
-        // var elemento66 = document.getElementById("cliente").textContent = "CLIENTE: " + cliente;
-        // var elemento67 = document.getElementById("caja").textContent = "CAJA: " + caja;
-        // var elemento68 = document.getElementById("fechaFactura").textContent = "fechaFactura: " + fechaFactura;
-        // var elemento69 = document.getElementById("horaFactura").textContent = "hora" + hora;
-
-
-
         
         function formatNumber(num) {
             return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -331,7 +317,7 @@
                 doc.text(`${instagram}`, 0.5, saltoLinea);
                 doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
-                doc.text(`${fechaFactura}`, 8.1, saltoLinea, { align: 'right' });
+                doc.text(`${fecha}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
                 doc.text(`${hora}`, 8.1, saltoLinea, { align: 'right' });
 
