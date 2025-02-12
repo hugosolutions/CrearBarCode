@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizacion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-weight: bold;            
+            font-size: 14px;
+            text-align: left;
+            color: #333;
+        }
+        h2 {
+            font-weight: bold;
+            font-size: 14px;            
+            text-align: right;
+            color: #333;
+        }
+        h1, h2 {
+            margin: 0; /* Elimina márgenes predeterminados */
+            padding: 0;
+            display: inline-block;
+            vertical-align: middle; /* Alinea verticalmente los elementos */
+        }
+        
+        h2 {
+            float: right; /* Hace que flote a la derecha */
+        }
+
+        h3 {
+            text-align: left;
+            color: #333;
+            font-size: 12px;
+        }
+      
+        .info {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .totales {
+            text-align: right;
+            padding-top: 2px;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 1px;
+        }
+        #btn-pdf {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body onload="generarPDF()" onfocus="window.close()" id="body">
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "1LeCdr1S3lKFH7Mj2ulH4nLJR9GhXgm5l&sz=w1000";
+
+
+        // Datos para condiciones
+        var numTipoVenta = params.has('numTipoVenta') ? params.get('numTipoVenta') : "numTipoVenta";
+        var numTipoFactura = params.has('numTipoFactura') ? params.get('numTipoFactura') : "numTipoFactura";
+
+
+        // Valores encabezado despues del logo
+        var direccion = params.has('direccion') ? params.get('direccion') : "sinDato";
+        var ciudad = params.has('ciudad') ? params.get('ciudad') : "sinDato";
+        var tipoTienda = params.has('tipoTienda') ? params.get('tipoTienda') : "sinDato";
+        var telefono = params.has('telefono') ? params.get('telefono') : "sinDato";
+        var instagram = params.has('instagram') ? params.get('instagram') : "sinDato";
+
+        //valores datos de la factura
+        var noFactura = params.has('noFactura') ? params.get('noFactura') : "sinDato";
+        var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "sinDato";
+        var cliente = params.has('cliente') ? params.get('cliente') : "sinDato";
+        var caja = params.has('caja') ? params.get('caja') : "sinDato";
+        var ncf = params.has('ncf') ? params.get('ncf') : "sinDato";
+        var tipoFactura = params.has('tipoFactura') ? params.get('tipoFactura') : "sinDato";
+
+        
+        var fechaAux = params.has('fecha') ? params.get('fecha') : "sinDato";
+        var partesFecha = fechaAux.split('/');        
+        // Reorganiza la fecha al formato dd/mm/yyyy
+        var fecha = partesFecha[1] + '/' + partesFecha[0] + '/' + partesFecha[2];
+        
+        var fechaCreditoAux = params.has('fechaCredito') ? params.get('fechaCredito') : "sinDato";
+        var partesFechaCredito = fechaCreditoAux.split('/');        
+        // Reorganiza la fecha al formato dd/mm/yyyy
+        var fechaCredito = partesFechaCredito[1] + '/' + partesFechaCredito[0] + '/' + partesFechaCredito[2];
+
+
+        
+        var pagadoCredito = params.has('pagadoCredito') ? params.get('pagadoCredito') : "sinDato";
+        var pendienteCredito = params.has('pendienteCredito') ? params.get('pendienteCredito') : "sinDato";
+        var hora = params.has('hora') ? params.get('hora') : "sinDato";
+
+
+        //valores totales factura
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "sinDato";
+        var descuento = params.has('descuento') ? params.get('descuento') : "sinDato";
+        var envio = params.has('envio') ? params.get('envio') : "sinDato";
+        var itbis = params.has('itbis') ? params.get('itbis') : "sinDato";
+        var total = params.has('total') ? params.get('total') : "sinDato";
+        
+
+        //pies de factura
+        var piePagina = params.has('piePagina') ? params.get('piePagina') : "sinDato";
+        var otroPie = params.has('otroPie') ? params.get('otroPie') : "sinDato";
+
+        // Valores del detalle de la factura
+        var descripcionDetalle = params.has('descripcionDetalle') ? params.get('descripcionDetalle') : "descripcionDetalle";
+        var cantidadDetalle = params.has('cantidadDetalle') ? params.get('cantidadDetalle') : "cantidadDetalle";
+        var precioUnitarioDetalle = params.has('precioUnitarioDetalle') ? params.get('precioUnitarioDetalle') : "precioUnitarioDetalle";
+        var precioTotalDetalle = params.has('precioTotalDetalle') ? params.get('precioTotalDetalle') : "precioTotalDetalle";
+
+
+        // Crear una lista de cada columna a partir de las comas.
+        descripcionDetalle = descripcionDetalle.split(",");
+        cantidadDetalle = cantidadDetalle.split(",");
+        precioUnitarioDetalle = precioUnitarioDetalle.split(",");
+        precioTotalDetalle = precioTotalDetalle.split(",");
+
+        // Valores del final de la factura
+        var subTotal = params.has('subTotal') ? params.get('subTotal') : "subTotal";
+        var descuento = params.has('descuento') ? params.get('descuento') : "descuento";
+        var iva = params.has('iva') ? params.get('iva') : "iva";
+        var totalIva = params.has('totalIva') ? params.get('totalIva') : "totalIva";
+        var envio = params.has('envio') ? params.get('envio') : "envio";
+
+
+        
+
+
+    </script>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=1LeCdr1S3lKFH7Mj2ulH4nLJR9GhXgm5l&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
+    </div>
+    <p id="direccion" style="text-align: center;"></p>
+    <p id="telefono" style="text-align: center;"></p>
+    <p id="tipoTienda" style="text-align: center;"></p>
+    <p id="instagram" style="text-align: center;"></p>
+    <p id="noFactura" style="text-align: left;"></p>
+    <p id="tipoVenta" style="text-align: left;"></p>
+    <p id="cliente" style="text-align: left;"></p>
+    <p id="caja" style="text-align: left;"></p>
+    <p id="fechaFactura" style="text-align: left;"></p>
+    <p id="horaFactura" style="text-align: left;"></p>
+    <table id="tabla-ventas">
+        <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th>Unidades</th>
+                <th>Precio Unidad</th>
+                <th>Precio Total</th>
+            </tr>
+        </thead>
+        <tbody id="datos-ventas">
+
+        </tbody>
+    </table>
+    <div class="totales">
+        <p id="subTotal"></p>
+        <p id="totalIva"></p>
+    </div>
+    <div class="total">
+        <p id="total"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        if (direccion!="sinDato") {
+            var elemento60 = document.getElementById("direccion").textContent =  direccion;
+        }
+
+        if (telefono!="sinDato") {
+            var elemento61 = document.getElementById("telefono").textContent =  telefono;
+        }
+
+        if (tipoTienda!="sinDato") {
+            var elemento62 = document.getElementById("tipoTienda").textContent = tipoTienda;
+        }
+
+        if (instagram!="sinDato") {
+            var elemento63 = document.getElementById("instagram").textContent = instagram;
+        }
+
+        if (noFactura!="sinDato") {
+
+            if(formatNumber(numTipoFactura)<3){
+                document.getElementById("noFactura").innerHTML ="Cotizacion No. " + noFactura + "<br>Tipo de Factura: " + tipoFactura + "<br>" + ncf;
+            }else{
+                var elemento64 = document.getElementById("noFactura").textContent ="Cotizacion No. " + noFactura;
+            }
+        }
+
+        if (tipoVenta!="sinDato") {
+            var elemento65 = document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta;
+        }
+
+        if (cliente!="sinDato") {
+            var elemento66 = document.getElementById("cliente").textContent = "CLIENTE: " + cliente;
+        }
+
+        if (caja!="sinDato") {
+            var elemento67 = document.getElementById("caja").textContent = "CAJA: " + caja;
+        }
+
+        if (fechaFactura!="sinDato") {
+            var elemento68 = document.getElementById("fechaFactura").textContent = fecha;
+        }
+
+        if (hora!="sinDato") {
+            var elemento69 = document.getElementById("horaFactura").textContent = hora;
+        }
+
+        var elemento70=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
+        var elemento71=document.getElementById("totalIva").textContent = "ITBIS: +" + itbis 
+        var elemento72=document.getElementById("total").textContent = "Total: " + total
+        
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+
+        for (let i = 0; i < descripcionDetalle.length; i++) {
+            const row = tablaVentas.insertRow();
+            row.insertCell(0).textContent = descripcionDetalle[i];
+            row.insertCell(1).textContent = cantidadDetalle[i];
+            row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
+            row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
+        }
+
+         
+
+
+        // Función para generar el PDF con contenido completo
+        function generarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            });
+        
+            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/hugoSolutionsLogo.png";
+        
+            convertImageToBase64(imgUrl, function(base64Img) {
+                // Agregar la imagen (logo) al PDF
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const imgWidth = 2;
+                const imgHeight = 2;
+                var saltoLinea = 1.48;
+        
+                doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
+        
+                // Preparar datos de la tabla
+                const tableData = [];
+                for (let i = 0; i < descripcionDetalle.length; i++) {
+                    tableData.push([
+                        descripcionDetalle[i],
+                        cantidadDetalle[i],
+                        formatNumber(precioUnitarioDetalle[i]),
+                        formatNumber(precioTotalDetalle[i])
+                    ]);
+                }
+                
+        
+                doc.setFontSize(18);
+                doc.setFont("helvetica", "bold");
+                const numFacturaAux = "Cotizacion " + noFactura;
+                doc.text(numFacturaAux, 0.5, 1);
+
+                doc.setFontSize(12);
+                doc.text(`${direccion}`, 0.5, saltoLinea);
+                doc.text(`No. Cotizacion: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${telefono}`, 0.5, saltoLinea);              
+                doc.text(`Tipo de Venta: ${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${tipoTienda}`, 0.5, saltoLinea);
+                doc.text(`Cliente: ${cliente}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${instagram}`, 0.5, saltoLinea);
+                doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${fecha}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+                doc.text(`${hora}`, 8.1, saltoLinea, { align: 'right' });
+
+                if(formatNumber(numTipoFactura)<3){
+                    doc.text(`Tipo de Factura: ${tipoFactura}`, 8.1, saltoLinea, { align: 'right' });
+                    saltoLinea+=0.22
+                    doc.text(`${ncf}`, 8.1, saltoLinea, { align: 'right' });
+                    saltoLinea+=0.22
+                }
+
+                saltoLinea= 2.76
+                
+        
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+              
+        
+                // Generar la tabla y capturar la posición de la última fila
+                doc.autoTable({
+                    head: [['Descripción', 'Unidades', 'Precio Unitario', 'Precio Total']],
+                    body: tableData,
+                    startY: saltoLinea + 0.04,
+                    margin: { left: 0.5, right: 0.5 },
+                    headStyles: {
+                        fillColor: [101, 0, 0], // Color de fondo del encabezado (en formato RGB)
+                        textColor: [255, 255, 255], // Color del texto del encabezado (blanco)
+                        fontStyle: 'bold', // Negrita para el texto del encabezado
+                    },
+                    didDrawPage: function (data) {
+                        // Este callback ocurre después de dibujar la tabla, pero se ejecutará en cada página
+                    },
+                    didDrawCell: function (data) {
+                        // Este callback se ejecuta en cada celda
+                    },
+                    willDrawCell: function (data) {
+                        // Este callback permite personalizar el comportamiento antes de dibujar cada celda
+                    }
+                });
+        
+                // Después de que la tabla haya terminado
+                let finalY = doc.lastAutoTable.finalY; // Obtiene la posición Y después de la tabla
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const espacioDisponible = pageHeight - finalY;
+        
+                // Verificar si hay espacio suficiente para los totales en la misma página
+                if (espacioDisponible < 1.5) { // Ajustar este valor según lo que ocupen tus totales
+                    // No hay suficiente espacio, agregar una nueva página
+                    doc.addPage();
+                    finalY = 0.5; // Reiniciar la posición en la nueva página
+                }
+        
+                // Dibujar los totales al final de la última página o en una nueva página
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.text(`Sub-Total: ${formatNumber(subTotal)}`, 7.9, finalY + 0.5, { align: 'right' });
+                doc.text(`TBIS: +${formatNumber(itbis)}`, 7.9, finalY + 0.75, { align: 'right' });
+                // doc.text(`Sub-Total - Descuento: ${formatNumber(subTotal - descuento)}`, 7.9, finalY + 1, { align: 'right' });
+
+        
+                doc.setFontSize(14);
+                const centerXaux = pageWidth / 2; // Centro de la página en X
+                const textWidthTotalaux = doc.getTextWidth(`TOTAL COTIZACION: ${formatNumber(total)}`);
+                doc.text(`TOTAL COTIZACION: ${formatNumber(total)}`, centerXaux - textWidthTotalaux / 2, finalY + 2);
+
+
+                doc.setFontSize(10);
+                if(formatNumber(numTipoVenta)==2){
+                    
+
+                    // Obtener el ancho del texto
+                    const textWidth1aux = doc.getTextWidth(`Pagar Antes de: ${fechaCreditoAux}`);
+                    const textWidth2aux = doc.getTextWidth("______________________________________________________________");
+                    const textWidth3aux = doc.getTextWidth(cliente);
+
+
+                    doc.text(`Pagar Antes de: ${fechaCreditoAux}`, centerXaux - textWidth1aux / 2, finalY + 3);
+                    doc.text("______________________________________________________________", centerXaux - textWidth2aux / 2, finalY + 3.8);
+                    doc.text(cliente, centerXaux - textWidth3aux / 2, finalY + 4);
+
+                }
+
+                
+
+
+
+        
+                // Guardar el PDF
+                const nombreArchivo = `${cliente} Cotizacion ${noFactura}.pdf`;
+                doc.save(nombreArchivo);
+            });
+        }
+
+
+
+
+    
+    // Función para convertir una imagen a base64
+    function convertImageToBase64(url, callback) {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous'; // Necesario para cargar imágenes externas
+        img.src = url;
+    
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL('image/png');
+            callback(dataURL);
+        };
+    
+        img.onerror = function() {
+            console.error("No se pudo cargar la imagen.");
+            callback(null);
+        };
+    }
+
+    </script>
+</body>
+</html>
