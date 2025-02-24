@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Beneficios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 10px;
+        }
+        #btn-pdf {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body id="body">
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+
+        // Valores encabezado después del logo
+        var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
+        var total = params.has('total') ? params.get('total') : "total";
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+
+        // Valores de fecha
+        // var fechaInicio = params.has('fechaInicio') ? params.get('fechaInicio') : "2024-10-01";
+        // var fechaFin = params.has('fechaFin') ? params.get('fechaFin') : "2024-10-05";
+
+        // Valores del detalle de la factura
+        // var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        var ventasDetalle = params.has('ventasDetalle') ? params.get('ventasDetalle') : "ventasDetalle";
+        var ingresosDetalle = params.has('ingresosDetalle') ? params.get('ingresosDetalle') : "ingresosDetalle";
+        var costosDetalle = params.has('costosDetalle') ? params.get('costosDetalle') : "costosDetalle";
+        var gastosDetalle = params.has('gastosDetalle') ? params.get('gastosDetalle') : "gastosDetalle";
+        var descuentosDetalle = params.has('descuentosDetalle') ? params.get('descuentosDetalle') : "descuentosDetalle";
+        var costosIndividual = params.has('costosIndividual') ? params.get('costosIndividual') : "costosIndividual";
+        var cantFacturas = params.has('cantFacturas') ? params.get('cantFacturas') : "cantFacturas";
+
+        
+
+        // // Crear una lista de cada columna a partir de las comas.
+        // fechaDetalle = fechaDetalle.split(",");
+
+        
+        // // Convertir fechaDetalle a un array de objetos Date
+        // fechaDetalle = fechaDetalle.map(fechaStr => {
+        //     const trimmedFecha = fechaStr.trim();
+        //     const [day, month, year] = trimmedFecha.split("/").map(Number);
+        //     const date = new Date(year, month - 1, day);
+        
+        //     if (isNaN(date.getTime())) {
+        //         console.error(`Fecha inválida: ${trimmedFecha}`);
+        //         return null;
+        //     }
+            
+        //     return date.toISOString().split('T')[0]; // Convertir a formato "YYYY-MM-DD"
+        // }).filter(fecha => fecha !== null);
+
+        
+        // ventasDetalle = ventasDetalle.split(",");
+        // costosDetalle = costosDetalle.split(",");
+        // gastosDetalle = gastosDetalle.split(",");
+        // descuentosDetalle = descuentosDetalle.split(",");
+        // costosIndividual = costosIndividual.split(",");
+
+        // let beneficiosPorDia = {};
+        // let facturasPorFecha = {};
+
+        // // Crear rango de fechas en el formato "YYYY-MM-DD"
+        // function obtenerFechasEnRango(fechaInicio, fechaFin) {
+        //     let inicio = new Date(fechaInicio);
+        //     let fin = new Date(fechaFin);
+        //     let rangoFechas = [];
+        
+        //     while (inicio <= fin) {
+        //         rangoFechas.push(inicio.toISOString().split('T')[0]); // Formato "YYYY-MM-DD"
+        //         inicio.setDate(inicio.getDate() + 1);
+        //     }
+        
+        //     return rangoFechas;
+        // }
+
+
+        // // Obtener fechas en el rango
+        // const rangoFechas = obtenerFechasEnRango(fechaInicio, fechaFin);
+
+        // // Inicializar beneficiosPorDia
+        // rangoFechas.forEach(fecha => {
+        //     beneficiosPorDia[fecha] = {
+        //         cantFacturas: 0,
+        //         ventas: 0,
+        //         costos: 0,
+        //         gastos: 0,
+        //         descuentos: 0,
+        //         beneficios: 0
+        //     };
+        // });
+
+
+
+        // // Procesar los datos
+        // for (let i = 0; i < rangoFechas.length; i++) {
+        //     const fecha = rangoFechas[i];
+
+        //     if (!beneficiosPorDia[fecha]) {
+        //         continue; // Si la fecha no está en el rango, la ignoramos
+        //     }
+
+        //     beneficiosPorDia[fecha].ventas += ventasDetalle[i] ? parseFloat(ventasDetalle[i]) : 0;
+        //     beneficiosPorDia[fecha].costos += costosDetalle[i] ? parseFloat(costosDetalle[i]) : 0;
+        //     beneficiosPorDia[fecha].costos += costosIndividual[i] ? parseFloat(costosIndividual[i]) : 0;
+        //     beneficiosPorDia[fecha].gastos += gastosDetalle[i] ? parseFloat(gastosDetalle[i]) : 0;
+        //     beneficiosPorDia[fecha].descuentos += descuentosDetalle[i] ? parseFloat(descuentosDetalle[i]) : 0;
+
+        //     // Calcular beneficio: Ventas - (Costos + Gastos + Descuentos)
+        //     beneficiosPorDia[fecha].beneficios = 
+        //         beneficiosPorDia[fecha].ventas - 
+        //         (beneficiosPorDia[fecha].costos + beneficiosPorDia[fecha].gastos + beneficiosPorDia[fecha].descuentos);
+
+        //     // Contar facturas por fecha
+        //     beneficiosPorDia[fecha].cantFacturas+= ventasDetalle[i] ? 1 : 0;
+        // }
+
+        // // Filtrar solo las fechas relevantes
+        // let beneficiosDias = {};
+        // Object.keys(beneficiosPorDia).forEach(fecha => {
+        //     const beneficioDia = beneficiosPorDia[fecha];
+        //     if (beneficioDia.ventas > 0 || beneficioDia.gastos > 0 || beneficioDia.costos > 0 || beneficioDia.descuentos > 0) {
+        //         beneficiosDias[fecha] = beneficioDia;
+        //     }
+        // });
+
+    </script>
+    <button id="btn-pdf">Generar PDF</button>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
+    </div>
+    <h1 id="titulo">Reporte de Beneficios</h1>
+    <h1 id="periodo"></h1>
+    <h1 id="nombreEmpresa"></h1>
+    <table id="tabla-ventas">
+        <thead>
+            <tr>
+                <th>Facturas</th>
+                <th>Ventas</th>
+                <th>Ingresos extras</th>
+                <th>Costos</th>
+                <th>Gastos</th>
+                <th>Descuentos</th>
+                <th>Beneficios</th>
+            </tr>
+        </thead>
+        <tbody id="datos-ventas">
+
+        </tbody>
+    </table>
+    <div class="total">
+        <p id="total"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        function formatFecha(fecha) {
+            const [year, month, day] = fecha.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+        let totalGeneral = 0;
+
+        let beneficioDetalle = 0; 
+
+        beneficioDetalle = (parseFloat(ventasDetalle)+ parseFloat(ingresosDetalle)) - (parseFloat(costosDetalle) + parseFloat(gastosDetalle) + parseFloat(descuentosDetalle))
+
+        const row = tablaVentas.insertRow();
+
+        row.insertCell(0).textContent = cantFacturas
+        row.insertCell(1).textContent = formatNumber(ventasDetalle);
+        row.insertCell(2).textContent = formatNumber(ingresosDetalle);
+        row.insertCell(3).textContent = formatNumber(costosDetalle);
+        row.insertCell(4).textContent = formatNumber(gastosDetalle);
+        row.insertCell(5).textContent = formatNumber(descuentosDetalle);
+        row.insertCell(6).textContent = formatNumber(beneficioDetalle);
+
+
+        // Valores encabezado después del logo
+        document.getElementById("periodo").textContent = periodo;
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
+        document.getElementById("total").textContent = `Total de Beneficios: ${formatNumber(beneficioDetalle)}`;
+
+        // Función para generar PDF
+        document.getElementById('btn-pdf').onclick = function() {
+            const { jsPDF } = window.jspdf;  // Asegúrate de acceder correctamente a jsPDF
+            const doc = new jsPDF();
+        
+            // Obtener el ancho de la página
+            const pageWidth = doc.internal.pageSize.getWidth();
+            
+            // Función para centrar texto
+            function centerText(text, y) {
+                const textWidth = doc.getTextWidth(text);
+                const x = (pageWidth - textWidth) / 2;
+                doc.text(text, x, y);
+            }
+            
+            centerText('Reporte de Beneficios', 10);
+            centerText(`Periodo: ${periodo}`, 20);
+            centerText(`Nombre de la Empresa: ${nombreEmpresa}`, 30);
+            
+            doc.autoTable({ html: '#tabla-ventas', startY: 40 });
+            
+            centerText(`Total de Beneficios: ${formatNumber(beneficioDetalle)}`, doc.autoTable.previous.finalY + 10);
+        
+            doc.save('reporte_beneficios.pdf');
+        };
+
+    </script>
+</body>
+</html>
