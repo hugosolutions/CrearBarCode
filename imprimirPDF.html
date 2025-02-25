@@ -391,6 +391,15 @@
                     const textWidth1aux = doc.getTextWidth(`Pagar Antes de: ${fechaCreditoAux}`);
                     const textWidth2aux = doc.getTextWidth("______________________________________________________________");
                     const textWidth3aux = doc.getTextWidth(cliente);
+                    
+                    const textWidth4aux = doc.getTextWidth(`Pagado: ${pagadoCredito}`);
+                    const textWidth5aux = doc.getTextWidth(`Pendiente: ${pendienteCredito}`);
+                    
+                    doc.text(`Pagado: ${pagadoCredito}`, centerXaux - textWidth4aux / 2, finalY + 2.5);
+                    doc.text(`Pendiente: ${pendienteCredito}`, centerXaux - textWidth5aux / 2, finalY + 2.7);
+
+
+                    
 
 
                     doc.text(`Pagar Antes de: ${fechaCreditoAux}`, centerXaux - textWidth1aux / 2, finalY + 3);
@@ -398,6 +407,7 @@
                     doc.text(cliente, centerXaux - textWidth3aux / 2, finalY + 4);
 
                 }
+                
 
                 
 
