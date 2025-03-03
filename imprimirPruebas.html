@@ -184,8 +184,8 @@
         var otroPie = params.has('otroPie') ? params.get('otroPie') : "otroPie";
         
         //Formato de 2 decimales
-        recibido = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
-        cambio = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        recibido = parseFloat(recibido).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        cambio = parseFloat(cambio).toLocaleString('en-US', { minimumFractionDigits: 2 });
         
         subTotal = parseFloat(subTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
         descuento = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
