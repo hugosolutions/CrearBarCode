@@ -184,8 +184,8 @@
         var otroPie = params.has('otroPie') ? params.get('otroPie') : "otroPie";
         
         //Formato de 2 decimales
-        recibido = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
-        cambio = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        recibido = parseFloat(recibido).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        cambio = parseFloat(cambio).toLocaleString('en-US', { minimumFractionDigits: 2 });
         
         subTotal = parseFloat(subTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
         descuento = parseFloat(descuento).toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -364,10 +364,17 @@
         // var elemento30=document.getElementById("envio").textContent = "Envío: +" + envio 
         var elemento25=document.getElementById("itbis").textContent = "ITBIS: +" + itbis 
         var elemento19=document.getElementById("total").textContent = "Total: " + total
+
+        var elemento91=document.getElementById("recibido").textContent = "Recibido: +" + recibido 
+        var elemento92=document.getElementById("cambio").textContent = "Cambio: " + cambio
         
         
         
-        
+        if (tipoVenta.trim().toLowerCase() === "contado") {
+    var elemento99 = document.getElementById("recibido").innerHTML = "<br><strong>Recibido:</strong> " + recibido;
+    var elemento98 = document.getElementById("cambio").innerHTML = "<strong>Cambio:</strong> " + cambio;
+}
+
         
         //pies de factura   
         var elemento23=document.getElementById("piePagina").textContent = piePagina
