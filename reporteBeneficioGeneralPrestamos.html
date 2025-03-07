@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Beneficios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 10px;
+        }
+        #btn-pdf {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body id="body">
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        var idLogo = params.has('idLogo') ? params.get('idLogo') : "17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000";
+
+        // Valores encabezado después del logo
+        var periodo = params.has('periodo') ? params.get('periodo') : "periodo";
+        var total = params.has('total') ? params.get('total') : "total";
+        var nombreEmpresa = params.has('nombreEmpresa') ? params.get('nombreEmpresa') : "nombreEmpresa";
+
+        // Valores del detalle de la factura
+        // var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
+        var ingresoCuotas = params.has('ingresoCuotas') ? params.get('ingresoCuotas') : "ingresoCuotas";
+        var montoPrestado = params.has('montoPrestado') ? params.get('montoPrestado') : "montoPrestado";
+        var montoPendiente = params.has('montoPendiente') ? params.get('montoPendiente') : "montoPendiente";
+        var montoVencido = params.has('montoVencido') ? params.get('montoVencido') : "montoVencido";
+        var cantPrestamos = params.has('cantPrestamos') ? params.get('cantPrestamos') : "cantPrestamos";
+
+    </script>
+    <button id="btn-pdf">Generar PDF</button>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img id="imagenLogo" src="https://drive.google.com/thumbnail?id=17cXW3U50L2cL4xE4lGaF1iIahY01UhAD&sz=w1000" alt="Logo" style="max-width: 25%; height: auto;">
+    </div>
+    <h1 id="titulo">Reporte de Beneficios General</h1>
+    <h1 id="periodo"></h1>
+    <h1 id="nombreEmpresa"></h1>
+    <table id="tabla-ventas">
+        <thead>
+            <tr>
+                <th>Cantidad Prestamos</th>
+                <th>Monto Prestado</th>
+                <th>Interes Ingresado</th>
+                <th>Interes Pendiente</th>
+                <th>Interes Vencido</th>
+                <th>Beneficio Estimado</th>
+                <th>Beneficio Real</th>
+            </tr>
+        </thead>
+        <tbody id="datos-ventas">
+
+        </tbody>
+    </table>
+    <div class="total">
+        <p id="total"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+        var elemento30= document.getElementById('imagenLogo').src ='https://drive.google.com/thumbnail?id=' + idLogo;
+
+        function formatFecha(fecha) {
+            const [year, month, day] = fecha.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Llenar la tabla de ventas
+        const tablaVentas = document.getElementById('datos-ventas');
+        let totalGeneral = 0;
+        let SUMbeneficioEstimado = 0;
+        let SUMbeneficioReal = 0;
+
+        SUMbeneficioEstimado = parseFloat(ingresoCuotas) + parseFloat(montoPendiente) + parseFloat(montoVencido) - (parseFloat(montoPrestado) )
+        SUMbeneficioReal = parseFloat(ingresoCuotas) - (parseFloat(montoPrestado) )
+
+        const row = tablaVentas.insertRow();
+
+        row.insertCell(0).textContent = cantPrestamos
+        row.insertCell(1).textContent = formatNumber(montoPrestado)
+        row.insertCell(2).textContent = formatNumber(ingresoCuotas);
+        row.insertCell(3).textContent = formatNumber(montoPendiente);
+        row.insertCell(4).textContent = formatNumber(montoVencido);
+        row.insertCell(5).textContent = formatNumber(SUMbeneficioEstimado);
+        row.insertCell(6).textContent = formatNumber(SUMbeneficioReal);
+
+
+        // Valores encabezado después del logo
+        document.getElementById("periodo").textContent = periodo;
+        document.getElementById("nombreEmpresa").textContent = nombreEmpresa;
+        document.getElementById("total").textContent = `Total de Beneficios Real: ${formatNumber(SUMbeneficioReal)}`;
+
+        // Función para generar PDF
+        document.getElementById('btn-pdf').onclick = function() {
+            const { jsPDF } = window.jspdf;  // Asegúrate de acceder correctamente a jsPDF
+            const doc = new jsPDF();
+        
+            // Obtener el ancho de la página
+            const pageWidth = doc.internal.pageSize.getWidth();
+            
+            // Función para centrar texto
+            function centerText(text, y) {
+                const textWidth = doc.getTextWidth(text);
+                const x = (pageWidth - textWidth) / 2;
+                doc.text(text, x, y);
+            }
+            
+            centerText('Reporte de Beneficios', 10);
+            centerText(`Periodo: ${periodo}`, 20);
+            centerText(`${nombreEmpresa}`, 30);
+            
+            doc.autoTable({ html: '#tabla-ventas', startY: 40 });
+            
+            centerText(`Beneficios Real: ${formatNumber(SUMbeneficioReal)}`, doc.autoTable.previous.finalY + 10);
+        
+            doc.save('reporte_beneficios.pdf');
+        };
+
+    </script>
+</body>
+</html>
