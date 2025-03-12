@@ -61,6 +61,7 @@
         // Valores del detalle de la factura
         // var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
         var ingresoCuotas = params.has('ingresoCuotas') ? params.get('ingresoCuotas') : "ingresoCuotas";
+        var interesEstimado = params.has('interesEstimado') ? params.get('interesEstimado') : "interesEstimado";
         var montoPrestado = params.has('montoPrestado') ? params.get('montoPrestado') : "montoPrestado";
         var montoPendiente = params.has('montoPendiente') ? params.get('montoPendiente') : "montoPendiente";
         var montoVencido = params.has('montoVencido') ? params.get('montoVencido') : "montoVencido";
@@ -79,6 +80,7 @@
             <tr>
                 <th>Cantidad Prestamos</th>
                 <th>Monto Prestado</th>
+                <th>Interes Estimado</th>
                 <th>Interes Ingresado</th>
                 <th>Interes Pendiente</th>
                 <th>Interes Vencido</th>
@@ -115,20 +117,19 @@
         // Llenar la tabla de ventas
         const tablaVentas = document.getElementById('datos-ventas');
         let totalGeneral = 0;
-        let SUMbeneficioEstimado = 0;
         let SUMbeneficioReal = 0;
 
-        SUMbeneficioEstimado = parseFloat(ingresoCuotas) + parseFloat(montoPendiente) + parseFloat(montoVencido) - (parseFloat(montoPrestado) )
-        SUMbeneficioReal = parseFloat(ingresoCuotas) - (parseFloat(montoPrestado) )
+        SUMbeneficioReal = parseFloat(montoPrestado) - (parseFloat(ingresoCuotas))
 
         const row = tablaVentas.insertRow();
 
         row.insertCell(0).textContent = cantPrestamos
         row.insertCell(1).textContent = formatNumber(montoPrestado)
-        row.insertCell(2).textContent = formatNumber(ingresoCuotas);
-        row.insertCell(3).textContent = formatNumber(montoPendiente);
-        row.insertCell(4).textContent = formatNumber(montoVencido);
-        row.insertCell(5).textContent = formatNumber(SUMbeneficioEstimado);
+        row.insertCell(2).textContent = formatNumber(interesEstimado);
+        row.insertCell(3).textContent = formatNumber(ingresoCuotas);
+        row.insertCell(4).textContent = formatNumber(montoPendiente);
+        row.insertCell(5).textContent = formatNumber(montoVencido);
+        row.insertCell(6).textContent = formatNumber(interesEstimado);
         row.insertCell(6).textContent = formatNumber(SUMbeneficioReal);
 
 
