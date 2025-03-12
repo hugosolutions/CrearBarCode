@@ -143,30 +143,57 @@
         document.getElementById("total").textContent = `Total de Beneficios Real: ${formatNumber(SUMbeneficioReal)}`;
 
         // Función para generar PDF
-        document.getElementById('btn-pdf').onclick = function() {
-            const { jsPDF } = window.jspdf;  // Asegúrate de acceder correctamente a jsPDF
+        document.getElementById('btn-pdf').onclick = async function () {
+            const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-        
-            // Obtener el ancho de la página
+
             const pageWidth = doc.internal.pageSize.getWidth();
-            
+
             // Función para centrar texto
             function centerText(text, y) {
                 const textWidth = doc.getTextWidth(text);
                 const x = (pageWidth - textWidth) / 2;
                 doc.text(text, x, y);
             }
-            
-            centerText('Reporte de Beneficios', 10);
-            centerText(`Periodo: ${periodo}`, 20);
-            centerText(`${nombreEmpresa}`, 30);
-            
-            doc.autoTable({ html: '#tabla-ventas', startY: 40 });
-            
-            centerText(`Beneficios Real: ${formatNumber(SUMbeneficioReal)}`, doc.autoTable.previous.finalY + 10);
-        
-            doc.save('reporte_beneficios.pdf');
+
+            // Cargar imagen desde la URL
+            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/prestamoLogo.png";
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // Evitar problemas de CORS
+            img.src = imgUrl;
+
+            img.onload = function () {
+                const imgWidth = 50;  // Ancho de la imagen en mm
+                const imgHeight = 30; // Alto de la imagen en mm
+                const x = (pageWidth - imgWidth) / 2; // Centrar la imagen
+
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                const imgData = canvas.toDataURL("image/png");
+
+                // Agregar imagen centrada
+                doc.addImage(imgData, "PNG", x, 10, imgWidth, imgHeight);
+
+                // Agregar textos centrados
+                centerText('Reporte de Beneficios', 50);
+                centerText(`Periodo: ${periodo}`, 60);
+                centerText(`${nombreEmpresa}`, 70);
+
+                // Agregar tabla
+                doc.autoTable({ html: '#tabla-ventas', styles: { fillColor: [58, 139, 127] }, startY: 80 });
+
+                // Agregar beneficio real centrado debajo de la tabla
+                centerText(`Beneficios Real: ${formatNumber(SUMbeneficioReal)}`, doc.autoTable.previous.finalY + 10);
+
+                // Descargar PDF
+                doc.save('reporte_beneficios.pdf');
+            };
         };
+
 
     </script>
 </body>
