@@ -61,6 +61,7 @@
         // Valores del detalle de la factura
         // var fechaDetalle = params.has('fechaDetalle') ? params.get('fechaDetalle') : "fechaDetalle";
         var ingresoCuotas = params.has('ingresoCuotas') ? params.get('ingresoCuotas') : "ingresoCuotas";
+        var ingresoInteres = params.has('ingresoInteres') ? params.get('ingresoInteres') : "ingresoInteres";
         var interesEstimado = params.has('interesEstimado') ? params.get('interesEstimado') : "interesEstimado";
         var montoPagado = params.has('montoPagado') ? params.get('montoPagado') : "montoPagado";
         var montoPrestado = params.has('montoPrestado') ? params.get('montoPrestado') : "montoPrestado";
@@ -129,7 +130,7 @@
         row.insertCell(1).textContent = formatNumber(montoPrestado);
         row.insertCell(2).textContent = formatNumber(montoPagado);
         row.insertCell(3).textContent = formatNumber(interesEstimado);
-        row.insertCell(4).textContent = formatNumber(ingresoCuotas);
+        row.insertCell(4).textContent = formatNumber(ingresoInteres);
         row.insertCell(5).textContent = formatNumber(montoPendiente);
         row.insertCell(6).textContent = formatNumber(montoVencido);
         row.insertCell(7).textContent = formatNumber(interesEstimado);
