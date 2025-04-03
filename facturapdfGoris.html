@@ -366,7 +366,7 @@
                 // Guardar el PDF
                 // Convertir la imagen del sello y agregarla al final del documento
                 convertImageToBase64(imgUr2, function(base64Sello) {
-                    let yPos = finalY-0.9; // Posición para el sello
+                    let yPos = finalY-0.6; // Posición para el sello
         
                     // Si la imagen se sale de la página, agregar una nueva página
                     if (yPos + imgHeight > pageHeight - 0.5) {
@@ -375,7 +375,7 @@
                     }
         
                     // Agregar la imagen (sello de la empresa)
-                    doc.addImage(base64Sello, 'PNG', pageWidth - 9, yPos, 6, 4);
+                    doc.addImage(base64Sello, 'PNG', pageWidth - 9, yPos, 3, 3);
         
                     // Guardar el PDF después de agregar el sello
                     // Guardar el PDF
