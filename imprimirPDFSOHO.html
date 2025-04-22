@@ -282,7 +282,7 @@
                 orientation: 'portrait'
             });
         
-            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/SOHO.jpg";
+            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/logoSoho.png";
         
             convertImageToBase64(imgUrl, function(base64Img) {
                 // Agregar la imagen (logo) al PDF
@@ -291,7 +291,7 @@
                 const imgHeight = 2;
                 var saltoLinea = 1.48;
         
-                doc.addImage(base64Img, 'JPG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
+                doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
         
                 // Preparar datos de la tabla
                 const tableData = [];
