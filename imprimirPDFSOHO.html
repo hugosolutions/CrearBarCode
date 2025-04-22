@@ -235,7 +235,7 @@
             var elemento66 = document.getElementById("cliente").textContent = "CLIENTE: " +cliente;
         }
         
-        if (terminal!="sinDato" && terminal!="") {
+        if (terminal!="sinDato") {
             var elemento80 = document.getElementById("terminal").textContent = "TERMINAL: " + terminal;
         }
 
@@ -322,7 +322,10 @@
                 saltoLinea+=0.22
                 doc.text(`${instagram}`, 0.5, saltoLinea);             
                 doc.setTextColor(255, 0, 0); // Rojo
-                doc.text(`Terminal: ${terminal}`, 8.1, saltoLinea, { align: 'right' });
+                if (terminal!="sinDato") {
+                    doc.text(`Terminal: ${terminal}`, 8.1, saltoLinea, { align: 'right' });
+                }
+                
                 doc.setTextColor(0, 0, 0); // Restablecer a negro si es necesario
                 saltoLinea+=0.22
                 
