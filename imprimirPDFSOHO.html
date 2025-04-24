@@ -341,7 +341,7 @@
                 doc.text(`${fecha} | ${hora}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
 
-                if (tipoFactura!="sinDato") {
+                if (tipoFactura!="sinDato" && tipoFactura!="No Aplica") {
                     doc.text(`${tipoFactura} | NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
                 }
                 
