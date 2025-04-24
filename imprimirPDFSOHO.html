@@ -100,6 +100,7 @@
         var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "sinDato";
         var cliente = params.has('cliente') ? params.get('cliente') : "sinDato";
         var terminal = params.has('terminal') && params.get('terminal').trim() !== "" ? params.get('terminal') : "sinDato";
+        var correoCliente = params.has('correoCliente') && params.get('correoCliente').trim() !== "" ? params.get('correoCliente') : "sinDato";
         var caja = params.has('caja') ? params.get('caja') : "sinDato";
 
         var ncf = params.has('ncf') && params.get('ncf').trim() !== "" ? params.get('ncf') : "sinDato";
@@ -315,35 +316,39 @@
 
                 doc.setFontSize(12);
                 doc.text(`${direccion}`, 0.5, saltoLinea);
-                doc.text(`No. Factura: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
+                doc.text(`Tipo de Venta: ${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
                 doc.text(`${telefono}`, 0.5, saltoLinea);              
-                doc.text(`Tipo de Venta: ${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
+                doc.text(`${cliente}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
                 if(rnc!="sinDato"){
                     doc.text(`RNC: ${rnc}`, 0.5, saltoLinea);
                 }
+
+                if(rnc!="sinDato"){
+                    doc.text(`${correoCliente}`, 8.1, saltoLinea, { align: 'right' });
+                }
+
                 
-                doc.text(`Cliente: ${cliente}`, 8.1, saltoLinea, { align: 'right' });
-                saltoLinea+=0.22
-                doc.text(`${instagram}`, 0.5, saltoLinea);             
                 doc.setTextColor(255, 0, 0); // Rojo
                 if (terminal!="sinDato") {
                     doc.text(`Terminal: ${terminal}`, 8.1, saltoLinea, { align: 'right' });
                 }
-                
                 doc.setTextColor(0, 0, 0); // Restablecer a negro si es necesario
                 saltoLinea+=0.22
-                
+                doc.text(`${instagram}`, 0.5, saltoLinea);             
                 doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
+                
+                
                 saltoLinea+=0.22
-
+                
                 doc.text(`${fecha} | ${hora}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
 
                 if (tipoFactura!="sinDato" && tipoFactura!="No Aplica") {
                     doc.text(`${tipoFactura} | NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
                 }
+                
                 
                 saltoLinea= 2.86
                 
