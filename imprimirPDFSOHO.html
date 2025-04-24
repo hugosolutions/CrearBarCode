@@ -101,6 +101,7 @@
         var cliente = params.has('cliente') ? params.get('cliente') : "sinDato";
         var terminal = params.has('terminal') && params.get('terminal').trim() !== "" ? params.get('terminal') : "sinDato";
         var correoCliente = params.has('correoCliente') && params.get('correoCliente').trim() !== "" ? params.get('correoCliente') : "sinDato";
+        var correoEmpresa = params.has('correoEmpresa') && params.get('correoEmpresa').trim() !== "" ? params.get('correoEmpresa') : "sinDato";
         var caja = params.has('caja') ? params.get('caja') : "sinDato";
 
         var ncf = params.has('ncf') && params.get('ncf').trim() !== "" ? params.get('ncf') : "sinDato";
@@ -329,14 +330,18 @@
                     doc.text(`${correoCliente}`, 8.1, saltoLinea, { align: 'right' });
                 }
 
-                
+                saltoLinea+=0.22
                 doc.setTextColor(255, 0, 0); // Rojo
                 if (terminal!="sinDato") {
                     doc.text(`Terminal: ${terminal}`, 8.1, saltoLinea, { align: 'right' });
                 }
                 doc.setTextColor(0, 0, 0); // Restablecer a negro si es necesario
+                
+                doc.text(`${instagram}`, 0.5, saltoLinea);         
                 saltoLinea+=0.22
-                doc.text(`${instagram}`, 0.5, saltoLinea);             
+                if (correoEmpresa!="sinDato") {
+                    doc.text(`${correoEmpresa}`, 0.5, saltoLinea);   
+                }
                 doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
                 
                 
