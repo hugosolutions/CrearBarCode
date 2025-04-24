@@ -276,7 +276,7 @@
                 orientation: 'portrait'
             });
         
-            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/SOHO.jpg";
+            const imgUrl = "https://raw.githubusercontent.com/hugosolutions/CrearBarCode/main/logoSoho.png";
         
             convertImageToBase64(imgUrl, function(base64Img) {
                 // Agregar la imagen (logo) al PDF
@@ -285,7 +285,7 @@
                 const imgHeight = 2;
                 var saltoLinea = 1.48;
         
-                doc.addImage(base64Img, 'JPG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
+                doc.addImage(base64Img, 'PNG', (pageWidth - imgWidth) / 2, 0.5, imgWidth, imgHeight);
         
                 // Preparar datos de la tabla
                 const tableData = [];
@@ -301,34 +301,50 @@
         
                 doc.setFontSize(18);
                 doc.setFont("helvetica", "bold");
-                const numFacturaAux = "Cotizacion " + noFactura;
+                const numFacturaAux = "Cotización " + noFactura;
                 doc.text(numFacturaAux, 0.5, 1);
 
                 doc.setFontSize(12);
                 doc.text(`${direccion}`, 0.5, saltoLinea);
-                doc.text(`No. Cotizacion: ${noFactura}`, 8.1, saltoLinea, { align: 'right' });
-                saltoLinea+=0.22
-                doc.text(`${telefono}`, 0.5, saltoLinea);              
                 doc.text(`Tipo de Venta: ${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
-                doc.text(`${tipoTienda}`, 0.5, saltoLinea);
-                doc.text(`Cliente: ${cliente}`, 8.1, saltoLinea, { align: 'right' });
+                doc.text(`${telefono}`, 0.5, saltoLinea);              
+                doc.text(`${cliente}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
-                doc.text(`${instagram}`, 0.5, saltoLinea);
-                doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
-                saltoLinea+=0.22
-                doc.text(`${fecha}`, 8.1, saltoLinea, { align: 'right' });
-                saltoLinea+=0.22
-                doc.text(`${hora}`, 8.1, saltoLinea, { align: 'right' });
-
-                if(formatNumber(numTipoFactura)<3){
-                    doc.text(`Tipo de Factura: ${tipoFactura}`, 8.1, saltoLinea, { align: 'right' });
-                    saltoLinea+=0.22
-                    doc.text(`${ncf}`, 8.1, saltoLinea, { align: 'right' });
-                    saltoLinea+=0.22
+                if(rnc!="sinDato"){
+                    doc.text(`RNC: ${rnc}`, 0.5, saltoLinea);
                 }
 
-                saltoLinea= 2.76
+                if(correoCliente!="sinDato"){
+                    doc.text(`${correoCliente}`, 8.1, saltoLinea, { align: 'right' });
+                }
+
+                saltoLinea+=0.22
+                doc.setTextColor(255, 0, 0); // Rojo
+                if (terminal!="sinDato") {
+                    doc.text(`Terminal: ${terminal}`, 8.1, saltoLinea, { align: 'right' });
+                }
+                doc.setTextColor(0, 0, 0); // Restablecer a negro si es necesario
+                
+                doc.text(`${instagram}`, 0.5, saltoLinea);         
+                saltoLinea+=0.22
+                if (correoEmpresa!="sinDato") {
+                    doc.text(`${correoEmpresa}`, 0.5, saltoLinea);   
+                }
+                doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
+                
+                
+                saltoLinea+=0.22
+                
+                doc.text(`${fecha} | ${hora}`, 8.1, saltoLinea, { align: 'right' });
+                saltoLinea+=0.22
+
+                if (tipoFactura!="sinDato" && tipoFactura!="No Aplica") {
+                    doc.text(`${tipoFactura} | NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
+                }
+                
+                
+                saltoLinea= 2.86
                 
         
                 doc.setFont("helvetica", "normal");
@@ -342,7 +358,7 @@
                     startY: saltoLinea + 0.04,
                     margin: { left: 0.5, right: 0.5 },
                     headStyles: {
-                        fillColor: [220, 43, 42], // Color de fondo del encabezado (en formato RGB)
+                        fillColor: [181, 42, 45], // Color de fondo del encabezado (en formato RGB)
                         textColor: [255, 255, 255], // Color del texto del encabezado (blanco)
                         fontStyle: 'bold', // Negrita para el texto del encabezado
                     },
@@ -379,8 +395,8 @@
         
                 doc.setFontSize(14);
                 const centerXaux = pageWidth / 2; // Centro de la página en X
-                const textWidthTotalaux = doc.getTextWidth(`TOTAL COTIZACION: ${formatNumber(total)}`);
-                doc.text(`TOTAL COTIZACION: ${formatNumber(total)}`, centerXaux - textWidthTotalaux / 2, finalY + 2);
+                const textWidthTotalaux = doc.getTextWidth(`TOTAL: ${formatNumber(total)}`);
+                doc.text(`TOTAL FACTURA: ${formatNumber(total)}`, centerXaux - textWidthTotalaux / 2, finalY + 2);
 
 
                 doc.setFontSize(10);
@@ -391,6 +407,15 @@
                     const textWidth1aux = doc.getTextWidth(`Pagar Antes de: ${fechaCreditoAux}`);
                     const textWidth2aux = doc.getTextWidth("______________________________________________________________");
                     const textWidth3aux = doc.getTextWidth(cliente);
+                    
+                    const textWidth4aux = doc.getTextWidth(`Pagado: ${formatNumber(pagadoCredito)}`);
+                    const textWidth5aux = doc.getTextWidth(`Pendiente: ${formatNumber(pendienteCredito)}`);
+                    
+                    doc.text(`Pagado: ${formatNumber(pagadoCredito)}`, centerXaux - textWidth4aux / 2, finalY + 2.5);
+                    doc.text(`Pendiente: ${formatNumber(pendienteCredito)}`, centerXaux - textWidth5aux / 2, finalY + 2.7);
+
+
+                    
 
 
                     doc.text(`Pagar Antes de: ${fechaCreditoAux}`, centerXaux - textWidth1aux / 2, finalY + 3);
@@ -398,6 +423,7 @@
                     doc.text(cliente, centerXaux - textWidth3aux / 2, finalY + 4);
 
                 }
+                
 
                 
 
@@ -405,7 +431,7 @@
 
         
                 // Guardar el PDF
-                const nombreArchivo = `${cliente} Cotizacion ${noFactura}.pdf`;
+                const nombreArchivo = `${cliente} Factura ${noFactura}.pdf`;
                 doc.save(nombreArchivo);
             });
         }
