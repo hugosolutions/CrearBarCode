@@ -178,6 +178,7 @@
         //pies de factura
         var piePagina = params.has('piePagina') ? params.get('piePagina') : "piePagina";
         var otroPie = params.has('otroPie') ? params.get('otroPie') : "otroPie";
+        var rnc = params.has('otroPie') ? params.get('rnc') : "rnc";
         
         //Formato de 2 decimales
         subTotal = parseFloat(subTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -216,6 +217,7 @@
             <p id="tipoTienda"></p>
             <p id="telefono"></p>
             <p id="instagram"></p>
+            <p id="rnc"></p>
         </div>
         
         <div class="details">
@@ -330,6 +332,7 @@
         var elemento3=document.getElementById("tipoTienda").textContent = tipoTienda
         var elemento4=document.getElementById("telefono").textContent = telefono 
         var elemento5=document.getElementById("instagram").textContent = instagram 
+        var elemento555=document.getElementById("rnc").textContent = rnc 
 
         //valores datos de la factura
         var elemento8=document.getElementById("noFactura").textContent = "Factura #000" + noFactura
