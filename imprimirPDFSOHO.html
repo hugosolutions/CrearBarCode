@@ -101,8 +101,11 @@
         var cliente = params.has('cliente') ? params.get('cliente') : "sinDato";
         var terminal = params.has('terminal') && params.get('terminal').trim() !== "" ? params.get('terminal') : "sinDato";
         var caja = params.has('caja') ? params.get('caja') : "sinDato";
-        var ncf = params.has('ncf') ? params.get('ncf') : "sinDato";
-        var tipoFactura = params.has('tipoFactura') ? params.get('tipoFactura') : "sinDato";
+
+        var ncf = params.has('ncf') && params.get('ncf').trim() !== "" ? params.get('ncf') : "sinDato";
+        var rnc = params.has('rnc') && params.get('rnc').trim() !== "" ? params.get('rnc') : "sinDato";
+        var tipoFactura = params.has('tipoFactura') && params.get('tipoFactura').trim() !== "" ? params.get('tipoFactura') : "sinDato";
+        
 
         
         var fechaAux = params.has('fecha') ? params.get('fecha') : "sinDato";
@@ -317,7 +320,10 @@
                 doc.text(`${telefono}`, 0.5, saltoLinea);              
                 doc.text(`Tipo de Venta: ${tipoVenta}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
-                doc.text(`${tipoTienda}`, 0.5, saltoLinea);
+                if(rnc!="sinDato"){
+                    doc.text(`RNC: ${rnc}`, 0.5, saltoLinea);
+                }
+                
                 doc.text(`Cliente: ${cliente}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
                 doc.text(`${instagram}`, 0.5, saltoLinea);             
@@ -332,17 +338,13 @@
                 doc.text(`Caja: ${caja}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
 
-                doc.text(`${fecha}`, 8.1, saltoLinea, { align: 'right' });
+                doc.text(`${fecha} | ${hora}`, 8.1, saltoLinea, { align: 'right' });
                 saltoLinea+=0.22
-                doc.text(`${hora}`, 8.1, saltoLinea, { align: 'right' });
 
-                if(formatNumber(numTipoFactura)<3){
-                    doc.text(`Tipo de Factura: ${tipoFactura}`, 8.1, saltoLinea, { align: 'right' });
-                    saltoLinea+=0.22
-                    doc.text(`${ncf}`, 8.1, saltoLinea, { align: 'right' });
-                    saltoLinea+=0.22
+                if (tipoFactura!="sinDato") {
+                    doc.text(`${tipoFactura} | NCF: ${ncf}`, 8.1, saltoLinea, { align: 'right' });
                 }
-
+                
                 saltoLinea= 2.86
                 
         
