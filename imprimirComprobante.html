@@ -361,11 +361,11 @@
             var elemento30=document.getElementById("envio").textContent = "Envío: +" + envio 
         } 
 
-        if (fechaNCF!="fechaNCF") {
-            var elemento1130=document.getElementById("fechaNCF").textContent = "Fecha Vencimiento NCF: +" + fechaNCF 
+        if (fechaNCF!="fechaNCF" && fechaNCFAux) {
+            var elemento1130=document.getElementById("fechaNCF").textContent = "Vencimiento NCF: " + fechaNCF 
         } 
 
-        if (clienteRNC!="clienteRNC") {
+        if (clienteRNC!="clienteRNC" && cliente!="Cliente General") {
             var elemento1131=document.getElementById("clienteRNC").textContent = "RNC: " + clienteRNC 
         } 
         //valores totales factura
