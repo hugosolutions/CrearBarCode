@@ -139,6 +139,7 @@
         var noFactura = params.has('noFactura') ? params.get('noFactura') : "noFactura";
         var tipoVenta = params.has('tipoVenta') ? params.get('tipoVenta') : "tipoVenta";
         var cliente = params.has('cliente') ? params.get('cliente') : "cliente";
+        var clienteRNC = params.has('clienteRNC') ? params.get('clienteRNC') : "clienteRNC";
         var caja = params.has('caja') ? params.get('caja') : "caja";
         var ncf = params.has('ncf') ? params.get('ncf') : "ncf";
         var tipoFactura = params.has('tipoFactura') ? params.get('tipoFactura') : "tipoFactura";
@@ -365,7 +366,7 @@
         } 
 
         if (clienteRNC!="clienteRNC") {
-            var elemento1130=document.getElementById("fechaNCF").textContent = "RNC: +" + clienteRNC 
+            var elemento1131=document.getElementById("fechaNCF").textContent = "RNC: +" + clienteRNC 
         } 
         //valores totales factura
         var elemento17=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
