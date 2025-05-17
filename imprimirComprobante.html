@@ -145,9 +145,12 @@
 
         
         var fechaAux = params.has('fecha') ? params.get('fecha') : "fecha";
+        var fechaNCFAux = params.has('fechaNCF') ? params.get('fechaNCF') : "fechaNCF";
         var partesFecha = fechaAux.split('/');        
+        var partesFechaNCF = fechaNCFAux.split('/');        
         // Reorganiza la fecha al formato dd/mm/yyyy
         var fecha = partesFecha[1] + '/' + partesFecha[0] + '/' + partesFecha[2];
+        var fechaNCF = partesFechaNCF[1] + '/' + partesFechaNCF[0] + '/' + partesFechaNCF[2];
         
         var fechaCreditoAux = params.has('fechaCredito') ? params.get('fechaCredito') : "fechaCredito";
         var partesFechaCredito = fechaCreditoAux.split('/');        
@@ -222,9 +225,12 @@
         
         <div class="details">
             <p id="noFactura"></p>
-            <p id="tipoFactura">Tipo de Factura: </p>
+            <p id="tipoVenta">Tipo de Venta: </p>
+            <p id="tipoFactura"></p>
             <p id="ncf">NCF: </p>
+            <p id="fechaNCF"></p>
             <p id="cliente">Cliente: </p>
+            <p id="clienteRNC">RNC: </p>
             <p id="caja">Caja: </p>
             <p id="fecha">Fecha: </p>
             <p id="hora">Hora: </p>
@@ -336,7 +342,7 @@
 
         //valores datos de la factura
         var elemento8=document.getElementById("noFactura").textContent = "Factura #000" + noFactura
-        // var elemento9=document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta 
+        var elemento9=document.getElementById("tipoVenta").textContent = "Tipo de venta: " + tipoVenta 
         var elemento9=document.getElementById("ncf").textContent = "NCF: " + ncf 
         var elemento9=document.getElementById("tipoFactura").textContent = tipoFactura 
         var elemento10=document.getElementById("cliente").textContent = "Cliente: " + cliente
@@ -353,7 +359,14 @@
         if (parseFloat(envio) > 0) {
             var elemento30=document.getElementById("envio").textContent = "Envío: +" + envio 
         } 
-        
+
+        if (fechaNCF!="fechaNCF") {
+            var elemento1130=document.getElementById("fechaNCF").textContent = "Fecha Vencimiento NCF: +" + fechaNCF 
+        } 
+
+        if (clienteRNC!="clienteRNC") {
+            var elemento1130=document.getElementById("fechaNCF").textContent = "RNC: +" + clienteRNC 
+        } 
         //valores totales factura
         var elemento17=document.getElementById("subTotal").textContent = "Sub-Total: " + subTotal
         // var elemento18=document.getElementById("descuento").textContent = "Descuento: -" + descuento 
