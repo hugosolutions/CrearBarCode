@@ -177,6 +177,7 @@
         var nombreProducto = params.has('nombreProducto') ? params.get('nombreProducto') : "nombreProducto";
         var precioUnitProducto = params.has('precioUnitProducto') ? params.get('precioUnitProducto') : "precioUnitProducto";
         var precioTotalProducto = params.has('precioTotalProducto') ? params.get('precioTotalProducto') : "precioTotalProducto";
+        var ITBISProducto = params.has('ITBISProducto') ? params.get('ITBISProducto') : "ITBISProducto";
         
 
         //pies de factura
@@ -201,6 +202,7 @@
         nombreProducto = nombreProducto.split(",");
         precioUnitProducto = precioUnitProducto.split(",");
         precioTotalProducto = precioTotalProducto.split(",");
+        ITBISProducto = ITBISProducto.split(",");
 
         //Crea una lista para mostrar en cada fila de la tabla
         var result = [];
