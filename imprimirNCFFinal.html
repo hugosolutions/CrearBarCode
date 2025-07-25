@@ -381,7 +381,7 @@
             var elemento1131=document.getElementById("clienteRNC").textContent = "RNC: " + clienteRNC 
         } 
 
-        if (tipoVenta.trim().toLowerCase() === "contado" && !isNaN(recibido) ) {
+        if (tipoVenta.trim().toLowerCase() === "contado" && recibido!="recibido" ) {
             var elemento99 = document.getElementById("recibido").innerHTML = "<br><strong>Recibido:</strong> " + recibido;
             var elemento98 = document.getElementById("cambio").innerHTML = "<strong>Cambio:</strong> " + cambio;
         }
