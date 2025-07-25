@@ -173,6 +173,7 @@
         var itbis = params.has('itbis') ? params.get('itbis') : "0.00";
         var total = params.has('total') ? params.get('total') : "total";
         var recibido = params.has('recibido') ? params.get('recibido') : "recibido";
+        var recibidoAux = params.has('recibido') ? params.get('recibido') : "recibido";
         var cambio = params.has('cambio') ? params.get('cambio') : "0.00";
 
         //valores del detalle de la factura
@@ -381,7 +382,7 @@
             var elemento1131=document.getElementById("clienteRNC").textContent = "RNC: " + clienteRNC 
         } 
 
-        if (tipoVenta.trim().toLowerCase() === "contado" && recibido!="recibido" ) {
+        if (tipoVenta.trim().toLowerCase() === "contado" && recibidoAux!="recibido" ) {
             var elemento99 = document.getElementById("recibido").innerHTML = "<br><strong>Recibido:</strong> " + recibido;
             var elemento98 = document.getElementById("cambio").innerHTML = "<strong>Cambio:</strong> " + cambio;
         }
