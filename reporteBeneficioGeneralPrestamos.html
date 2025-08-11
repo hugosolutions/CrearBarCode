@@ -125,7 +125,7 @@
         let totalGeneral = 0;
         let SUMbeneficioReal = 0;
 
-        SUMbeneficioReal = parseFloat(montoPagado) - parseFloat(montoPrestado);
+        SUMbeneficioReal = (parseFloat(montoPagado) - parseFloat(montoPrestado))-parseFloat(descuento);
 
         const row = tablaVentas.insertRow();
 
