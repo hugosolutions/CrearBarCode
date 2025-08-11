@@ -65,6 +65,7 @@
         var ingresoInteres = params.has('ingresoInteres') ? params.get('ingresoInteres') : "ingresoInteres";
         var interesEstimado = params.has('interesEstimado') ? params.get('interesEstimado') : "interesEstimado";
         var montoPagado = params.has('montoPagado') ? params.get('montoPagado') : "montoPagado";
+        var descuento = params.has('descuento') ? params.get('descuento') : "descuento";
         var montoPrestado = params.has('montoPrestado') ? params.get('montoPrestado') : "montoPrestado";
         var montoPendiente = params.has('montoPendiente') ? params.get('montoPendiente') : "montoPendiente";
         var montoVencido = params.has('montoVencido') ? params.get('montoVencido') : "montoVencido";
@@ -88,6 +89,7 @@
                 <th>Interes Ingresado</th>
                 <th>Interes Pendiente</th>
                 <th>Interes Vencido</th>
+                <th>Descuento</th>
                 <th>Beneficio Estimado</th>
                 <th>Beneficio Real</th>
             </tr>
@@ -134,8 +136,9 @@
         row.insertCell(4).textContent = formatNumber(ingresoInteres);
         row.insertCell(5).textContent = formatNumber(montoPendiente);
         row.insertCell(6).textContent = formatNumber(montoVencido);
-        row.insertCell(7).textContent = formatNumber(interesEstimado);
-        row.insertCell(8).textContent = formatNumber(SUMbeneficioReal);
+        row.insertCell(7).textContent = formatNumber(descuento);
+        row.insertCell(8).textContent = formatNumber(interesEstimado);
+        row.insertCell(9).textContent = formatNumber(SUMbeneficioReal);
 
 
         // Valores encabezado después del logo
