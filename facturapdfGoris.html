@@ -97,6 +97,7 @@
 
       // Valores encabezado después del logo Cliente Datos
         var cliente = params.has('cliente') ? params.get('cliente') : "";
+        var nota = params.has('nota') ? params.get('nota') : "";
         var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
         var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "";
         var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "";
@@ -185,6 +186,13 @@
             row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
             row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
         }
+
+        if (nota) {
+            const row2 = tablaVentas.insertRow();
+            row.insertCell(0).textContent = nota;
+        }
+
+        
 
         // Valores encabezado después del logo
         // document.getElementById("fechaFactura").textContent = fechaFactura;
