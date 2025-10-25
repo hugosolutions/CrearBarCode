@@ -181,7 +181,7 @@
 
         for (let i = 0; i < descripcionDetalle.length; i++) {
             const row = tablaVentas.insertRow();
-            row.insertCell(0).textContent = descripcionDetalle[i];
+            row.insertCell(0).textContent = descripcionDetalle[i].toUpperCase();
             row.insertCell(1).textContent = cantidadDetalle[i];
             row.insertCell(2).textContent = formatNumber(precioUnitarioDetalle[i]);
             row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
