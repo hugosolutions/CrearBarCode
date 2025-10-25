@@ -188,8 +188,10 @@
         }
 
         if (nota) {
-            const row2 = tablaVentas.insertRow();
-            row2.insertCell(0).textContent = nota;
+          const row2 = tablaVentas.insertRow();
+          const cell = row2.insertCell(0);
+          cell.colSpan = 4; // Ocupa las 4 columnas
+          cell.innerHTML = `<strong>Nota:</strong> ${nota}`;
         }
 
         
