@@ -272,6 +272,12 @@
                         formatNumber(precioTotalDetalle[i])
                     ]);
                 }
+
+                if (nota) {
+                  tableData.push([
+                    { content: `Nota: ${nota}`, colSpan: 4, styles: { fontStyle: 'bold' } }
+                  ]);
+                }
                 
         
                 doc.setFontSize(18);
