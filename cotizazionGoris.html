@@ -94,6 +94,7 @@
 
       // Valores encabezado después del logo Cliente Datos
         var cliente = params.has('cliente') ? params.get('cliente') : "";
+        var nota = params.has('nota') ? params.get('nota') : "";
         var vehiculo = params.has('vehiculo') ? params.get('vehiculo') : "";
         var colorVehiculo = params.has('colorVehiculo') ? params.get('colorVehiculo') : "";
         var telefonoCliente = params.has('telefonoCliente') ? params.get('telefonoCliente') : "";
@@ -183,6 +184,13 @@
             row.insertCell(3).textContent = formatNumber(precioTotalDetalle[i]);
         }
 
+        if (nota) {
+          const row2 = tablaVentas.insertRow();
+          const cell = row2.insertCell(0);
+          cell.colSpan = 4; // Ocupa las 4 columnas
+          cell.innerHTML = `<strong>Nota:</strong> ${nota}`;
+        }
+
         // Valores encabezado después del logo
         // document.getElementById("fechaCotizacion").textContent = fechaCotizacion;
         // document.getElementById("noCotizacion").innerHTML = "<br>No. Cotización: " + noCotizacion;
@@ -253,6 +261,12 @@
                         formatNumber(precioUnitarioDetalle[i]),
                         formatNumber(precioTotalDetalle[i])
                     ]);
+                }
+
+                if (nota) {
+                  tableData.push([
+                    { content: `Nota: ${nota}`, colSpan: 4, styles: { fontStyle: 'bold' } }
+                  ]);
                 }
         
                 doc.setFontSize(18);
