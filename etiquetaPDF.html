@@ -116,18 +116,18 @@ async function generarPDF() {
     pdf.line(2, y, 36, y);
 
     // Nombre producto
-    y += 1.5;
+    y += 2.5;
     pdf.setFontSize(7);
     pdf.text(nombre, center, y, { align: "center" });
 
     // Precio
-    y += 1.5;
+    y += 3.5;
     pdf.setFont("Helvetica", "bold");
     pdf.setFontSize(10);
     pdf.text(precio, center, y, { align: "center" });
 
     // Código QR
-    y += 1;
+    y += 4;
     if (codigo) {
         try {
             const img64 = await getBase64(codigo);
