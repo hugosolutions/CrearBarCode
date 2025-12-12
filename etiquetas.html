@@ -73,7 +73,7 @@
 <div id="contenedor">
 
     <div class="fila-superior">
-        <img id="logo" class="logo" src="" alt="Logo">
+        <img id="logoIMG" class="logo" src="https://drive.google.com/thumbnail?id=1znBRe040_UR8U3ZBUej5xxdpXhUMnjeL" alt="Logo">
         <div id="precio" class="precio"></div>
     </div>
 
@@ -88,7 +88,7 @@
 <script>
     const params = new URLSearchParams(window.location.search);
 
-    document.getElementById('logo').src ='https://drive.google.com/thumbnail?id=' + logo
+    document.getElementById('logoIMG').src ='https://drive.google.com/thumbnail?id=' + logo
     document.getElementById("precio").textContent = params.get("precio") || "precio";
     document.getElementById("nombre").textContent = params.get("nombre") || "nombre";
     document.getElementById("descripcion").textContent = params.get("descripcion") || "descripcion";
