@@ -92,7 +92,7 @@ async function generarPDF() {
 
     const pdf = new jsPDF({
         unit: "mm",
-        format: [38, 27],  // ANCHO 38 / ALTO 27
+        format: [40, 27],  // ANCHO 38 / ALTO 27
         orientation: "landscape"
     });
 
@@ -103,7 +103,7 @@ async function generarPDF() {
     const codigo = document.getElementById("codigo").src;
 
     // --- POSICIONES ---
-    const center = 19; // mitad de 38mm
+    const center = 20; // mitad de 38mm
     let y = 4;
 
     // Nombre tienda
