@@ -136,7 +136,7 @@ async function generarPDF() {
     }
 
     // Serial
-    pdf.setFontSize(6);
+    pdf.setFontSize(8);
     pdf.text(serial, center, 26, { align: "center" });
 
     pdf.save("etiqueta_" + serial + ".pdf");
