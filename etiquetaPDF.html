@@ -69,7 +69,7 @@
     }
 </style>
 </head>
-<body>
+<body onload="generarPDF()" >
 <div id="contenedor">
 
     <div class="fila-superior">
@@ -164,8 +164,6 @@ function getBase64(url) {
         img.src = url;
     });
 }
-
-window.onload = () => generarPDF();
 </script>
 </body>
 </html>
