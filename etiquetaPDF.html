@@ -2,98 +2,85 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=50mm, height=40mm, initial-scale=1.0">
-<title>Etiqueta 40x50mm</title>
+<meta name="viewport" content="width=38mm, height=27mm, initial-scale=1.0">
+<title>Etiqueta 38x27mm</title>
+
 <style>
     body {
         margin: 0;
         padding: 0;
-        width: 50mm;
-        height: 40mm;
+        width: 38mm;
+        height: 27mm;
         font-family: Arial, sans-serif;
         text-align: center;
         overflow: hidden;
     }
 
     #contenedor {
-        width: 50mm;
-        height: 40mm;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        width: 38mm;
+        height: 27mm;
         padding: 1mm;
         box-sizing: border-box;
     }
 
-    .fila-superior {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    .logo {
-        width: 12mm;
-        height: auto;
-    }
-
-    .precio {
-        font-size: 5mm;
-        font-weight: bold;
-        text-align: right;
-        flex-grow: 1;
-        padding-right: 2mm;
-    }
-
-    .nombre {
-        margin-top: 2mm;
+    #tienda {
         font-size: 4mm;
         font-weight: bold;
     }
 
-    .descripcion {
+    #nombre {
+        font-size: 3.2mm;
         margin-top: 1mm;
-        font-size: 3mm;
+        font-weight: bold;
     }
 
-    .codigo-img {
-        margin-top: 2mm;
-        width: 20mm;
-        height: auto;
+    #precio {
+        font-size: 4.5mm;
+        margin-top: 1mm;
+        font-weight: bold;
     }
 
-    .serial {
+    #codigo {
         margin-top: 1mm;
+        width: 12mm;
+    }
+
+    #serial {
         font-size: 3mm;
+        margin-top: 1mm;
         font-weight: bold;
     }
 </style>
 </head>
-<body onload="generarPDF()" >
+
+<body onload="generarPDF()">
+
 <div id="contenedor">
 
-    <div class="fila-superior">
-        <img id="logoIMG" class="logo" src="" alt="Logo">
-        <div id="precio" class="precio"></div>
-    </div>
+    <div id="tienda"></div>
 
-    <div id="nombre" class="nombre"></div>
-    <div id="descripcion" class="descripcion"></div>
+    <hr style="border: none; border-top: 1px solid black; margin: 1mm 0;">
 
-    <img id="codigo" class="codigo-img" src="" alt="Código">
-    <div id="serial" class="serial"></div>
+    <div id="nombre"></div>
+
+    <div id="precio"></div>
+
+    <img id="codigo" src="" alt="Código QR">
+
+    <div id="serial"></div>
 
 </div>
 
 <script>
     const params = new URLSearchParams(window.location.search);
 
-    document.getElementById("logoIMG").src =params.get("logo") || ""
+    document.getElementById("tienda").textContent = params.get("tienda") || "TIENDA";
+    document.getElementById("nombre").textContent = params.get("nombre") || "";
+    
     const precioValor = params.get("precio");
     const precioFormateado = precioValor ? Number(precioValor).toLocaleString('en-US', { maximumFractionDigits: 0 }) : "0";
-    document.getElementById("precio").textContent = 'RD$ ' + precioFormateado;
-    document.getElementById("nombre").textContent = params.get("nombre") || "";
-    document.getElementById("descripcion").textContent = params.get("descripcion") || "";
+    document.getElementById("precio").textContent = "RD$ " + precioFormateado;
+
     document.getElementById("codigo").src = params.get("codigo") || "";
     document.getElementById("serial").textContent = params.get("serial") || "";
 </script>
@@ -101,69 +88,77 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 async function generarPDF() {
-    const {jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf;
+
     const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: [38, 27]
+        unit: "mm",
+        format: [38, 27],  // ANCHO 38 / ALTO 27
+        orientation: "landscape"
     });
 
+    const tienda = document.getElementById("tienda").textContent;
     const nombre = document.getElementById("nombre").textContent;
-    const descripcion = document.getElementById("descripcion").textContent;
     const precio = document.getElementById("precio").textContent;
     const serial = document.getElementById("serial").textContent;
+    const codigo = document.getElementById("codigo").src;
 
-    const logo = document.getElementById("logoIMG");
-    const codigo = document.getElementById("codigo");
+    // --- POSICIONES ---
+    const center = 19; // mitad de 38mm
+    let y = 4;
 
-    pdf.setFont('Helvetica', 'bold');
-    pdf.setFontSize(14);
-    pdf.text(precio, 48, 8, { align: 'right' });
+    // Nombre tienda
+    pdf.setFont("Helvetica", "bold");
+    pdf.setFontSize(8);
+    pdf.text(tienda, center, y, { align: "center" });
 
-    if (logo.src) {
-        try {
-            const logoImg = await getBase64(logo.src);
-            pdf.addImage(logoImg, 'PNG', 2, 2, 12, 12);
-        } catch {}
-    }
+    // Línea divisoria
+    y += 2.5;
+    pdf.line(2, y, 36, y);
 
+    // Nombre producto
+    y += 4;
+    pdf.setFontSize(6);
+    pdf.text(nombre, center, y, { align: "center" });
+
+    // Precio
+    y += 4;
+    pdf.setFont("Helvetica", "bold");
     pdf.setFontSize(10);
-    pdf.text(nombre, 25, 18, { align: 'center' });
+    pdf.text(precio, center, y, { align: "center" });
 
-    pdf.setFont('Helvetica', 'normal');
-    pdf.setFontSize(8);
-    pdf.text(descripcion, 25, 23, { align: 'center' });
-
-    if (codigo.src) {
+    // Código QR
+    y += 2;
+    if (codigo) {
         try {
-            const codImg = await getBase64(codigo.src);
-            pdf.addImage(codImg, 'PNG', 15, 26, 20, 10);
+            const img64 = await getBase64(codigo);
+            pdf.addImage(img64, "PNG", center - 6, y, 12, 12);
         } catch {}
     }
 
-    pdf.setFontSize(8);
-    pdf.text(serial, 25, 38, { align: 'center' });
+    // Serial
+    pdf.setFontSize(6);
+    pdf.text(serial, center, 26, { align: "center" });
 
-    pdf.save("etiqueta " + serial+".pdf");
-    
+    pdf.save("etiqueta_" + serial + ".pdf");
 }
 
 function getBase64(url) {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = 'Anonymous';
+        img.crossOrigin = "Anonymous";
         img.onload = function () {
-            const canvas = document.createElement('canvas');
+            const canvas = document.createElement("canvas");
             canvas.width = this.width;
             canvas.height = this.height;
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext("2d");
             ctx.drawImage(this, 0, 0);
-            resolve(canvas.toDataURL('image/png'));
+            resolve(canvas.toDataURL("image/png"));
         };
         img.onerror = reject;
         img.src = url;
     });
 }
 </script>
+
 </body>
 </html>
