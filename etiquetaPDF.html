@@ -131,7 +131,7 @@ async function generarPDF() {
     if (codigo) {
         try {
             const img64 = await getBase64(codigo);
-            pdf.addImage(img64, "PNG", center - 12, y, 24, 8);
+            pdf.addImage(img64, "PNG", center - 12, y, 24, 10);
         } catch {}
     }
 
