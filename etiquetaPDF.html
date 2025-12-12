@@ -112,22 +112,22 @@ async function generarPDF() {
     pdf.text(tienda, center, y, { align: "center" });
 
     // Línea divisoria
-    y += 2.5;
+    y += 1.5;
     pdf.line(2, y, 36, y);
 
     // Nombre producto
-    y += 4;
-    pdf.setFontSize(6);
+    y += 1.5;
+    pdf.setFontSize(7);
     pdf.text(nombre, center, y, { align: "center" });
 
     // Precio
-    y += 4;
+    y += 1.5;
     pdf.setFont("Helvetica", "bold");
     pdf.setFontSize(10);
     pdf.text(precio, center, y, { align: "center" });
 
     // Código QR
-    y += 2;
+    y += 1;
     if (codigo) {
         try {
             const img64 = await getBase64(codigo);
