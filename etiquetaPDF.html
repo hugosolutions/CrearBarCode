@@ -139,7 +139,7 @@ async function generarPDF() {
 
     // Serial
     pdf.setFontSize(9);
-    pdf.text(serial, center, 26.5, { align: "center" });
+    pdf.text(serial, center, 25.4, { align: "center" });
 
     pdf.save("etiqueta_" + serial + ".pdf");
 }
